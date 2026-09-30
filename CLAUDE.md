@@ -37,9 +37,7 @@ Camila: dev com experiência em React Native (e um pouco de Zustand); primeira v
 - Fim de cada tarefa: atualize `docs/PROGRESSO.md`.
 
 ## Diário (documentação contínua)
-- Arquivo do dia: `docs/diario/AAAA-MM-DD.md`. Atualize ao fim de cada bloco de trabalho relevante.
-- Registre: decisões e o argumento da Camila, as perguntas dela, erros/falhas e como foram corrigidos, avanços, e quais recursos do Claude foram usados (e como).
-- Registre fatos. Não embeleze nem invente o raciocínio da Camila; quando não souber, pergunte.
+- Ao fim de cada bloco de trabalho (commit, decisão, problema resolvido), use a skill `/diario`. A Camila também pode acioná-la.
 - A seção "Harness e estratégia" do README é escrita pela Camila. Claude só fornece material de apoio.
 
 ## Identidade visual e UX
