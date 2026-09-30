@@ -55,6 +55,6 @@ Camila: dev com experiência em React Native (e um pouco de Zustand); primeira v
 - Plataforma alvo (README): **Android** (celular via USB). Fluxo: começar desenvolvendo e testando na Web (Chromium) pela agilidade; depois, foco exclusivo no Android.
 - Gerenciamento de estado: PENDENTE
 - Arquitetura / camadas: PENDENTE
-- Fonte de dados mock: PENDENTE
-- Idioma do código: PENDENTE
+- Fonte de dados mock: **asset JSON** (`assets/`) + delay de 1–2 s, atrás de uma data source. Erro simulável com `flutter run --dart-define=SIMULATE_ERROR=true`. Testes automatizados com data source falsa: se der tempo.
+- Idioma: código (classes, variáveis, funções, arquivos) em **inglês**; textos da interface em português. As chaves do JSON (`titulo`, `preco`…) são traduzidas só no modelo, ao ler/escrever os dados.
 - Comandos (run/test/analyze): definidos após `flutter create`
