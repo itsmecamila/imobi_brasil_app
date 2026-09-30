@@ -52,7 +52,7 @@ Camila: dev com experiência em React Native (e um pouco de Zustand); primeira v
 
 ## Decisões do projeto
 (Preencher só quando a Camila decidir. Até lá: PENDENTE.)
-- Plataforma primária: PENDENTE
+- Plataforma alvo (README): **Android** (celular via USB). Fluxo: começar desenvolvendo e testando na Web (Chromium) pela agilidade; depois, foco exclusivo no Android.
 - Gerenciamento de estado: PENDENTE
 - Arquitetura / camadas: PENDENTE
 - Fonte de dados mock: PENDENTE
