@@ -6,3 +6,6 @@ docs/diario/
 docs/IDEIAS.md
 docs/PROGRESSO.md
 docs/referencias.md
+
+# Log bruto das sessões com o Claude (gerado pelo hook arquivar-log.sh)
+.logs/
