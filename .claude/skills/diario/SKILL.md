@@ -48,6 +48,9 @@ Resumo do dia para reler em 10 segundos.
 ## 🧠 O que aprendi
 - **Conceito:** explicação curta → _(Camila: reescreva com suas palavras)_
 
+## 🎯 Checagens de entendimento
+- HH:MM — pergunta → resposta da Camila (literal, entre aspas) ✅/🟡/❌ (+ nuance, se houver)
+
 ## 🤝 Divisão do trabalho
 - **Eu fiz:** …
 - **Claude fez (com minha aprovação):** …
