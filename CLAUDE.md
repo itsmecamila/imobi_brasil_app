@@ -25,6 +25,8 @@ Camila: dev com experiência em React Native (e um pouco de Zustand); primeira v
    - trailer `Co-Authored-By: Claude` (a Camila decide se mantém).
    Se o passo misturar assuntos, sugira dividir em mais de um commit. A Camila revisa com `git diff --staged` e faz o commit.
 
+10. Sem abreviações: escreva os termos por extenso (ex.: "React Native", nunca "RN"). Siglas técnicas (JSON, APK, SDK…) são explicadas por extenso na primeira vez que aparecem em cada conversa.
+
 ## Critérios de avaliação (pesos definidos pela empresa)
 | Peso | Critérios |
 |---|---|
@@ -53,7 +55,7 @@ Camila: dev com experiência em React Native (e um pouco de Zustand); primeira v
 ## Decisões do projeto
 (Preencher só quando a Camila decidir. Até lá: PENDENTE.)
 - Plataforma alvo (README): **Android** (celular via USB). Fluxo: começar desenvolvendo e testando na Web (Chromium) pela agilidade; depois, foco exclusivo no Android.
-- Gerenciamento de estado: **Provider** (`ChangeNotifier`) — decisão **provisória** (01/10), a confirmar. Loading/erro modelados à mão. Para atualizar listas, preferir `.map(...).toList()`.
+- Gerenciamento de estado: **Provider** + `ChangeNotifier` nos ViewModels (confirmado em 01/10: encaixa no guia oficial e exige menos conceitos novos). Loading/erro como campos do ViewModel. Para atualizar listas, preferir `.map(...).toList()`.
 - Arquitetura: **guia oficial do Flutter (MVVM)** — View → ViewModel → Repository → Service. Pastas como no estudo de caso oficial: `lib/ui/<tela>/{view_models,widgets}`, `lib/ui/core/{themes,ui}`, `lib/domain/models`, `lib/data/{repositories,services}`, `lib/routing`. Simplificação: um único `Property` (com `fromJson`), sem `data/model/` separado.
 - Fonte de dados mock: **asset JSON** (`assets/`) + delay de 1–2 s ao carregar e ~1 s ao salvar, no Service. Erro simulável (carregar e salvar) com `flutter run --dart-define=SIMULATE_ERROR=true`. Testes automatizados com data source falsa: se der tempo.
 - Idioma: código (classes, variáveis, funções, arquivos) em **inglês**; textos da interface em português. As chaves do JSON (`titulo`, `preco`…) são traduzidas só no modelo, ao ler/escrever os dados.
