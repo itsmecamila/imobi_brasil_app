@@ -45,7 +45,7 @@ _Heurísticas de Nielsen: 3 (controle e liberdade do usuário) e 6 (reconhecer e
 **Regras:**
 1. Sempre há um caminho de volta visível (seta na barra do detalhe e da edição); o botão voltar do Android se comporta igual. _(H3)_
 2. Cancelar na edição descarta tudo e volta ao detalhe, sem etapas extras. _(H3)_
-3. Busca e filtro ativos ficam visíveis: segmento selecionado destacado, texto no campo, botão ✕ para limpar a busca. _(H6)_
+3. Busca e filtro ativos ficam visíveis ou reaparecem com um leve gesto para cima (quick return): segmento selecionado destacado, texto no campo, botão ✕ para limpar a busca. _(H6)_
 4. Ao voltar do detalhe para a lista, busca, filtro e posição da rolagem continuam como estavam. _(H6)_
 5. A edição abre preenchida com os valores atuais. _(H6)_
 6. Os nomes dos campos ficam sempre visíveis, sem depender de placeholder que some ao digitar. _(H6)_
@@ -63,7 +63,7 @@ _Heurísticas de Nielsen: 3 (controle e liberdade do usuário) e 6 (reconhecer e
   | Card do imóvel | `Card` |
   | Carregando | `CircularProgressIndicator` |
   | Editar | `IconButton` (lápis) com rótulo de acessibilidade |
-  | Entrar em Contato | `FilledButton` → `AlertDialog` |
+  | Entrar em Contato | `FilledButton` → conteúdo único; tela estreita (< 600): painel de baixo (`showModalBottomSheet`); tela larga: `AlertDialog` |
   | Campos do formulário | `TextField` com mensagem de erro abaixo; teclado numérico em preço, área e contagens |
   | Tipo (venda/aluguel) | `DropdownMenu` |
   | Confirmação ao salvar | `SnackBar` |

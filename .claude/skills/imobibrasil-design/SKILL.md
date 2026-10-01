@@ -25,7 +25,8 @@ description: Regras de uso da identidade visual da ImobiBrasil no app — qual t
 | Texto principal / secundário / auxiliar | `text` / `text-2` / `muted` |
 | `FilledButton` (ação principal) | fundo `brand-600`, pressionado `brand-700`, texto branco |
 | `OutlinedButton` / `TextButton` | texto e contorno `brand-600` |
-| AppBar | fundo `brand-600`, texto e ícones brancos (ver "Logo na AppBar") |
+| AppBar | fundo `brand-600`, texto e ícones brancos, em todas as telas |
+| Splash screen | fundo `surface`, logo completo centralizado |
 | Status bar (Android) | `brand-800` |
 | Ícones de ação, indicador de progresso, foco | `brand-500` |
 | Links em verde | `brand-600` |
@@ -41,4 +42,4 @@ description: Regras de uso da identidade visual da ImobiBrasil no app — qual t
 
 ## Logos
 - Baixar os SVGs (logo completo e ícone) para `assets/` e exibir com `flutter_svg`; carregar da URL falha na Web (CORS).
-- **Logo na AppBar:** conferir as cores do logo original sobre o fundo `brand-600` antes de decidir. Se não houver contraste, usar AppBar clara (`surface`) com o logo — decidir no wireframe.
+- **Logo na splash screen, não na AppBar** (Camila, 01/10/2026): o logo original é verde (`#009035`) com detalhes amarelo e branco; sobre a AppBar verde ele some, e recolorir o logo alteraria um ativo da marca. O enunciado prevê o logo "para splash screen ou AppBar". A AppBar é verde em todas as telas, com título em texto branco.
