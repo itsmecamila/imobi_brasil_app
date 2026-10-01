@@ -55,7 +55,7 @@ Camila: dev com experiência em React Native (e um pouco de Zustand); primeira v
 - Plataforma alvo (README): **Android** (celular via USB). Fluxo: começar desenvolvendo e testando na Web (Chromium) pela agilidade; depois, foco exclusivo no Android.
 - Gerenciamento de estado: **Provider** (`ChangeNotifier`) — decisão **provisória** (01/10), a confirmar. Loading/erro modelados à mão. Para atualizar listas, preferir `.map(...).toList()`.
 - Arquitetura: **guia oficial do Flutter (MVVM)** — View → ViewModel → Repository → Service. Pastas como no estudo de caso oficial: `lib/ui/<tela>/{view_models,widgets}`, `lib/ui/core/{themes,ui}`, `lib/domain/models`, `lib/data/{repositories,services}`, `lib/routing`. Simplificação: um único `Property` (com `fromJson`), sem `data/model/` separado.
-- Fonte de dados mock: **asset JSON** (`assets/`) + delay de 1–2 s, atrás de uma data source. Erro simulável com `flutter run --dart-define=SIMULATE_ERROR=true`. Testes automatizados com data source falsa: se der tempo.
+- Fonte de dados mock: **asset JSON** (`assets/`) + delay de 1–2 s ao carregar e ~1 s ao salvar, no Service. Erro simulável (carregar e salvar) com `flutter run --dart-define=SIMULATE_ERROR=true`. Testes automatizados com data source falsa: se der tempo.
 - Idioma: código (classes, variáveis, funções, arquivos) em **inglês**; textos da interface em português. As chaves do JSON (`titulo`, `preco`…) são traduzidas só no modelo, ao ler/escrever os dados.
 - Projeto: `imobi_app` (org `com.itsmecamila`), plataformas `android` e `web`.
 - Comandos:
