@@ -43,3 +43,15 @@ Mínimo AA: 4.5:1 para texto normal; 3:1 para texto grande (≥ 18pt, ou ≥ 14p
 | `muted` sobre `bg` | 4.53 | texto normal ✅ (no limite) |
 | `muted` sobre `surface` | 4.76 | texto normal ✅ |
 | `border` sobre `surface` | 1.19 | decorativo apenas; não usar como único indicador de estado |
+| `text` sobre `brand-500` | 4.41 | só texto grande/negrito |
+| branco sobre `brand-700` | 7.55 | texto normal ✅ |
+| `brand-700` sobre `brand-50` | 6.79 | texto normal ✅ |
+| `brand-800` sobre `brand-50` | 9.44 | texto normal ✅ |
+| `brand-500` sobre `surface` | 4.05 | ícones e texto grande; não usar em texto normal |
+| `brand-600` sobre `surface` | 5.48 | texto normal ✅ (links em verde) |
+| `accent-blue` sobre `surface` | 4.06 | ícones e texto grande |
+| `danger` sobre `surface` | 4.22 | bordas e ícones; não usar em texto normal |
+| `danger` sobre `bg` | 4.01 | bordas e ícones |
+| `text-2` sobre `surface` | 10.35 | texto normal ✅ |
+
+_Pares adicionais calculados em 01/10/2026._

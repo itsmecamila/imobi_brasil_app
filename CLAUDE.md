@@ -41,7 +41,7 @@ Camila: dev com experiência em React Native (e um pouco de Zustand); primeira v
 - A seção "Harness e estratégia" do README é escrita pela Camila. Claude só fornece material de apoio.
 
 ## Identidade visual e UX
-- A identidade visual da ImobiBrasil é obrigatória (fonte única: `docs/identidade-visual.md`). Nunca use cor, fonte ou raio fora dos tokens; se faltar algo, pergunte.
+- A identidade visual da ImobiBrasil é obrigatória (dados: `docs/identidade-visual.md`; regras de uso: skill `imobibrasil-design`). Nunca use cor, fonte ou raio fora dos tokens; se faltar algo, pergunte.
 - Contraste (WCAG 2.2 AA): texto branco sobre `brand-500` (4.05:1) só em texto grande/negrito; para texto normal sobre verde, use `brand-600`+. Nunca texto branco sobre `accent-yellow`.
 - Toda ação do usuário tem feedback visível. Todo elemento assíncrono tem os estados carregando / sucesso / vazio / erro mapeados.
 - Wireframes são aprovados pela Camila antes de qualquer código de tela.
