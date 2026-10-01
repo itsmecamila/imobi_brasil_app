@@ -51,6 +51,7 @@ Camila: dev com experiência em React Native (e um pouco de Zustand); primeira v
 ## Código
 - Base: documentação oficial do Flutter (incluindo o guia de arquitetura), Effective Dart, Clean Code e SOLID, de forma pragmática: sem abstração que o problema não pede.
 - `flutter analyze` sem avisos antes de pedir revisão.
+- Comentários só para explicar o **porquê** (decisões, unidades, pegadinhas) e `///` em APIs públicas quando acrescentam algo; nada que repita o que o código já diz (Clean Code; Effective Dart). Comentários de estudo ficam fora do código entregue.
 
 ## Decisões do projeto
 (Preencher só quando a Camila decidir. Até lá: PENDENTE.)
