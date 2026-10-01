@@ -47,4 +47,12 @@ void main() {
       expect(() => Property.fromJson(invalid), throwsFormatException);
     });
   });
+
+  group('Property.toJson', () {
+    test('ida e volta: toJson devolve o mesmo JSON que entrou', () {
+      final property = Property.fromJson(json);
+
+      expect(property.toJson(), json);
+    });
+  });
 }

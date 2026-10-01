@@ -1,14 +1,18 @@
-/// Whether a property is for sale or for rent.
 enum PropertyType {
   sale,
   rent;
 
   /// Translates the API value (`"venda"` / `"aluguel"`) into the enum.
   static PropertyType fromJson(String value) => switch (value) {
-        'venda' => sale,
-        'aluguel' => rent,
-        _ => throw FormatException('Unknown property type: "$value"'),
-      };
+    'venda' => sale,
+    'aluguel' => rent,
+    _ => throw FormatException('Unknown property type: "$value"'),
+  };
+
+  String toJson() => switch (this) {
+    sale => 'venda',
+    rent => 'aluguel',
+  };
 }
 
 /// A real estate listing.
@@ -63,4 +67,19 @@ class Property {
       photoUrl: json['foto'] as String,
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'titulo': title,
+    'descricao': description,
+    'tipo': type.toJson(),
+    'preco': price,
+    'cidade': city,
+    'bairro': neighborhood,
+    'quartos': bedrooms,
+    'banheiros': bathrooms,
+    'vagas': parkingSpaces,
+    'area_m2': area,
+    'foto': photoUrl,
+  };
 }
