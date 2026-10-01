@@ -25,7 +25,7 @@ description: Regras de uso da identidade visual da ImobiBrasil no app — qual t
 | Texto principal / secundário / auxiliar | `text` / `text-2` / `muted` |
 | `FilledButton` (ação principal) | fundo `brand-600`, pressionado `brand-700`, texto branco |
 | `OutlinedButton` / `TextButton` | texto e contorno `brand-600` |
-| AppBar | fundo `brand-600`, texto e ícones brancos, em todas as telas |
+| AppBar | fundo `brand-600`, texto e ícones brancos, em todas as telas; na Lista, ícone da marca num quadro `surface` |
 | Splash screen | fundo `surface`, logo completo centralizado |
 | Status bar (Android) | `brand-800` |
 | Ícones de ação, indicador de progresso, foco | `brand-500` |
@@ -33,7 +33,7 @@ description: Regras de uso da identidade visual da ImobiBrasil no app — qual t
 | Seleção (segmento ativo, item selecionado) | fundo `brand-50`, texto e ícone `brand-700` |
 | Badge de destaque (ex.: tipo do imóvel) | fundo `accent-yellow`, texto `text` |
 | Informação / ação secundária (ícones) | `accent-blue` |
-| Erro / ação destrutiva | `danger` em bordas e ícones; mensagem em `text-2` |
+| Erro / ação destrutiva | `danger` em bordas e ícones; mensagem em `text-2`. Botão destrutivo (ex.: "Descartar"): `OutlinedButton` com contorno e ícone `danger`, texto `text` |
 | Desabilitado | `muted` |
 
 ## Tipografia e formas
@@ -42,4 +42,4 @@ description: Regras de uso da identidade visual da ImobiBrasil no app — qual t
 
 ## Logos
 - Baixar os SVGs (logo completo e ícone) para `assets/` e exibir com `flutter_svg`; carregar da URL falha na Web (CORS).
-- **Logo na splash screen, não na AppBar** (Camila, 01/10/2026): o logo original é verde (`#009035`) com detalhes amarelo e branco; sobre a AppBar verde ele some, e recolorir o logo alteraria um ativo da marca. O enunciado prevê o logo "para splash screen ou AppBar". A AppBar é verde em todas as telas, com título em texto branco.
+- **Logo completo na splash screen; na AppBar da Lista, só o ícone num quadro branco** (Camila, 01/10/2026; ícone acrescentado na revisão da alta fidelidade): o logo original é verde (`#009035`) com detalhes amarelo e branco; sobre a AppBar verde ele some, e recolorir o logo alteraria um ativo da marca. O enunciado prevê o logo "para splash screen ou AppBar". A AppBar é verde em todas as telas, com título em texto branco. Na Lista, o ícone original (sem recolorir) fica num quadro `surface` de raio 8, à esquerda de "Imóveis".

@@ -20,7 +20,7 @@ _Heurísticas de Nielsen: 1 (visibilidade do status do sistema) e 10 (ajuda e do
 1. Toda ação assíncrona mostra progresso enquanto acontece (indicador ao carregar a lista; botão "Salvando…" desabilitado ao salvar). _(H1)_
 2. Toda ação concluída tem confirmação breve e visível (ex.: SnackBar "Imóvel atualizado"). _(H1)_
 3. Todo toque tem resposta visual imediata; não remover o efeito de toque padrão do Material. _(H1)_
-4. Textos na língua do usuário: "Aluguel", "R$ 1.800,00", "65 m²"; nunca valores crus (`1800.0`) ou termos técnicos. _(H2)_
+4. Textos na língua do usuário: "Aluguel", "R$ 1.800,00 /mês" (aluguel leva "/mês"; venda não), "65 m²", "Sem quartos", "1 vaga" (singular/plural); nunca valores crus (`1800.0`) ou termos técnicos. _(H2)_
 5. Estado vazio explica o motivo e o que fazer (ex.: "Nenhum imóvel encontrado para 'xyz'. Tente outro termo ou mude o filtro."). _(H10)_
 6. Ícones sem texto têm rótulo (tooltip e leitor de tela), ex.: "Editar imóvel". _(H10 + acessibilidade)_
 
@@ -33,9 +33,10 @@ _Heurísticas de Nielsen: 5 (prevenção de erros) e 9 (ajudar a reconhecer, dia
 1. Restringir em vez de corrigir depois: tipo como lista de opções; teclado numérico em preço, área e contagens. _(H5)_
 2. A mensagem de erro aparece junto ao campo com problema, não só no topo da tela. _(H9)_
 3. Toda mensagem de erro diz o que aconteceu e como resolver, em linguagem simples e sem códigos (ex.: "Informe um preço maior que zero."). _(H9)_
-4. Erro de carregamento sempre oferece uma ação de recuperação: "Tentar novamente". _(H9)_
+4. Erro de carregamento ou de salvamento sempre oferece uma ação de recuperação, com o rótulo "Atualizar". _(H9)_
 5. Nunca culpar o usuário; quando o problema é interno, dizer isso (ex.: "Não foi possível carregar os imóveis agora."). _(H9)_
 6. Nunca apagar o que o usuário digitou por causa de um erro; o formulário mantém os valores para correção. _(H5)_
+7. Formulários em uma coluna, um campo por linha, para cada mensagem de erro ficar logo abaixo do seu campo. Exceção: campos curtos que nunca exibem erro (quartos, banheiros, vagas) podem ficar lado a lado. Mensagens curtas que dizem como resolver ("Informe o título."); se precisarem de duas linhas, quebram sem cortar. _(H9 + NN/g, formulários)_
 
 ### 🧭 O usuário no controle
 _Heurísticas de Nielsen: 3 (controle e liberdade do usuário) e 6 (reconhecer em vez de lembrar)._
@@ -44,11 +45,11 @@ _Heurísticas de Nielsen: 3 (controle e liberdade do usuário) e 6 (reconhecer e
 
 **Regras:**
 1. Sempre há um caminho de volta visível (seta na barra do detalhe e da edição); o botão voltar do Android se comporta igual. _(H3)_
-2. Cancelar na edição descarta tudo e volta ao detalhe, sem etapas extras. _(H3)_
+2. Cancelar na edição descarta tudo e volta ao detalhe, sem etapas extras (intenção explícita). Já a seta ← ou o voltar do Android **com mudanças não salvas** pedem confirmação: "Descartar alterações?" · Editar · Descartar (toque acidental; H5). Sem mudanças, voltam direto. _(H3 + H5)_
 3. Busca e filtro ativos ficam visíveis ou reaparecem com um leve gesto para cima (quick return): segmento selecionado destacado, texto no campo, botão ✕ para limpar a busca. _(H6)_
 4. Ao voltar do detalhe para a lista, busca, filtro e posição da rolagem continuam como estavam. _(H6)_
 5. A edição abre preenchida com os valores atuais. _(H6)_
-6. Os nomes dos campos ficam sempre visíveis, sem depender de placeholder que some ao digitar. _(H6)_
+6. Os nomes dos campos ficam sempre visíveis, acima da caixa (não o rótulo flutuante do Material), sem depender de placeholder que some ao digitar. _(H6 + NN/g, formulários)_
 
 ## Componentes (Material 3)
 - Usar os componentes padrão do Material 3 (consistência, heurística 4), com as cores da marca aplicadas pelo tema; nunca estilizar componente a componente.
@@ -60,7 +61,8 @@ _Heurísticas de Nielsen: 3 (controle e liberdade do usuário) e 6 (reconhecer e
   | Barra superior | `AppBar` |
   | Busca | `TextField` (ou `SearchBar`) |
   | Filtro Todos/Venda/Aluguel | `SegmentedButton` |
-  | Card do imóvel | `Card` |
+  | Card do imóvel | `Card` (foto em cima) |
+| Características no detalhe | grade 2×2 (ícone + texto) |
   | Carregando | `CircularProgressIndicator` |
   | Editar | `IconButton` (lápis) com rótulo de acessibilidade |
   | Entrar em Contato | `FilledButton` → conteúdo único; tela estreita (< 600): painel de baixo (`showModalBottomSheet`); tela larga: `AlertDialog` |
@@ -76,9 +78,10 @@ _Heurísticas de Nielsen: 3 (controle e liberdade do usuário) e 6 (reconhecer e
 5. Ações importantes podem ser desfeitas; campos com erro sugerem a correção; nada muda de contexto automaticamente enquanto o usuário digita.
 
 ## Estados obrigatórios
-Todo elemento que depende de dados assíncronos tem os quatro estados desenhados: **carregando · sucesso · vazio · erro** (erro sempre com uma ação de recuperação, ex.: "Tentar novamente").
+Todo elemento que depende de dados assíncronos tem os quatro estados desenhados: **carregando · sucesso · vazio · erro** (erro sempre com uma ação de recuperação: "Atualizar").
 
 ## Fontes
+- Nielsen Norman Group, *Website Forms Usability: Top 10 Recommendations* — https://www.nngroup.com/articles/web-form-design/
 - Jakob Nielsen (1994), *10 Usability Heuristics for User Interface Design* — https://www.nngroup.com/articles/ten-usability-heuristics/
 - Catálogo de componentes Material do Flutter — https://docs.flutter.dev/ui/widgets/material
 - Guia de acessibilidade do Flutter — https://docs.flutter.dev/ui/accessibility-and-internationalization/accessibility
