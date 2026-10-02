@@ -33,9 +33,11 @@ void main() {
   group('PropertyRepository', () {
     test('carrega os 6 imóveis já traduzidos', () async {
       final repository = PropertyRepository(_instantService());
+      expect(repository.hasLoaded, isFalse);
 
       await repository.load();
 
+      expect(repository.hasLoaded, isTrue);
       expect(repository.properties.length, 6);
       expect(repository.properties.first.title, 'Apartamento Centro');
     });

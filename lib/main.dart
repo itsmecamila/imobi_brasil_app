@@ -16,8 +16,10 @@ void main() {
           create: (_) => PropertyRepository(PropertyService()),
         ),
         // Lives above the screens so search, filter and list survive
-        // navigation; loading starts as soon as the app opens.
+        // navigation. Not lazy: loading starts as soon as the app opens,
+        // even when it opens straight on a detail link (web).
         ChangeNotifierProvider(
+          lazy: false,
           create: (context) =>
               PropertyListViewModel(context.read<PropertyRepository>())..load(),
         ),

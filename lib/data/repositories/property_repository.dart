@@ -9,8 +9,12 @@ class PropertyRepository extends ChangeNotifier {
 
   final PropertyService _service;
   List<Property> _properties = [];
+  bool _hasLoaded = false;
 
   List<Property> get properties => List.unmodifiable(_properties);
+
+  /// Distinguishes "still loading" from "loaded, but the listing is missing".
+  bool get hasLoaded => _hasLoaded;
 
   Property? findById(int id) {
     for (final property in _properties) {
@@ -22,6 +26,7 @@ class PropertyRepository extends ChangeNotifier {
   Future<void> load() async {
     final raw = await _service.fetchProperties();
     _properties = raw.map(Property.fromJson).toList();
+    _hasLoaded = true;
     notifyListeners();
   }
 
