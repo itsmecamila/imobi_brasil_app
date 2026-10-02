@@ -60,3 +60,4 @@ docs/referencias.md
 
 # Log bruto das sessões com o Claude (gerado pelo hook arquivar-log.sh)
 .logs/
+docs/harness.md

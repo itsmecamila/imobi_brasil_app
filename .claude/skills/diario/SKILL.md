@@ -21,6 +21,7 @@ O diário é a matéria-prima para a Camila reler o processo e escrever, com as 
 4. **"✍️ Espaço da Camila" é só dela:** crie a seção vazia, mas nunca escreva nem altere o conteúdo.
 5. **Horários de Brasília** (UTC−3), no formato HH:MM. Use `~` quando o horário for aproximado.
 6. **Ideias** estacionadas também vão para `docs/IDEIAS.md`.
+6b. **Recursos do Claude:** quando um recurso ou configuração do Claude Code for criado, alterado ou usado pela primeira vez (skill, hook, permissão, memória, comando, ferramenta), atualize também `docs/harness.md` (o inventário), com arquivo, commit, data, porquê e como foi verificado.
 7. **Dia do prazo:** 30/09 = dia 1 … 05/10 = dia 6.
 8. **Ao terminar**, avise em uma linha: `📓 diário atualizado: <seções alteradas>`.
 9. **Mudança de template:** ao reformatar diários antigos, preserve todo o conteúdo existente, em especial o Espaço da Camila, que deve ser mantido palavra por palavra. Use o log bruto para preencher as seções novas.
