@@ -2,6 +2,8 @@ import 'package:go_router/go_router.dart';
 import 'package:imobi_app/data/repositories/property_repository.dart';
 import 'package:imobi_app/ui/property_detail/view_models/property_detail_view_model.dart';
 import 'package:imobi_app/ui/property_detail/widgets/property_detail_screen.dart';
+import 'package:imobi_app/ui/property_edit/view_models/property_edit_view_model.dart';
+import 'package:imobi_app/ui/property_edit/widgets/property_edit_screen.dart';
 import 'package:imobi_app/ui/property_list/widgets/property_list_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -22,19 +24,31 @@ GoRouter createRouter() => GoRouter(
       routes: [
         GoRoute(
           path: 'property/:id',
-          builder: (context, state) {
-            // An invalid id (e.g. "/property/abc") becomes "not found".
-            final id = int.tryParse(state.pathParameters['id'] ?? '');
-            return ChangeNotifierProvider(
-              create: (context) => PropertyDetailViewModel(
-                context.read<PropertyRepository>(),
-                id ?? -1,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (context) => PropertyDetailViewModel(
+              context.read<PropertyRepository>(),
+              _idFrom(state),
+            ),
+            child: const PropertyDetailScreen(),
+          ),
+          routes: [
+            GoRoute(
+              path: 'edit',
+              builder: (context, state) => ChangeNotifierProvider(
+                create: (context) => PropertyEditViewModel(
+                  context.read<PropertyRepository>(),
+                  _idFrom(state),
+                ),
+                child: const PropertyEditScreen(),
               ),
-              child: const PropertyDetailScreen(),
-            );
-          },
+            ),
+          ],
         ),
       ],
     ),
   ],
 );
+
+/// An invalid id (e.g. "/property/abc") becomes -1, shown as "not found".
+int _idFrom(GoRouterState state) =>
+    int.tryParse(state.pathParameters['id'] ?? '') ?? -1;
