@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:imobi_app/routing/router.dart';
 import 'package:imobi_app/ui/core/themes/app_colors.dart';
+import 'package:imobi_app/ui/core/ui/state_message.dart';
 import 'package:imobi_app/ui/property_list/view_models/property_list_view_model.dart';
 import 'package:imobi_app/ui/property_list/widgets/property_card.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +37,7 @@ class PropertyListScreen extends StatelessWidget {
       return const [
         SliverFillRemaining(
           hasScrollBody: false,
-          child: _StateMessage.loading(),
+          child: StateMessage.loading(message: 'Carregando imóveis…'),
         ),
       ];
     }
@@ -44,7 +45,7 @@ class PropertyListScreen extends StatelessWidget {
       return [
         SliverFillRemaining(
           hasScrollBody: false,
-          child: _StateMessage(
+          child: StateMessage(
             icon: Icons.cloud_off_outlined,
             iconColor: AppColors.danger,
             message: 'Não foi possível carregar os imóveis agora.',
@@ -62,7 +63,7 @@ class PropertyListScreen extends StatelessWidget {
       return const [
         SliverFillRemaining(
           hasScrollBody: false,
-          child: _StateMessage(
+          child: StateMessage(
             icon: Icons.home_work_outlined,
             message: 'Nenhum imóvel cadastrado ainda.',
           ),
@@ -76,7 +77,7 @@ class PropertyListScreen extends StatelessWidget {
       return [
         SliverFillRemaining(
           hasScrollBody: false,
-          child: _StateMessage(
+          child: StateMessage(
             icon: Icons.search_off,
             message: query.isEmpty
                 ? 'Nenhum imóvel encontrado com esse filtro.'
@@ -221,67 +222,6 @@ class _SearchFieldState extends State<_SearchField> {
                 tooltip: 'Limpar busca',
                 onPressed: _clear,
               ),
-      ),
-    );
-  }
-}
-
-class _StateMessage extends StatelessWidget {
-  const _StateMessage({
-    required this.icon,
-    required this.message,
-    this.iconColor = AppColors.muted,
-    this.hint,
-    this.action,
-  });
-
-  const _StateMessage.loading()
-    : icon = null,
-      iconColor = AppColors.muted,
-      message = 'Carregando imóveis…',
-      hint = null,
-      action = null;
-
-  final IconData? icon;
-  final Color iconColor;
-  final String message;
-  final String? hint;
-  final Widget? action;
-
-  @override
-  Widget build(BuildContext context) {
-    final icon = this.icon;
-    final hint = this.hint;
-    final action = this.action;
-    final textTheme = Theme.of(context).textTheme;
-
-    return Padding(
-      padding: const EdgeInsets.all(32),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (icon == null)
-            const CircularProgressIndicator()
-          else
-            Icon(icon, size: 48, color: iconColor),
-          const SizedBox(height: 16),
-          Text(
-            message,
-            textAlign: TextAlign.center,
-            style: textTheme.titleMedium,
-          ),
-          if (hint != null) ...[
-            const SizedBox(height: 4),
-            Text(
-              hint,
-              textAlign: TextAlign.center,
-              style: textTheme.bodyMedium?.copyWith(
-                color: AppColors.textSecondary,
-              ),
-            ),
-          ],
-          if (action != null) ...[const SizedBox(height: 16), action],
-        ],
       ),
     );
   }
