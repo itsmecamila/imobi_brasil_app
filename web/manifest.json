@@ -1,11 +1,11 @@
 {
-    "name": "imobi_app",
-    "short_name": "imobi_app",
+    "name": "ImobiBrasil",
+    "short_name": "ImobiBrasil",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#FFFFFF",
+    "theme_color": "#007A35",
+    "description": "Imóveis ImobiBrasil: lista, detalhe e edição.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
