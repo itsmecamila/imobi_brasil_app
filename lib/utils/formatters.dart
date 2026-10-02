@@ -11,7 +11,10 @@ String formatPrice(Property property) {
 }
 
 /// "150 m²", "65,5 m²".
-String formatArea(double area) => '${_decimal.format(area)} m²';
+String formatArea(double area) => '${formatDecimal(area)} m²';
+
+/// "150", "65,5": no unnecessary decimals, comma as separator.
+String formatDecimal(double value) => _decimal.format(value);
 
 String formatBedrooms(int count) =>
     _count(count, zero: 'Sem quartos', one: 'quarto', many: 'quartos');
