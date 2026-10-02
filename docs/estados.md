@@ -23,6 +23,7 @@ Todo elemento que depende de algo assíncrono (dados, imagens, ações externas)
 | Elemento | Carregando | Sucesso | Vazio | Erro |
 |---|---|---|---|---|
 | Campo do formulário | — | Normal (sem destaque verde) | — | Borda e ⚠ em `danger` + mensagem em `text-2` abaixo do campo, ao sair do campo e ao tocar em Salvar |
+| Tocar em Salvar com campos inválidos | — | — | — | Foco no 1º campo errado + SnackBar "Corrija o campo destacado para salvar." / "Corrija os N campos destacados para salvar." (botão nunca desativado) |
 | Salvar | Botão "Salvando…" desabilitado, com indicador, ~1 s | Volta ao detalhe atualizado + SnackBar "Imóvel atualizado" | — | Permanece na edição, mantém o que foi digitado + SnackBar "Não foi possível salvar agora." com ação **Atualizar** |
 
 ## Splash

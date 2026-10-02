@@ -37,6 +37,7 @@ _Heurísticas de Nielsen: 5 (prevenção de erros) e 9 (ajudar a reconhecer, dia
 5. Nunca culpar o usuário; quando o problema é interno, dizer isso (ex.: "Não foi possível carregar os imóveis agora."). _(H9)_
 6. Nunca apagar o que o usuário digitou por causa de um erro; o formulário mantém os valores para correção. _(H5)_
 7. Formulários em uma coluna, um campo por linha, para cada mensagem de erro ficar logo abaixo do seu campo. Exceção: campos curtos que nunca exibem erro (quartos, banheiros, vagas) podem ficar lado a lado. Mensagens curtas que dizem como resolver ("Informe o título."); se precisarem de duas linhas, quebram sem cortar. _(H9 + NN/g, formulários)_
+8. Botão de envio nunca fica desativado por formulário inválido: ao tocar com erros, levar o foco ao 1º campo errado **e** avisar quantos campos corrigir (SnackBar, anunciada pelo leitor de tela). _(H1 + H9; Friedman, "Disabled Buttons", Smashing Magazine, 2021)_
 
 ### 🧭 O usuário no controle
 _Heurísticas de Nielsen: 3 (controle e liberdade do usuário) e 6 (reconhecer em vez de lembrar)._
@@ -82,6 +83,7 @@ Todo elemento que depende de dados assíncronos tem os quatro estados desenhados
 
 ## Fontes
 - Nielsen Norman Group, *Website Forms Usability: Top 10 Recommendations* — https://www.nngroup.com/articles/web-form-design/
+- Vitaly Friedman (2021), *Frustrating Design Patterns: Disabled Buttons* — https://www.smashingmagazine.com/2021/08/frustrating-design-patterns-disabled-buttons/
 - Jakob Nielsen (1994), *10 Usability Heuristics for User Interface Design* — https://www.nngroup.com/articles/ten-usability-heuristics/
 - Catálogo de componentes Material do Flutter — https://docs.flutter.dev/ui/widgets/material
 - Guia de acessibilidade do Flutter — https://docs.flutter.dev/ui/accessibility-and-internationalization/accessibility
