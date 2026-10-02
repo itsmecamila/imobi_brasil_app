@@ -6,9 +6,12 @@ import 'package:imobi_app/data/services/property_service.dart';
 import 'package:imobi_app/routing/router.dart';
 import 'package:imobi_app/ui/core/themes/app_theme.dart';
 import 'package:imobi_app/ui/property_list/view_models/property_list_view_model.dart';
+import 'package:imobi_app/ui/splash/widgets/splash_gate.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await precacheSplashLogo();
   runApp(
     MultiProvider(
       providers: [
@@ -41,6 +44,8 @@ class ImobiApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
       routerConfig: router,
+      builder: (context, child) =>
+          SplashGate(child: child ?? const SizedBox.shrink()),
       locale: const Locale('pt', 'BR'),
       supportedLocales: const [Locale('pt', 'BR')],
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
