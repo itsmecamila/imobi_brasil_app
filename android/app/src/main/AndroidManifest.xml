@@ -1,4 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Photos come from the internet; debug builds add this on their own,
+         release builds do not. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="ImobiBrasil"
         android:name="${applicationName}"
