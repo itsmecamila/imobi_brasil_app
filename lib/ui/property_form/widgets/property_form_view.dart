@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:imobi_app/domain/models/property.dart';
 import 'package:imobi_app/ui/core/themes/app_colors.dart';
+import 'package:imobi_app/ui/core/ui/labeled_text_field.dart';
 import 'package:imobi_app/ui/property_form/view_models/property_form.dart';
 import 'package:imobi_app/utils/currency_input.dart';
 
@@ -205,7 +206,7 @@ class _PropertyFormViewState extends State<PropertyFormView> {
           child: ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              _FormTextField(
+              LabeledTextField(
                 label: 'Título',
                 isRequired: true,
                 controller: _title,
@@ -214,7 +215,7 @@ class _PropertyFormViewState extends State<PropertyFormView> {
                 textCapitalization: TextCapitalization.sentences,
               ),
               const SizedBox(height: 16),
-              _FormTextField(
+              LabeledTextField(
                 label: 'Descrição',
                 controller: _description,
                 textCapitalization: TextCapitalization.sentences,
@@ -230,7 +231,7 @@ class _PropertyFormViewState extends State<PropertyFormView> {
                 onChanged: (type) => setState(() => _type = type),
               ),
               const SizedBox(height: 16),
-              _FormTextField(
+              LabeledTextField(
                 label: 'Preço',
                 isRequired: true,
                 controller: _price,
@@ -240,7 +241,7 @@ class _PropertyFormViewState extends State<PropertyFormView> {
                 inputFormatters: [CurrencyInputFormatter()],
               ),
               const SizedBox(height: 16),
-              _FormTextField(
+              LabeledTextField(
                 label: 'Cidade',
                 isRequired: true,
                 controller: _city,
@@ -249,7 +250,7 @@ class _PropertyFormViewState extends State<PropertyFormView> {
                 textCapitalization: TextCapitalization.words,
               ),
               const SizedBox(height: 16),
-              _FormTextField(
+              LabeledTextField(
                 label: 'Bairro',
                 isRequired: true,
                 controller: _neighborhood,
@@ -286,7 +287,7 @@ class _PropertyFormViewState extends State<PropertyFormView> {
               // MergeSemantics of the field breaks the semantics tree once the
               // field has text (found by the widget test). The label is also
               // where WCAG 3.3.2 expects the expected format.
-              _FormTextField(
+              LabeledTextField(
                 label: 'Área (m²)',
                 isRequired: true,
                 controller: _area,
@@ -315,11 +316,6 @@ class _PropertyFormViewState extends State<PropertyFormView> {
   }
 }
 
-const _errorBorder = OutlineInputBorder(
-  borderRadius: BorderRadius.all(Radius.circular(8)),
-  borderSide: BorderSide(color: AppColors.danger, width: 2),
-);
-
 Future<bool> _confirmDiscard(BuildContext context, String message) async {
   final discard = await showDialog<bool>(
     context: context,
@@ -347,130 +343,6 @@ Future<bool> _confirmDiscard(BuildContext context, String message) async {
   return discard ?? false;
 }
 
-/// Label above the box, error shown as red border + ⚠ icon + dark message
-/// (contrast decision 1 in the imobibrasil-design skill).
-class _FormTextField extends StatelessWidget {
-  const _FormTextField({
-    required this.label,
-    required this.controller,
-    this.isRequired = false,
-    this.focusNode,
-    this.validator,
-    this.keyboardType,
-    this.inputFormatters,
-    this.textCapitalization = TextCapitalization.none,
-    this.textInputAction = TextInputAction.next,
-    this.minLines,
-    this.maxLines = 1,
-  });
-
-  final String label;
-  final TextEditingController controller;
-  final bool isRequired;
-  final FocusNode? focusNode;
-  final String? Function(String?)? validator;
-  final TextInputType? keyboardType;
-  final List<TextInputFormatter>? inputFormatters;
-  final TextCapitalization textCapitalization;
-  final TextInputAction textInputAction;
-  final int? minLines;
-  final int maxLines;
-
-  @override
-  Widget build(BuildContext context) {
-    final validator = this.validator;
-    return FormField<String>(
-      initialValue: controller.text,
-      validator: validator == null ? null : (_) => validator(controller.text),
-      builder: (field) {
-        final error = field.errorText;
-        return MergeSemantics(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _FieldLabel(label: label, isRequired: isRequired),
-              TextField(
-                controller: controller,
-                focusNode: focusNode,
-                onChanged: field.didChange,
-                keyboardType: keyboardType,
-                inputFormatters: inputFormatters,
-                textCapitalization: textCapitalization,
-                textInputAction: textInputAction,
-                minLines: minLines,
-                maxLines: maxLines,
-                decoration: InputDecoration(
-                  isDense: true,
-                  suffixIcon: error == null
-                      ? null
-                      : const Icon(
-                          Icons.error_outline,
-                          color: AppColors.danger,
-                        ),
-                  enabledBorder: error == null ? null : _errorBorder,
-                  focusedBorder: error == null ? null : _errorBorder,
-                ),
-              ),
-              if (error != null) _ErrorLine(message: error),
-            ],
-          ),
-        );
-      },
-    );
-  }
-}
-
-class _FieldLabel extends StatelessWidget {
-  const _FieldLabel({required this.label, this.isRequired = false});
-
-  final String label;
-  final bool isRequired;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 6),
-      child: Text(
-        isRequired ? '$label *' : label,
-        style: const TextStyle(
-          color: AppColors.textSecondary,
-          fontWeight: FontWeight.w600,
-          fontSize: 13,
-        ),
-      ),
-    );
-  }
-}
-
-class _ErrorLine extends StatelessWidget {
-  const _ErrorLine({required this.message});
-
-  final String message;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 4),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Icon(Icons.error_outline, size: 16, color: AppColors.danger),
-          const SizedBox(width: 4),
-          Expanded(
-            child: Text(
-              message,
-              style: const TextStyle(
-                color: AppColors.textSecondary,
-                fontSize: 12.5,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _CountField extends StatelessWidget {
   const _CountField({required this.label, required this.controller});
 
@@ -479,7 +351,7 @@ class _CountField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _FormTextField(
+    return LabeledTextField(
       label: label,
       controller: controller,
       keyboardType: TextInputType.number,
@@ -516,15 +388,15 @@ class _TypeField extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const _FieldLabel(label: 'Tipo', isRequired: true),
+              const FieldLabel(label: 'Tipo', isRequired: true),
               DropdownButtonFormField<PropertyType>(
                 initialValue: initialValue,
                 focusNode: focusNode,
                 isDense: true,
                 hint: const Text('Selecione…'),
                 decoration: InputDecoration(
-                  enabledBorder: error == null ? null : _errorBorder,
-                  focusedBorder: error == null ? null : _errorBorder,
+                  enabledBorder: error == null ? null : errorInputBorder,
+                  focusedBorder: error == null ? null : errorInputBorder,
                 ),
                 items: const [
                   DropdownMenuItem(
@@ -542,7 +414,7 @@ class _TypeField extends StatelessWidget {
                   onChanged(type);
                 },
               ),
-              if (error != null) _ErrorLine(message: error),
+              if (error != null) ErrorLine(message: error),
             ],
           ),
         );
