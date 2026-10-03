@@ -132,6 +132,11 @@ abstract final class AppTheme {
           side: const WidgetStatePropertyAll(
             BorderSide(color: AppColors.muted),
           ),
+          // Tighter than the default so the check mark + label fit on narrow
+          // screens and with large system fonts.
+          padding: const WidgetStatePropertyAll(
+            EdgeInsets.symmetric(horizontal: 8),
+          ),
           textStyle: const WidgetStatePropertyAll(
             TextStyle(fontWeight: FontWeight.w600),
           ),

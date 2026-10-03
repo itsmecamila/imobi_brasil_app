@@ -22,7 +22,10 @@ class PropertyListScreen extends StatelessWidget {
             // Quick return: hides on scroll down, comes back whole on scroll up.
             floating: true,
             snap: true,
-            titleSpacing: 12,
+            // More air around the brand tile and title (the default bar is
+            // 56 high and the tile sat too close to its edges).
+            toolbarHeight: 68,
+            titleSpacing: 16,
             title: const _BrandTitle(),
             bottom: _SearchAndFilter(viewModel: viewModel),
           ),
@@ -116,9 +119,9 @@ class _BrandTitle extends StatelessWidget {
       children: [
         // Original brand icon on a white tile: green on green would vanish.
         Container(
-          width: 34,
-          height: 34,
-          padding: const EdgeInsets.all(4),
+          width: 44,
+          height: 44,
+          padding: const EdgeInsets.all(9),
           decoration: const BoxDecoration(
             color: AppColors.surface,
             borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -128,7 +131,7 @@ class _BrandTitle extends StatelessWidget {
             semanticsLabel: 'ImobiBrasil',
           ),
         ),
-        const SizedBox(width: 10),
+        const SizedBox(width: 14),
         const Text('Imóveis'),
       ],
     );
@@ -159,15 +162,15 @@ class _SearchAndFilter extends StatelessWidget implements PreferredSizeWidget {
                 segments: const [
                   ButtonSegment(
                     value: PropertyFilter.all,
-                    label: Text('Todos'),
+                    label: _FilterLabel('Todos'),
                   ),
                   ButtonSegment(
                     value: PropertyFilter.sale,
-                    label: Text('Venda'),
+                    label: _FilterLabel('Venda'),
                   ),
                   ButtonSegment(
                     value: PropertyFilter.rent,
-                    label: Text('Aluguel'),
+                    label: _FilterLabel('Aluguel'),
                   ),
                 ],
                 selected: {viewModel.filter},
@@ -180,6 +183,17 @@ class _SearchAndFilter extends StatelessWidget implements PreferredSizeWidget {
       ),
     );
   }
+}
+
+/// A filter label never wraps: a broken word ("Alugue/l") reads as a bug.
+class _FilterLabel extends StatelessWidget {
+  const _FilterLabel(this.text);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) =>
+      Text(text, maxLines: 1, softWrap: false);
 }
 
 class _SearchField extends StatefulWidget {
