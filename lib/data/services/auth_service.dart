@@ -27,4 +27,8 @@ class AuthService {
     if (!matches) return null;
     return {'nome': BrokerContact.name, 'email': _email};
   }
+
+  /// Same latency as signing in. It never fails: the session is local, so
+  /// leaving must always work, even with simulated errors on.
+  Future<void> signOut() => Future<void>.delayed(delay);
 }

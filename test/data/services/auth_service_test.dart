@@ -35,6 +35,10 @@ void main() {
       expect(await _service().signIn('outro@email.com', 'imobi2026'), isNull);
     });
 
+    test('sair nunca falha, mesmo com erro simulado', () async {
+      await expectLater(_service(simulateError: true).signOut(), completes);
+    });
+
     test('com erro simulado, a chamada falha', () async {
       await expectLater(
         _service(simulateError: true)

@@ -56,7 +56,7 @@ void main() {
       var notifications = 0;
       repository.addListener(() => notifications++);
 
-      repository.signOut();
+      await repository.signOut();
 
       expect(repository.isSignedIn, isFalse);
       expect(repository.user, isNull);

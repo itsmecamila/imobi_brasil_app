@@ -8,7 +8,9 @@ flowchart TD
     G -->|"Entrar ✓"| L[Lista]
     G -->|Entrar com erro| G
     G -->|"botão voltar nativo do Android"| F
-    L -->|Sair| G
+    L -->|Sair| QS{{"Sair da conta?"}}
+    QS -->|"Sair (Saindo… ~1 s)"| G
+    QS -->|Cancelar| L
     L -->|toque no card| D[Detalhe]
     L -->|"＋ Adicionar imóvel"| N[Cadastro]
     N -->|"Cancelar (descarta)"| L
@@ -46,7 +48,7 @@ flowchart TD
 | Login → Lista | "Entrar" (ou "Entrar" do teclado) com as credenciais certas |
 | Login → Login | Credencial errada ("E-mail ou senha incorretos.") ou falha de conexão ("Não foi possível entrar agora. Tente de novo.") |
 | Login → sai do app | Botão voltar nativo do Android |
-| Lista → Login | Botão **Sair** na barra (sem confirmação: sair não apaga nada) |
+| Lista → confirmação | Botão **Sair** na barra: "Sair da conta?" → **Sair** (o ícone vira "Saindo…" por ~1 s e vai ao Login) ou **Cancelar**. A confirmação evita sair por um toque acidental no canto da tela |
 | Qualquer endereço sem login → Login | Rotas protegidas: um link direto (ex.: `/property/1/edit`) sem sessão leva ao Login; depois de entrar, vai para a Lista. Logado, abrir `/login` leva à Lista |
 | Lista → Detalhe | Toque no card |
 | Lista → Cadastro | Botão flutuante "＋ Adicionar imóvel" (só com a lista carregada) |

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:imobi_app/data/repositories/property_repository.dart';
 import 'package:imobi_app/data/services/property_service.dart';
@@ -10,6 +11,7 @@ import 'package:imobi_app/ui/property_list/widgets/property_list_skeleton.dart';
 import 'package:provider/provider.dart';
 
 import '../../../helpers/auth.dart';
+import '../../../helpers/fonts.dart';
 
 Future<void> _pumpList(
   WidgetTester tester, {
@@ -58,21 +60,84 @@ void main() {
       (width: 360.0, textScale: 1.0),
       (width: 320.0, textScale: 1.0),
       (width: 360.0, textScale: 1.3),
+      (width: 360.0, textScale: 1.5),
     ];
 
     for (final (:width, :textScale) in scenarios) {
-      testWidgets('"Aluguel" selecionado cabe numa linha '
+      testWidgets('"Aluguel" selecionado aparece inteiro, em Inter '
           '(largura $width, fonte x$textScale)', (tester) async {
+        await loadAppFonts(tester);
         await _pumpList(tester, width: width, textScale: textScale);
 
         await tester.tap(find.text('Aluguel'));
         await tester.pumpAndSettle();
 
-        // One text line is ~20 high at 14sp; a wrapped label is ~2x that.
-        final lineHeight = tester.getSize(find.text('Aluguel')).height;
-        expect(lineHeight, lessThan(textScale * 28));
+        final label = tester.renderObject<RenderParagraph>(
+          find.text('Aluguel'),
+        );
+        // The brand font, not the system one (which differs per phone).
+        expect(label.text.style?.fontFamily, 'Inter');
+        // Not cut: the whole word is laid out…
+        expect(
+          label.size.width,
+          greaterThanOrEqualTo(label.getMaxIntrinsicWidth(double.infinity)),
+        );
+        // …and, as drawn (shrunk if needed), it stays inside the filter
+        // without running into the next segment.
+        final drawn = tester.getRect(find.text('Aluguel'));
+        final filter = tester.getRect(
+          find.byType(SegmentedButton<PropertyFilter>),
+        );
+        expect(drawn.right, lessThanOrEqualTo(filter.right));
+        expect(
+          drawn.left,
+          greaterThanOrEqualTo(tester.getRect(find.text('Venda')).right),
+        );
       });
     }
+  });
+
+  group('cabeçalho', () {
+    for (final textScale in [1.3, 1.5, 2.0]) {
+      testWidgets('acompanha a fonte do sistema e não invade a lista '
+          '(fonte x$textScale)', (tester) async {
+        await loadAppFonts(tester);
+        await _pumpList(tester, width: 360);
+        double heightOf(Finder finder) => tester.getSize(finder).height;
+        final normalTitle = heightOf(find.text('Imóveis'));
+        final normalSearch = heightOf(find.byType(TextField));
+
+        tester.platformDispatcher.textScaleFactorTestValue = textScale;
+        await tester.pumpAndSettle();
+
+        // Grows with the system font, like the rest of the app.
+        expect(heightOf(find.text('Imóveis')), greaterThan(normalTitle));
+        expect(heightOf(find.byType(TextField)), greaterThan(normalSearch));
+        // And everything still fits above the first card.
+        expect(tester.takeException(), isNull);
+        expect(
+          tester.getRect(find.byType(PropertyCard).first).top,
+          greaterThanOrEqualTo(
+            tester.getRect(find.byType(SegmentedButton<PropertyFilter>)).bottom,
+          ),
+        );
+      });
+    }
+
+    testWidgets('some ao descer e volta ao subir (quick return)', (
+      tester,
+    ) async {
+      await _pumpList(tester, width: 360);
+      final list = find.byType(CustomScrollView);
+
+      await tester.drag(list, const Offset(0, -500));
+      await tester.pumpAndSettle();
+      expect(find.byTooltip('Sair').hitTestable(), findsNothing);
+
+      await tester.drag(list, const Offset(0, 100));
+      await tester.pumpAndSettle();
+      expect(find.byTooltip('Sair').hitTestable(), findsOneWidget);
+    });
   });
 
   group('botão "Adicionar imóvel"', () {

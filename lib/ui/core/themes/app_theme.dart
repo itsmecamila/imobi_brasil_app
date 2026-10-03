@@ -13,6 +13,15 @@ abstract final class AppTheme {
   static const _buttonShape = RoundedRectangleBorder(
     borderRadius: _buttonRadius,
   );
+  static const _fontFamily = 'Inter';
+
+  /// A button's text style replaces the inherited one instead of merging
+  /// with it, so the family must be repeated here: without it, buttons fall
+  /// back to the system font (wider on some phones, which cut "Aluguel").
+  static const _buttonText = TextStyle(
+    fontFamily: _fontFamily,
+    fontWeight: FontWeight.w600,
+  );
 
   static const _colorScheme = ColorScheme(
     brightness: Brightness.light,
@@ -40,7 +49,7 @@ abstract final class AppTheme {
       );
 
   static ThemeData get light {
-    final base = ThemeData(colorScheme: _colorScheme, fontFamily: 'Inter');
+    final base = ThemeData(colorScheme: _colorScheme, fontFamily: _fontFamily);
 
     return base.copyWith(
       scaffoldBackgroundColor: AppColors.background,
@@ -73,9 +82,7 @@ abstract final class AppTheme {
           foregroundColor: const WidgetStatePropertyAll(Colors.white),
           minimumSize: const WidgetStatePropertyAll(Size(64, 44)),
           shape: const WidgetStatePropertyAll(_buttonShape),
-          textStyle: const WidgetStatePropertyAll(
-            TextStyle(fontWeight: FontWeight.w600),
-          ),
+          textStyle: const WidgetStatePropertyAll(_buttonText),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
@@ -84,7 +91,7 @@ abstract final class AppTheme {
           side: const BorderSide(color: AppColors.brand600),
           minimumSize: const Size(64, 44),
           shape: _buttonShape,
-          textStyle: const TextStyle(fontWeight: FontWeight.w600),
+          textStyle: _buttonText,
         ),
       ),
       textButtonTheme: TextButtonThemeData(
@@ -92,7 +99,7 @@ abstract final class AppTheme {
           foregroundColor: AppColors.brand600,
           minimumSize: const Size(64, 44),
           shape: _buttonShape,
-          textStyle: const TextStyle(fontWeight: FontWeight.w600),
+          textStyle: _buttonText,
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
@@ -137,9 +144,7 @@ abstract final class AppTheme {
           padding: const WidgetStatePropertyAll(
             EdgeInsets.symmetric(horizontal: 8),
           ),
-          textStyle: const WidgetStatePropertyAll(
-            TextStyle(fontWeight: FontWeight.w600),
-          ),
+          textStyle: const WidgetStatePropertyAll(_buttonText),
         ),
       ),
       progressIndicatorTheme: const ProgressIndicatorThemeData(
@@ -147,7 +152,10 @@ abstract final class AppTheme {
       ),
       snackBarTheme: const SnackBarThemeData(
         backgroundColor: AppColors.text,
-        contentTextStyle: TextStyle(color: Colors.white, fontFamily: 'Inter'),
+        contentTextStyle: TextStyle(
+          color: Colors.white,
+          fontFamily: _fontFamily,
+        ),
         actionTextColor: AppColors.brand50,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: _buttonRadius),

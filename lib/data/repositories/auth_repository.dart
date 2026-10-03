@@ -24,7 +24,8 @@ class AuthRepository extends ChangeNotifier {
     return true;
   }
 
-  void signOut() {
+  Future<void> signOut() async {
+    await _service.signOut();
     _user = null;
     notifyListeners();
   }

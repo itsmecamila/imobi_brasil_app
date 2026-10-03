@@ -77,7 +77,17 @@ void main() {
     // The login leaves the history: back on the list exits the app.
     expect(router.canPop(), isFalse);
 
+    // Asks first: "Cancelar" keeps the session.
     await tester.tap(find.byTooltip('Sair'));
+    await tester.pumpAndSettle();
+    expect(find.text('Sair da conta?'), findsOneWidget);
+    await tester.tap(find.text('Cancelar'));
+    await tester.pumpAndSettle();
+    expect(router.state.uri.path, Routes.home);
+
+    await tester.tap(find.byTooltip('Sair'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilledButton, 'Sair'));
     await tester.pumpAndSettle();
 
     expect(router.state.uri.path, Routes.login);

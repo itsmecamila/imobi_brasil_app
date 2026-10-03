@@ -11,6 +11,8 @@ Todo elemento que depende de algo assíncrono (dados, imagens, ações externas)
 
 ## Tela 1 — Lista
 
+_Sair (barra):_ confirmação "Sair da conta?" → ícone vira indicador "Saindo…" (~1 s, anunciado por leitores de tela) → Login. Nunca falha: a sessão é local.
+
 | Elemento | Carregando | Sucesso | Vazio | Erro |
 |---|---|---|---|---|
 | Lista de imóveis | **Esqueleto (shimmer):** 3 cards em blocos `border` com brilho `surface` passando; parados com "remover animações" do sistema; leitores de tela ouvem "Carregando imóveis…" | Cards | **Sem resultado na busca/filtro:** "Nenhum imóvel encontrado para 'xyz'. Tente outro termo ou mude o filtro." · **Sem imóveis cadastrados:** "Nenhum imóvel cadastrado ainda." | "Não foi possível carregar os imóveis agora." + botão **Atualizar** |

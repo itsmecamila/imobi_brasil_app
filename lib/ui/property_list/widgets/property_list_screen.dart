@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:imobi_app/data/repositories/auth_repository.dart';
@@ -63,28 +64,18 @@ class _PropertyListScreenState extends State<PropertyListScreen> {
       body: CustomScrollView(
         controller: _scrollController,
         slivers: [
-          SliverAppBar(
-            // Quick return: hides on scroll down, comes back whole on scroll up.
-            floating: true,
-            snap: true,
-            // More air around the brand tile and title (the default bar is
-            // 56 high and the tile sat too close to its edges).
-            toolbarHeight: 68,
-            titleSpacing: 16,
-            title: const _BrandTitle(),
-            actions: [
-              IconButton(
-                tooltip: 'Sair',
-                icon: const Icon(Icons.logout),
-                // No navigation here: the router sends a signed-out user to
-                // the login screen.
-                onPressed: context.read<AuthRepository>().signOut,
-              ),
-              const SizedBox(width: 8),
-            ],
-            bottom: _SearchAndFilter(
-              viewModel: viewModel,
-              searchController: _searchController,
+          // Quick return: hides on scroll down, comes back whole on scroll up.
+          // Sized by its content, so larger system fonts grow the header
+          // instead of spilling over the list.
+          SliverFloatingHeader(
+            child: Column(
+              children: [
+                const _BrandBar(),
+                _SearchAndFilter(
+                  viewModel: viewModel,
+                  searchController: _searchController,
+                ),
+              ],
             ),
           ),
           ..._content(context, viewModel),
@@ -172,55 +163,151 @@ class _PropertyListScreenState extends State<PropertyListScreen> {
   }
 }
 
-class _BrandTitle extends StatelessWidget {
-  const _BrandTitle();
+/// The green bar: brand, title, user and "Sair". Built by hand instead of an
+/// AppBar because an AppBar has a fixed height.
+class _BrandBar extends StatelessWidget {
+  const _BrandBar();
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final userName = context.watch<AuthRepository>().user?.name;
-    return Row(
-      children: [
-        // Original brand icon on a white tile: green on green would vanish.
-        Container(
-          width: 44,
-          height: 44,
-          padding: const EdgeInsets.all(9),
-          decoration: const BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.all(Radius.circular(8)),
+
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: theme.appBarTheme.systemOverlayStyle!,
+      child: ColoredBox(
+        color: AppColors.brand600,
+        child: Padding(
+          // The status bar sits on the green, as it did with the AppBar.
+          padding: EdgeInsets.fromLTRB(
+            16,
+            MediaQuery.paddingOf(context).top + 12,
+            8,
+            12,
           ),
-          child: SvgPicture.asset(
-            'assets/images/imobibrasil-icon.svg',
-            semanticsLabel: 'ImobiBrasil',
-          ),
-        ),
-        const SizedBox(width: 14),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
+          child: Row(
             children: [
-              const Text('Imóveis'),
-              if (userName != null)
-                Text(
-                  userName,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400,
-                  ),
+              // Original brand icon on a white tile: green on green would
+              // vanish.
+              Container(
+                width: 44,
+                height: 44,
+                padding: const EdgeInsets.all(9),
+                decoration: const BoxDecoration(
+                  color: AppColors.surface,
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
                 ),
+                child: SvgPicture.asset(
+                  'assets/images/imobibrasil-icon.svg',
+                  semanticsLabel: 'ImobiBrasil',
+                ),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Semantics(
+                      header: true,
+                      child: Text(
+                        'Imóveis',
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    if (userName != null)
+                      Text(
+                        userName,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 13,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              const _SignOutButton(),
             ],
           ),
         ),
-      ],
+      ),
     );
   }
 }
 
-class _SearchAndFilter extends StatelessWidget implements PreferredSizeWidget {
+/// Asks first (a stray tap in the corner should not end the session), then
+/// shows "Saindo…" while the session closes.
+class _SignOutButton extends StatefulWidget {
+  const _SignOutButton();
+
+  @override
+  State<_SignOutButton> createState() => _SignOutButtonState();
+}
+
+class _SignOutButtonState extends State<_SignOutButton> {
+  bool _isSigningOut = false;
+
+  Future<void> _signOut() async {
+    final auth = context.read<AuthRepository>();
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Sair da conta?'),
+        content: const Text(
+          'Você precisará entrar de novo para ver os imóveis.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Sair'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+
+    setState(() => _isSigningOut = true);
+    // No navigation here: the router sends a signed-out user to the login.
+    await auth.signOut();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isSigningOut) {
+      return Semantics(
+        label: 'Saindo…',
+        liveRegion: true,
+        child: const SizedBox.square(
+          dimension: 48,
+          child: Center(
+            child: SizedBox.square(
+              dimension: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+    return IconButton(
+      tooltip: 'Sair',
+      color: Colors.white,
+      icon: const Icon(Icons.logout),
+      onPressed: _signOut,
+    );
+  }
+}
+
+class _SearchAndFilter extends StatelessWidget {
   const _SearchAndFilter({
     required this.viewModel,
     required this.searchController,
@@ -228,9 +315,6 @@ class _SearchAndFilter extends StatelessWidget implements PreferredSizeWidget {
 
   final PropertyListViewModel viewModel;
   final TextEditingController searchController;
-
-  @override
-  Size get preferredSize => const Size.fromHeight(116);
 
   @override
   Widget build(BuildContext context) {
@@ -271,15 +355,19 @@ class _SearchAndFilter extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
-/// A filter label never wraps: a broken word ("Alugue/l") reads as a bug.
+/// A filter label is never broken or cut ("Alugue/l" reads as a bug): with
+/// large system fonts on narrow screens it shrinks just enough to fit. The
+/// check mark stays, so the selection is not shown by color alone.
 class _FilterLabel extends StatelessWidget {
   const _FilterLabel(this.text);
 
   final String text;
 
   @override
-  Widget build(BuildContext context) =>
-      Text(text, maxLines: 1, softWrap: false);
+  Widget build(BuildContext context) => FittedBox(
+    fit: BoxFit.scaleDown,
+    child: Text(text, maxLines: 1, softWrap: false),
+  );
 }
 
 class _SearchField extends StatelessWidget {
