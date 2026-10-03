@@ -39,4 +39,16 @@ class PropertyRepository extends ChangeNotifier {
         .toList();
     notifyListeners();
   }
+
+  /// Incremental id for a new listing: the highest id plus one.
+  int get nextId =>
+      _properties.fold(0, (highest, p) => p.id > highest ? p.id : highest) + 1;
+
+  /// Same pessimistic order as [update]. The new listing goes on top
+  /// (newest first), so it is visible right after saving.
+  Future<void> add(Property created) async {
+    await _service.createProperty(created.toJson());
+    _properties = [created, ..._properties];
+    notifyListeners();
+  }
 }

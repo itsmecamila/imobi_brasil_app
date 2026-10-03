@@ -66,4 +66,47 @@ void main() {
       expect(repository.findById(1)!.price, 1800);
     });
   });
+
+  group('PropertyRepository.add', () {
+    test('o próximo id é o maior id + 1', () async {
+      final repository = PropertyRepository(_instantService());
+      expect(repository.nextId, 1);
+
+      await repository.load();
+
+      expect(repository.nextId, 7);
+    });
+
+    test('cadastra no topo e avisa os ouvintes', () async {
+      final repository = PropertyRepository(_instantService());
+      await repository.load();
+      var notifications = 0;
+      repository.addListener(() => notifications++);
+      final created = Property.fromJson({
+        ...repository.findById(1)!.toJson(),
+        'id': repository.nextId,
+        'titulo': 'Casa Nova',
+      });
+
+      await repository.add(created);
+
+      expect(repository.properties.first.title, 'Casa Nova');
+      expect(repository.properties.length, 7);
+      expect(repository.nextId, 8);
+      expect(notifications, 1);
+    });
+
+    test('com erro ao cadastrar, a lista não muda', () async {
+      final repository = PropertyRepository(_FailingSaveService());
+      await repository.load();
+      final created = Property.fromJson({
+        ...repository.findById(1)!.toJson(),
+        'id': repository.nextId,
+      });
+
+      await expectLater(repository.add(created), throwsException);
+
+      expect(repository.properties.length, 6);
+    });
+  });
 }

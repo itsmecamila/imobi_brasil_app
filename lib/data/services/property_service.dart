@@ -33,4 +33,8 @@ class PropertyService {
     await Future<void>.delayed(saveDelay);
     if (simulateError) throw Exception('Simulated network error');
   }
+
+  /// Same simulated request as saving; a real API would usually create and
+  /// update through different calls, so the contract is kept separate.
+  Future<void> createProperty(Map<String, dynamic> json) => saveProperty(json);
 }
