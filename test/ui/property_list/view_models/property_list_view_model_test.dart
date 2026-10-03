@@ -107,4 +107,35 @@ void main() {
       expect(_titles(viewModel).first, 'Apartamento Centro Reformado');
     });
   });
+
+  group('PropertyListViewModel.reveal', () {
+    test('imóvel escondido pela busca ou filtro: limpa os dois', () async {
+      final viewModel = await _loadedViewModel();
+      final rent = viewModel.visibleProperties.firstWhere(
+        (property) => property.type == PropertyType.rent,
+      );
+      viewModel
+        ..selectFilter(PropertyFilter.sale)
+        ..search('centro');
+
+      final cleared = viewModel.reveal(rent);
+
+      expect(cleared, isTrue);
+      expect(viewModel.query, isEmpty);
+      expect(viewModel.filter, PropertyFilter.all);
+    });
+
+    test('imóvel já visível: mantém busca e filtro', () async {
+      final viewModel = await _loadedViewModel();
+      viewModel
+        ..selectFilter(PropertyFilter.rent)
+        ..search('centro');
+
+      final cleared = viewModel.reveal(viewModel.visibleProperties.first);
+
+      expect(cleared, isFalse);
+      expect(viewModel.query, 'centro');
+      expect(viewModel.filter, PropertyFilter.rent);
+    });
+  });
 }

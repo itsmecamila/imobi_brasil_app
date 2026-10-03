@@ -66,6 +66,19 @@ class PropertyListViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Makes sure a just-created listing shows up: search and filter are kept
+  /// when it already matches them, otherwise both are cleared. Returns whether
+  /// they were cleared, so the screen can tell the user why they changed.
+  bool reveal(Property property) {
+    if (visibleProperties.any((visible) => visible.id == property.id)) {
+      return false;
+    }
+    _query = '';
+    _filter = PropertyFilter.all;
+    notifyListeners();
+    return true;
+  }
+
   bool _matchesFilter(Property property) => switch (_filter) {
     PropertyFilter.all => true,
     PropertyFilter.sale => property.type == PropertyType.sale,

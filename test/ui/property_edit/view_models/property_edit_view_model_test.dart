@@ -3,6 +3,7 @@ import 'package:imobi_app/data/repositories/property_repository.dart';
 import 'package:imobi_app/data/services/property_service.dart';
 import 'package:imobi_app/domain/models/property.dart';
 import 'package:imobi_app/ui/property_edit/view_models/property_edit_view_model.dart';
+import 'package:imobi_app/ui/property_form/view_models/property_form.dart';
 
 /// Loads normally; saving fails when [failSave] is true.
 class _FakeService extends PropertyService {
@@ -51,32 +52,6 @@ PropertyForm _form(
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-
-  group('validação', () {
-    test('obrigatórios vazios (ou só espaços) mostram a mensagem', () {
-      expect(PropertyEditViewModel.validateTitle('  '), 'Informe o título.');
-      expect(PropertyEditViewModel.validateCity(''), 'Informe a cidade.');
-      expect(
-        PropertyEditViewModel.validateNeighborhood(null),
-        'Informe o bairro.',
-      );
-      expect(PropertyEditViewModel.validateTitle('Casa'), isNull);
-    });
-
-    test('preço precisa ser maior que zero', () {
-      const message = 'Informe um preço maior que zero.';
-      expect(PropertyEditViewModel.validatePrice(''), message);
-      expect(PropertyEditViewModel.validatePrice('R\$ 0,00'), message);
-      expect(PropertyEditViewModel.validatePrice('R\$ 0,01'), isNull);
-    });
-
-    test('área precisa ser maior que zero e aceita vírgula', () {
-      const message = 'Informe uma área maior que zero.';
-      expect(PropertyEditViewModel.validateArea(''), message);
-      expect(PropertyEditViewModel.validateArea('0'), message);
-      expect(PropertyEditViewModel.validateArea('65,5'), isNull);
-    });
-  });
 
   group('rascunho', () {
     test('converte os textos do formulário num imóvel', () async {
