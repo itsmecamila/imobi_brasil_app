@@ -13,7 +13,7 @@ Todo elemento que depende de algo assíncrono (dados, imagens, ações externas)
 
 | Elemento | Carregando | Sucesso | Vazio | Erro |
 |---|---|---|---|---|
-| Lista de imóveis | Indicador circular + "Carregando imóveis…" | Cards | **Sem resultado na busca/filtro:** "Nenhum imóvel encontrado para 'xyz'. Tente outro termo ou mude o filtro." · **Sem imóveis cadastrados:** "Nenhum imóvel cadastrado ainda." | "Não foi possível carregar os imóveis agora." + botão **Atualizar** |
+| Lista de imóveis | **Esqueleto (shimmer):** 3 cards em blocos `border` com brilho `surface` passando; parados com "remover animações" do sistema; leitores de tela ouvem "Carregando imóveis…" | Cards | **Sem resultado na busca/filtro:** "Nenhum imóvel encontrado para 'xyz'. Tente outro termo ou mude o filtro." · **Sem imóveis cadastrados:** "Nenhum imóvel cadastrado ainda." | "Não foi possível carregar os imóveis agora." + botão **Atualizar** |
 | Foto do card | Área cinza (`border`) com ícone de imagem | Foto | — | Área cinza com ícone de casa + "Foto indisponível" |
 | Busca e filtro | — (filtragem local e instantânea) | Lista filtrada | ver "Vazio" acima | — |
 | Botão "＋ Adicionar imóvel" | Oculto | Visível (também com a lista vazia) | — | Oculto (o novo id depende dos imóveis carregados) |

@@ -4,7 +4,9 @@ import 'package:imobi_app/data/repositories/property_repository.dart';
 import 'package:imobi_app/data/services/property_service.dart';
 import 'package:imobi_app/ui/core/themes/app_theme.dart';
 import 'package:imobi_app/ui/property_list/view_models/property_list_view_model.dart';
+import 'package:imobi_app/ui/property_list/widgets/property_card.dart';
 import 'package:imobi_app/ui/property_list/widgets/property_list_screen.dart';
+import 'package:imobi_app/ui/property_list/widgets/property_list_skeleton.dart';
 import 'package:provider/provider.dart';
 
 import '../../../helpers/auth.dart';
@@ -108,6 +110,70 @@ void main() {
 
       expect(find.text('Atualizar'), findsOneWidget);
       expect(find.text('Adicionar imóvel'), findsNothing);
+    });
+  });
+
+  group('carregando (esqueleto)', () {
+    /// The list as it opens: loading has started and takes [loadDelay].
+    Future<PropertyListViewModel> pumpLoading(WidgetTester tester) async {
+      final viewModel = PropertyListViewModel(
+        PropertyRepository(
+          PropertyService(
+            loadDelay: const Duration(seconds: 2),
+            simulateError: false,
+          ),
+        ),
+      );
+      final auth = await signedInAuth(tester);
+      await tester.pumpWidget(
+        MultiProvider(
+          providers: [
+            ChangeNotifierProvider.value(value: auth),
+            ChangeNotifierProvider.value(value: viewModel),
+          ],
+          child: MaterialApp(
+            theme: AppTheme.light,
+            home: const PropertyListScreen(),
+          ),
+        ),
+      );
+      viewModel.load();
+      await tester.pump();
+      return viewModel;
+    }
+
+    testWidgets('mostra os cards-esqueleto com brilho e some com os dados', (
+      tester,
+    ) async {
+      final semantics = tester.ensureSemantics();
+      await pumpLoading(tester);
+
+      expect(find.byType(PropertyListSkeleton), findsOneWidget);
+      expect(find.byType(ShaderMask), findsNWidgets(3));
+      expect(find.bySemanticsLabel('Carregando imóveis…'), findsOneWidget);
+
+      // Ends the simulated delay, then lets the asset be read for real.
+      await tester.pump(const Duration(seconds: 2));
+      await tester.runAsync(() => Future<void>.delayed(Duration.zero));
+      await tester.pump();
+
+      expect(find.byType(PropertyListSkeleton), findsNothing);
+      expect(find.byType(PropertyCard), findsWidgets);
+      semantics.dispose();
+    });
+
+    testWidgets('com "remover animações" do sistema, os blocos ficam parados', (
+      tester,
+    ) async {
+      tester.platformDispatcher.accessibilityFeaturesTestValue =
+          const FakeAccessibilityFeatures(disableAnimations: true);
+      addTearDown(tester.platformDispatcher.clearAllTestValues);
+      await pumpLoading(tester);
+
+      expect(find.byType(PropertyListSkeleton), findsOneWidget);
+      expect(find.byType(ShaderMask), findsNothing);
+
+      await tester.pump(const Duration(seconds: 2));
     });
   });
 }

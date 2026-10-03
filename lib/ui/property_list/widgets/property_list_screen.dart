@@ -9,6 +9,7 @@ import 'package:imobi_app/ui/core/ui/state_message.dart';
 import 'package:imobi_app/ui/core/ui/success_snack_bar.dart';
 import 'package:imobi_app/ui/property_list/view_models/property_list_view_model.dart';
 import 'package:imobi_app/ui/property_list/widgets/property_card.dart';
+import 'package:imobi_app/ui/property_list/widgets/property_list_skeleton.dart';
 import 'package:provider/provider.dart';
 
 class PropertyListScreen extends StatefulWidget {
@@ -102,12 +103,7 @@ class _PropertyListScreenState extends State<PropertyListScreen> {
 
   List<Widget> _content(BuildContext context, PropertyListViewModel viewModel) {
     if (viewModel.isLoading) {
-      return const [
-        SliverFillRemaining(
-          hasScrollBody: false,
-          child: StateMessage.loading(message: 'Carregando imóveis…'),
-        ),
-      ];
+      return const [SliverToBoxAdapter(child: PropertyListSkeleton())];
     }
     if (viewModel.hasError) {
       return [
