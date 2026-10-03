@@ -8,7 +8,10 @@ flowchart TD
     G -->|"Entrar ✓"| L[Lista]
     G -->|Entrar com erro| G
     G -->|"botão voltar nativo do Android"| F
-    L -->|Sair| QS{{"Sair da conta?"}}
+    L -->|"⋮ → Sair"| QS{{"Sair da conta?"}}
+    L -->|"⋮ → Restaurar dados de exemplo"| QR{{"Restaurar dados de exemplo?"}}
+    QR -->|"Restaurar (recarrega + SnackBar)"| L
+    QR -->|Cancelar| L
     QS -->|"Sair (Saindo… ~1 s)"| G
     QS -->|Cancelar| L
     L -->|toque no card| D[Detalhe]
@@ -44,11 +47,12 @@ flowchart TD
 
 | De → Para | Gatilho |
 |---|---|
-| Splash → Login | Automático, depois de ~2 s. A splash sai do histórico: voltar nunca retorna a ela. O login vale enquanto o app está aberto |
+| Splash → Login | Automático, depois de ~2 s. A splash sai do histórico: voltar nunca retorna a ela. Com sessão guardada no aparelho, vai direto para a Lista |
+| Lista → Lista | Menu **⋮ → Restaurar dados de exemplo** → confirmação (botão destrutivo) → a Lista recarrega com os dados de exemplo, no topo, sem busca nem filtro, e avisa "Dados de exemplo restaurados" |
 | Login → Lista | "Entrar" (ou "Entrar" do teclado) com as credenciais certas |
 | Login → Login | Credencial errada ("E-mail ou senha incorretos.") ou falha de conexão ("Não foi possível entrar agora. Tente de novo.") |
 | Login → sai do app | Botão voltar nativo do Android |
-| Lista → confirmação | Botão **Sair** na barra: "Sair da conta?" → **Sair** (o ícone vira "Saindo…" por ~1 s e vai ao Login) ou **Cancelar**. A confirmação evita sair por um toque acidental no canto da tela |
+| Lista → confirmação | Menu **⋮ (Mais opções) → Sair**: "Sair da conta?" → **Sair** (o ícone vira "Saindo…" por ~1 s e vai ao Login) ou **Cancelar**. A confirmação evita sair por um toque acidental no canto da tela |
 | Qualquer endereço sem login → Login | Rotas protegidas: um link direto (ex.: `/property/1/edit`) sem sessão leva ao Login; depois de entrar, vai para a Lista. Logado, abrir `/login` leva à Lista |
 | Lista → Detalhe | Toque no card |
 | Lista → Cadastro | Botão flutuante "＋ Adicionar imóvel" (só com a lista carregada) |

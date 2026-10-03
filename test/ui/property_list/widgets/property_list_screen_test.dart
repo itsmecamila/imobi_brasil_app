@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:imobi_app/data/repositories/property_repository.dart';
 import 'package:imobi_app/data/services/property_service.dart';
+import 'package:imobi_app/domain/models/property.dart';
 import 'package:imobi_app/ui/core/themes/app_theme.dart';
 import 'package:imobi_app/ui/property_list/view_models/property_list_view_model.dart';
 import 'package:imobi_app/ui/property_list/widgets/property_card.dart';
@@ -132,11 +133,71 @@ void main() {
 
       await tester.drag(list, const Offset(0, -500));
       await tester.pumpAndSettle();
-      expect(find.byTooltip('Sair').hitTestable(), findsNothing);
+      expect(find.byTooltip('Mais opções').hitTestable(), findsNothing);
 
       await tester.drag(list, const Offset(0, 100));
       await tester.pumpAndSettle();
-      expect(find.byTooltip('Sair').hitTestable(), findsOneWidget);
+      expect(find.byTooltip('Mais opções').hitTestable(), findsOneWidget);
+    });
+  });
+
+  group('menu "Mais opções"', () {
+    testWidgets('restaurar pede confirmação e volta aos dados de exemplo', (
+      tester,
+    ) async {
+      await _pumpList(tester, width: 360);
+      final repository = tester
+          .element(find.byType(PropertyListScreen))
+          .read<PropertyRepository>();
+      await tester.runAsync(
+        () => repository.update(
+          Property.fromJson({
+            ...repository.findById(1)!.toJson(),
+            'titulo': 'Editado',
+          }),
+        ),
+      );
+      await tester.enterText(find.byType(TextField), 'editado');
+      await tester.pump();
+
+      await tester.tap(find.byTooltip('Mais opções'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Restaurar dados de exemplo'));
+      await tester.pumpAndSettle();
+      expect(find.text('Restaurar dados de exemplo?'), findsOneWidget);
+
+      await tester.tap(find.widgetWithText(OutlinedButton, 'Restaurar'));
+      await tester.pump();
+      // Restoring shows the skeleton, an endless animation, so time is moved
+      // step by step (the reload also reads the asset for real) until it ends.
+      expect(find.byType(PropertyListSkeleton), findsOneWidget);
+      for (
+        var i = 0;
+        i < 10 && find.byType(PropertyListSkeleton).evaluate().isNotEmpty;
+        i++
+      ) {
+        await tester.runAsync(() => Future<void>.delayed(Duration.zero));
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+
+      expect(find.text('Dados de exemplo restaurados'), findsOneWidget);
+      expect(repository.findById(1)!.title, 'Apartamento Centro');
+      final search = tester.widget<TextField>(find.byType(TextField));
+      expect(search.controller!.text, isEmpty);
+      expect(find.byType(PropertyCard), findsWidgets);
+    });
+
+    testWidgets('cancelar a restauração não muda nada', (tester) async {
+      await _pumpList(tester, width: 360);
+
+      await tester.tap(find.byTooltip('Mais opções'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Restaurar dados de exemplo'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Cancelar'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Dados de exemplo restaurados'), findsNothing);
     });
   });
 

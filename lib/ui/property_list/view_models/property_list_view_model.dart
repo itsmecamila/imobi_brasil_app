@@ -54,6 +54,24 @@ class PropertyListViewModel extends ChangeNotifier {
     }
   }
 
+  /// Back to the sample data, showing all of it (search and filter cleared).
+  /// Returns whether it worked; on failure the current listings stay.
+  Future<bool> restoreSample() async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      await _repository.resetToSample();
+      _query = '';
+      _filter = PropertyFilter.all;
+      return true;
+    } catch (_) {
+      return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   void search(String text) {
     _query = text;
     notifyListeners();

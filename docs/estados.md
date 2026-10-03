@@ -11,7 +11,9 @@ Todo elemento que depende de algo assíncrono (dados, imagens, ações externas)
 
 ## Tela 1 — Lista
 
-_Sair (barra):_ confirmação "Sair da conta?" → ícone vira indicador "Saindo…" (~1 s, anunciado por leitores de tela) → Login. Nunca falha: a sessão é local.
+_Restaurar dados de exemplo (menu ⋮):_ confirmação com botão destrutivo → esqueleto enquanto recarrega → SnackBar "Dados de exemplo restaurados" (busca e filtro limpos, topo); erro: SnackBar "Não foi possível restaurar agora." com **Atualizar**, e os imóveis atuais continuam.
+
+_Sair (menu ⋮):_ confirmação "Sair da conta?" → ícone vira indicador "Saindo…" (~1 s, anunciado por leitores de tela) → Login. Nunca falha: a sessão é local.
 
 | Elemento | Carregando | Sucesso | Vazio | Erro |
 |---|---|---|---|---|

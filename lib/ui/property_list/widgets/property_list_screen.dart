@@ -6,6 +6,7 @@ import 'package:imobi_app/data/repositories/auth_repository.dart';
 import 'package:imobi_app/domain/models/property.dart';
 import 'package:imobi_app/routing/router.dart';
 import 'package:imobi_app/ui/core/themes/app_colors.dart';
+import 'package:imobi_app/ui/core/ui/destructive_button.dart';
 import 'package:imobi_app/ui/core/ui/state_message.dart';
 import 'package:imobi_app/ui/core/ui/success_snack_bar.dart';
 import 'package:imobi_app/ui/property_list/view_models/property_list_view_model.dart';
@@ -55,6 +56,53 @@ class _PropertyListScreenState extends State<PropertyListScreen> {
       );
   }
 
+  /// Erases edits and new listings, so it asks first. Afterwards the list
+  /// shows the sample data from the top, with search and filter cleared.
+  Future<void> _restoreSample() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Restaurar dados de exemplo?'),
+        content: const Text(
+          'As edições e os imóveis cadastrados serão apagados.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancelar'),
+          ),
+          DestructiveButton(
+            label: 'Restaurar',
+            icon: Icons.restore,
+            onPressed: () => Navigator.of(context).pop(true),
+          ),
+        ],
+      ),
+    );
+    if (confirmed == true) await _runRestore();
+  }
+
+  Future<void> _runRestore() async {
+    final messenger = ScaffoldMessenger.of(context);
+    final restored = await context
+        .read<PropertyListViewModel>()
+        .restoreSample();
+    if (!mounted) return;
+
+    if (restored) {
+      _searchController.clear();
+      if (_scrollController.hasClients) _scrollController.jumpTo(0);
+      messenger.showSnackBar(successSnackBar('Dados de exemplo restaurados'));
+    } else {
+      messenger.showSnackBar(
+        SnackBar(
+          content: const Text('Não foi possível restaurar agora.'),
+          action: SnackBarAction(label: 'Atualizar', onPressed: _runRestore),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<PropertyListViewModel>();
@@ -70,7 +118,7 @@ class _PropertyListScreenState extends State<PropertyListScreen> {
           SliverFloatingHeader(
             child: Column(
               children: [
-                const _BrandBar(),
+                _BrandBar(onRestore: _restoreSample),
                 _SearchAndFilter(
                   viewModel: viewModel,
                   searchController: _searchController,
@@ -166,7 +214,9 @@ class _PropertyListScreenState extends State<PropertyListScreen> {
 /// The green bar: brand, title, user and "Sair". Built by hand instead of an
 /// AppBar because an AppBar has a fixed height.
 class _BrandBar extends StatelessWidget {
-  const _BrandBar();
+  const _BrandBar({required this.onRestore});
+
+  final VoidCallback onRestore;
 
   @override
   Widget build(BuildContext context) {
@@ -229,7 +279,7 @@ class _BrandBar extends StatelessWidget {
                   ],
                 ),
               ),
-              const _SignOutButton(),
+              _MoreMenu(onRestore: onRestore),
             ],
           ),
         ),
@@ -238,16 +288,21 @@ class _BrandBar extends StatelessWidget {
   }
 }
 
-/// Asks first (a stray tap in the corner should not end the session), then
-/// shows "Saindo…" while the session closes.
-class _SignOutButton extends StatefulWidget {
-  const _SignOutButton();
+enum _MenuAction { restore, signOut }
+
+/// Rarely used actions behind "Mais opções", each with a visible label.
+/// Signing out asks first (a stray tap in the corner should not end the
+/// session), then shows "Saindo…" while the session closes.
+class _MoreMenu extends StatefulWidget {
+  const _MoreMenu({required this.onRestore});
+
+  final VoidCallback onRestore;
 
   @override
-  State<_SignOutButton> createState() => _SignOutButtonState();
+  State<_MoreMenu> createState() => _MoreMenuState();
 }
 
-class _SignOutButtonState extends State<_SignOutButton> {
+class _MoreMenuState extends State<_MoreMenu> {
   bool _isSigningOut = false;
 
   Future<void> _signOut() async {
@@ -298,11 +353,44 @@ class _SignOutButtonState extends State<_SignOutButton> {
         ),
       );
     }
-    return IconButton(
-      tooltip: 'Sair',
-      color: Colors.white,
-      icon: const Icon(Icons.logout),
-      onPressed: _signOut,
+    return PopupMenuButton<_MenuAction>(
+      tooltip: 'Mais opções',
+      iconColor: Colors.white,
+      onSelected: (action) => switch (action) {
+        _MenuAction.restore => widget.onRestore(),
+        _MenuAction.signOut => _signOut(),
+      },
+      itemBuilder: (context) => const [
+        PopupMenuItem(
+          value: _MenuAction.restore,
+          child: _MenuItem(
+            icon: Icons.restore,
+            label: 'Restaurar dados de exemplo',
+          ),
+        ),
+        PopupMenuItem(
+          value: _MenuAction.signOut,
+          child: _MenuItem(icon: Icons.logout, label: 'Sair'),
+        ),
+      ],
+    );
+  }
+}
+
+class _MenuItem extends StatelessWidget {
+  const _MenuItem({required this.icon, required this.label});
+
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(icon, color: AppColors.textSecondary),
+        const SizedBox(width: 12),
+        Flexible(child: Text(label)),
+      ],
     );
   }
 }

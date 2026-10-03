@@ -138,4 +138,57 @@ void main() {
       expect(viewModel.filter, PropertyFilter.rent);
     });
   });
+
+  group('PropertyListViewModel.restoreSample', () {
+    test('volta aos dados de exemplo e mostra todos', () async {
+      final repository = _repository();
+      final viewModel = PropertyListViewModel(repository);
+      await viewModel.load();
+      await repository.update(
+        Property.fromJson({
+          ...repository.findById(1)!.toJson(),
+          'titulo': 'Editado',
+        }),
+      );
+      viewModel
+        ..selectFilter(PropertyFilter.sale)
+        ..search('editado');
+
+      final restored = await viewModel.restoreSample();
+
+      expect(restored, isTrue);
+      expect(repository.findById(1)!.title, 'Apartamento Centro');
+      expect(viewModel.query, isEmpty);
+      expect(viewModel.filter, PropertyFilter.all);
+      expect(viewModel.visibleProperties.length, 6);
+      expect(viewModel.isLoading, isFalse);
+    });
+
+    test('com erro, os imóveis atuais continuam', () async {
+      final repository = PropertyRepository(_FailingResetService());
+      final viewModel = PropertyListViewModel(repository);
+      await viewModel.load();
+      viewModel.search('kitnet');
+
+      final restored = await viewModel.restoreSample();
+
+      expect(restored, isFalse);
+      expect(viewModel.hasError, isFalse);
+      expect(viewModel.query, 'kitnet');
+      expect(viewModel.visibleProperties.length, 1);
+    });
+  });
+}
+
+/// Loads normally but cannot restore the sample data.
+class _FailingResetService extends PropertyService {
+  _FailingResetService()
+    : super(
+        loadDelay: Duration.zero,
+        saveDelay: Duration.zero,
+        simulateError: false,
+      );
+
+  @override
+  Future<void> resetToSample() async => throw Exception('Reset failed');
 }

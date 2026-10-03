@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:imobi_app/domain/models/property.dart';
 import 'package:imobi_app/ui/core/themes/app_colors.dart';
+import 'package:imobi_app/ui/core/ui/destructive_button.dart';
 import 'package:imobi_app/ui/core/ui/labeled_text_field.dart';
 import 'package:imobi_app/ui/property_form/view_models/property_form.dart';
 import 'package:imobi_app/utils/currency_input.dart';
@@ -333,15 +334,10 @@ Future<bool> _confirmDiscard(BuildContext context, String message) async {
           onPressed: () => Navigator.of(context).pop(false),
           child: const Text('Editar'),
         ),
-        // Destructive action: red outline and icon, dark text (contrast).
-        OutlinedButton.icon(
+        DestructiveButton(
+          label: 'Descartar',
+          icon: Icons.delete_outline,
           onPressed: () => Navigator.of(context).pop(true),
-          style: OutlinedButton.styleFrom(
-            foregroundColor: AppColors.text,
-            side: const BorderSide(color: AppColors.danger),
-          ),
-          icon: const Icon(Icons.delete_outline, color: AppColors.danger),
-          label: const Text('Descartar'),
         ),
       ],
     ),
