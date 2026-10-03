@@ -2,6 +2,13 @@
 
 Todo elemento que depende de algo assíncrono (dados, imagens, ações externas) tem os estados definidos abaixo. Base: skill `ux-imobi` (pilares "o app conversa" e "prevenir e recuperar").
 
+## Login (extra)
+
+| Elemento | Carregando | Sucesso | Vazio | Erro |
+|---|---|---|---|---|
+| Campos e-mail e senha | — | Normal | — | No padrão de erro dos campos: "Informe o e-mail." · "Informe um e-mail válido." · "Informe a senha." (ao sair do campo e ao tocar em Entrar) |
+| Entrar | Botão "Entrando…" desabilitado, com indicador, ~1 s | Vai para a Lista, com o nome do usuário na barra | — | Linha ⚠ abaixo do botão, anunciada por leitores de tela: "E-mail ou senha incorretos." (credencial errada) ou "Não foi possível entrar agora. Tente de novo." (falha de conexão); some ao voltar a digitar |
+
 ## Tela 1 — Lista
 
 | Elemento | Carregando | Sucesso | Vazio | Erro |

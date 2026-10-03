@@ -4,7 +4,11 @@ Fluxo entre as telas do app. O diagrama está em [Mermaid](https://mermaid.js.or
 
 ```mermaid
 flowchart TD
-    S([Splash]) -->|automático, ~2 s| L[Lista]
+    S([Splash]) -->|automático, ~2 s| G[Login]
+    G -->|"Entrar ✓"| L[Lista]
+    G -->|Entrar com erro| G
+    G -->|"botão voltar nativo do Android"| F
+    L -->|Sair| G
     L -->|toque no card| D[Detalhe]
     L -->|"＋ Adicionar imóvel"| N[Cadastro]
     N -->|"Cancelar (descarta)"| L
@@ -38,7 +42,12 @@ flowchart TD
 
 | De → Para | Gatilho |
 |---|---|
-| Splash → Lista | Automático, depois de ~2 s. A splash sai do histórico: voltar nunca retorna a ela |
+| Splash → Login | Automático, depois de ~2 s. A splash sai do histórico: voltar nunca retorna a ela. O login vale enquanto o app está aberto |
+| Login → Lista | "Entrar" (ou "Entrar" do teclado) com as credenciais certas |
+| Login → Login | Credencial errada ("E-mail ou senha incorretos.") ou falha de conexão ("Não foi possível entrar agora. Tente de novo.") |
+| Login → sai do app | Botão voltar nativo do Android |
+| Lista → Login | Botão **Sair** na barra (sem confirmação: sair não apaga nada) |
+| Qualquer endereço sem login → Login | Rotas protegidas: um link direto (ex.: `/property/1/edit`) sem sessão leva ao Login; depois de entrar, vai para a Lista. Logado, abrir `/login` leva à Lista |
 | Lista → Detalhe | Toque no card |
 | Lista → Cadastro | Botão flutuante "＋ Adicionar imóvel" (só com a lista carregada) |
 | Cadastro → Lista | Cancelar: descarta direto. Seta ← ou voltar do Android com o formulário **em branco**: volta direto |

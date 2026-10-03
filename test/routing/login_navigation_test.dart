@@ -74,6 +74,8 @@ void main() {
 
     expect(router.state.uri.path, Routes.home);
     expect(find.text('Corretor ImobiBrasil'), findsOneWidget);
+    // The login leaves the history: back on the list exits the app.
+    expect(router.canPop(), isFalse);
 
     await tester.tap(find.byTooltip('Sair'));
     await tester.pumpAndSettle();
