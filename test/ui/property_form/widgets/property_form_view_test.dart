@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:imobi_app/domain/models/property.dart';
 import 'package:imobi_app/ui/property_form/view_models/property_form.dart';
 import 'package:imobi_app/ui/property_form/widgets/property_form_view.dart';
+import 'package:imobi_app/utils/currency_input.dart';
 
 const _labels = PropertyFormLabels(
   save: 'Cadastrar',
@@ -30,6 +31,9 @@ void main() {
   testWidgets('em branco: aponta os 6 obrigatórios, incluindo o tipo', (
     tester,
   ) async {
+    tester.view.physicalSize = const Size(800, 2000);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
     var saveCalls = 0;
     await tester.pumpWidget(
       _app(
@@ -41,6 +45,19 @@ void main() {
       ),
     );
     expect(find.text('Selecione…'), findsOneWidget);
+    // Every field shows an example of what to type (tall screen: the list
+    // only builds the fields that are visible).
+    for (final hint in [
+      'Ex.: Casa com quintal no Jardim Bongiovani',
+      'Ex.: reformada, perto de escolas e do comércio',
+      formatCents(0),
+      'Ex.: Presidente Prudente',
+      'Ex.: Centro',
+      'Ex.: 65,5',
+    ]) {
+      expect(find.text(hint), findsOneWidget, reason: hint);
+    }
+    expect(find.text('0'), findsNWidgets(3));
 
     await tester.tap(find.text('Cadastrar'));
     await tester.pump();

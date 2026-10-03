@@ -17,6 +17,7 @@ class LabeledTextField extends StatelessWidget {
     super.key,
     required this.label,
     required this.controller,
+    this.hintText,
     this.isRequired = false,
     this.focusNode,
     this.validator,
@@ -35,6 +36,10 @@ class LabeledTextField extends StatelessWidget {
 
   final String label;
   final TextEditingController controller;
+
+  /// An example of what to type, never the instructions: it disappears as
+  /// soon as the user types, so the label above stays the real label.
+  final String? hintText;
   final bool isRequired;
   final FocusNode? focusNode;
   final String? Function(String?)? validator;
@@ -80,6 +85,7 @@ class LabeledTextField extends StatelessWidget {
           autofillHints: autofillHints,
           decoration: InputDecoration(
             isDense: true,
+            hintText: hintText,
             suffixIcon:
                 suffixIcon ??
                 (error == null
@@ -149,7 +155,6 @@ class ErrorLine extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 4),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Icon(Icons.error_outline, size: 16, color: AppColors.danger),
           const SizedBox(width: 4),

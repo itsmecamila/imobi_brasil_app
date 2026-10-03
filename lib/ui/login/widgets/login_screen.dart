@@ -74,6 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 32),
                       LabeledTextField(
                         label: 'E-mail',
+                        hintText: 'nome@exemplo.com.br',
                         isRequired: true,
                         controller: _email,
                         validator: LoginViewModel.validateEmail,
@@ -87,6 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 16),
                       LabeledTextField(
                         label: 'Senha',
+                        hintText: 'Sua senha',
                         isRequired: true,
                         controller: _password,
                         validator: LoginViewModel.validatePassword,

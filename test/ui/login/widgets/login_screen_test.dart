@@ -28,6 +28,8 @@ void main() {
     tester,
   ) async {
     final repository = await _pumpLogin(tester);
+    expect(find.text('nome@exemplo.com.br'), findsOneWidget);
+    expect(find.text('Sua senha'), findsOneWidget);
 
     await tester.tap(find.text('Entrar'));
     await tester.pump();

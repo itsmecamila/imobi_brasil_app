@@ -208,6 +208,7 @@ class _PropertyFormViewState extends State<PropertyFormView> {
             children: [
               LabeledTextField(
                 label: 'Título',
+                hintText: 'Ex.: Casa com quintal no Jardim Bongiovani',
                 isRequired: true,
                 controller: _title,
                 focusNode: _titleFocus,
@@ -217,6 +218,7 @@ class _PropertyFormViewState extends State<PropertyFormView> {
               const SizedBox(height: 16),
               LabeledTextField(
                 label: 'Descrição',
+                hintText: 'Ex.: reformada, perto de escolas e do comércio',
                 controller: _description,
                 textCapitalization: TextCapitalization.sentences,
                 keyboardType: TextInputType.multiline,
@@ -233,6 +235,7 @@ class _PropertyFormViewState extends State<PropertyFormView> {
               const SizedBox(height: 16),
               LabeledTextField(
                 label: 'Preço',
+                hintText: formatCents(0),
                 isRequired: true,
                 controller: _price,
                 focusNode: _priceFocus,
@@ -243,6 +246,7 @@ class _PropertyFormViewState extends State<PropertyFormView> {
               const SizedBox(height: 16),
               LabeledTextField(
                 label: 'Cidade',
+                hintText: 'Ex.: Presidente Prudente',
                 isRequired: true,
                 controller: _city,
                 focusNode: _cityFocus,
@@ -252,6 +256,7 @@ class _PropertyFormViewState extends State<PropertyFormView> {
               const SizedBox(height: 16),
               LabeledTextField(
                 label: 'Bairro',
+                hintText: 'Ex.: Centro',
                 isRequired: true,
                 controller: _neighborhood,
                 focusNode: _neighborhoodFocus,
@@ -289,6 +294,7 @@ class _PropertyFormViewState extends State<PropertyFormView> {
               // where WCAG 3.3.2 expects the expected format.
               LabeledTextField(
                 label: 'Área (m²)',
+                hintText: 'Ex.: 65,5',
                 isRequired: true,
                 controller: _area,
                 focusNode: _areaFocus,
@@ -354,6 +360,8 @@ class _CountField extends StatelessWidget {
     return LabeledTextField(
       label: label,
       controller: controller,
+      // Empty means zero, so the example says so.
+      hintText: '0',
       keyboardType: TextInputType.number,
       // Digits only, at most 2: invalid counts cannot be typed (H5).
       inputFormatters: [
