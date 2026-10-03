@@ -22,6 +22,11 @@ class _FailingSaveService extends PropertyService {
   Future<void> saveProperty(Map<String, dynamic> json) async {
     throw Exception('Save failed');
   }
+
+  @override
+  Future<void> createProperty(Map<String, dynamic> json) async {
+    throw Exception('Save failed');
+  }
 }
 
 Property _withPrice(Property property, double price) =>

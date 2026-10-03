@@ -10,18 +10,22 @@ import 'package:imobi_app/ui/core/themes/app_theme.dart';
 import 'package:imobi_app/ui/property_list/view_models/property_list_view_model.dart';
 import 'package:imobi_app/ui/splash/widgets/splash_gate.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await precacheSplashLogo();
+  // One storage for listings and session: the device's (browser's on web).
+  final storage = SharedPreferencesAsync();
   // Created here because the router (outside the widget tree) listens to it.
-  final auth = AuthRepository(AuthService());
+  final auth = AuthRepository(AuthService(storage: storage));
+  await auth.restoreSession();
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: auth),
         ChangeNotifierProvider(
-          create: (_) => PropertyRepository(PropertyService()),
+          create: (_) => PropertyRepository(PropertyService(storage: storage)),
         ),
         // Lives above the screens so search, filter and list survive
         // navigation. Not lazy: loading starts as soon as the app opens,

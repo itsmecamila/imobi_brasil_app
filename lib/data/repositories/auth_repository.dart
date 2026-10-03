@@ -3,8 +3,7 @@ import 'package:imobi_app/data/services/auth_service.dart';
 import 'package:imobi_app/domain/models/user.dart';
 
 /// Source of truth for the session. The router listens to it to protect the
-/// routes. The session lives only in memory: reopening the app asks for the
-/// login again (no local persistence).
+/// routes.
 class AuthRepository extends ChangeNotifier {
   AuthRepository(this._service);
 
@@ -13,6 +12,15 @@ class AuthRepository extends ChangeNotifier {
 
   User? get user => _user;
   bool get isSignedIn => _user != null;
+
+  /// Picks up the session left open on this device. Called before the app
+  /// starts, so a direct link (web) is not lost on the way through the login.
+  Future<void> restoreSession() async {
+    final raw = await _service.savedSession();
+    if (raw == null) return;
+    _user = User.fromJson(raw);
+    notifyListeners();
+  }
 
   /// Returns false for wrong credentials; throws when the request fails, so
   /// the screen can tell "check what you typed" from "try again later".

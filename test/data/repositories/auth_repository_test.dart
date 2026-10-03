@@ -1,6 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:imobi_app/data/repositories/auth_repository.dart';
 import 'package:imobi_app/data/services/auth_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
+import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
 
 AuthRepository _repository({bool simulateError = false}) => AuthRepository(
   AuthService(delay: Duration.zero, simulateError: simulateError),
@@ -61,6 +64,51 @@ void main() {
       expect(repository.isSignedIn, isFalse);
       expect(repository.user, isNull);
       expect(notifications, 1);
+    });
+  });
+
+  group('sessão guardada no aparelho', () {
+    setUp(() {
+      SharedPreferencesAsyncPlatform.instance =
+          InMemorySharedPreferencesAsync.empty();
+    });
+
+    AuthRepository withStorage() => AuthRepository(
+      AuthService(
+        storage: SharedPreferencesAsync(),
+        delay: Duration.zero,
+        simulateError: false,
+      ),
+    );
+
+    test('ao "reabrir o app", continua logado', () async {
+      await withStorage().signIn('corretor@imobibrasil.com.br', 'imobi2026');
+
+      final reopened = withStorage();
+      await reopened.restoreSession();
+
+      expect(reopened.isSignedIn, isTrue);
+      expect(reopened.user!.name, 'Corretor ImobiBrasil');
+    });
+
+    test('depois de sair, reabrir pede o login', () async {
+      final repository = withStorage();
+      await repository.signIn('corretor@imobibrasil.com.br', 'imobi2026');
+      await repository.signOut();
+
+      final reopened = withStorage();
+      await reopened.restoreSession();
+
+      expect(reopened.isSignedIn, isFalse);
+    });
+
+    test('credencial errada não guarda sessão', () async {
+      await withStorage().signIn('corretor@imobibrasil.com.br', 'errada');
+
+      final reopened = withStorage();
+      await reopened.restoreSession();
+
+      expect(reopened.isSignedIn, isFalse);
     });
   });
 }

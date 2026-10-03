@@ -5,7 +5,7 @@ import 'package:imobi_app/domain/models/property.dart';
 import 'package:imobi_app/ui/property_create/view_models/property_create_view_model.dart';
 import 'package:imobi_app/ui/property_form/view_models/property_form.dart';
 
-/// Loads normally; saving fails when [failSave] is true.
+/// Loads normally; creating fails when [failSave] is true.
 class _FakeService extends PropertyService {
   _FakeService({this.failSave = false})
     : super(
@@ -17,7 +17,7 @@ class _FakeService extends PropertyService {
   final bool failSave;
 
   @override
-  Future<void> saveProperty(Map<String, dynamic> json) async {
+  Future<void> createProperty(Map<String, dynamic> json) async {
     if (failSave) throw Exception('Save failed');
   }
 }

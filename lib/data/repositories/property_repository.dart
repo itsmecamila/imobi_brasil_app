@@ -40,6 +40,12 @@ class PropertyRepository extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Throws away every edit and new listing and loads the sample data again.
+  Future<void> resetToSample() async {
+    await _service.resetToSample();
+    await load();
+  }
+
   /// Incremental id for a new listing: the highest id plus one.
   int get nextId =>
       _properties.fold(0, (highest, p) => p.id > highest ? p.id : highest) + 1;
