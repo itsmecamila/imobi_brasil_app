@@ -5,12 +5,14 @@ import 'package:imobi_app/ui/property_detail/widgets/property_detail_screen.dart
 import 'package:imobi_app/ui/property_edit/view_models/property_edit_view_model.dart';
 import 'package:imobi_app/ui/property_edit/widgets/property_edit_screen.dart';
 import 'package:imobi_app/ui/property_list/widgets/property_list_screen.dart';
+import 'package:imobi_app/ui/property_photo/widgets/property_photo_screen.dart';
 import 'package:provider/provider.dart';
 
 abstract final class Routes {
   static const home = '/';
   static String property(int id) => '/property/$id';
   static String editProperty(int id) => '/property/$id/edit';
+  static String propertyPhoto(int id) => '/property/$id/photo';
 }
 
 GoRouter createRouter() => GoRouter(
@@ -40,6 +42,16 @@ GoRouter createRouter() => GoRouter(
                   _idFrom(state),
                 ),
                 child: const PropertyEditScreen(),
+              ),
+            ),
+            GoRoute(
+              path: 'photo',
+              builder: (context, state) => ChangeNotifierProvider(
+                create: (context) => PropertyDetailViewModel(
+                  context.read<PropertyRepository>(),
+                  _idFrom(state),
+                ),
+                child: const PropertyPhotoScreen(),
               ),
             ),
           ],

@@ -63,6 +63,7 @@ _Heurísticas de Nielsen: 3 (controle e liberdade do usuário) e 6 (reconhecer e
   | Busca | `TextField` (ou `SearchBar`) |
   | Filtro Todos/Venda/Aluguel | `SegmentedButton` |
   | Card do imóvel | `Card` (foto em cima) |
+  | Foto em tela cheia | `InteractiveViewer` (zoom 1×–4×) + `Hero`; ✕ com `tooltip` "Fechar" |
 | Características no detalhe | grade 2×2 (ícone + texto) |
   | Carregando | `CircularProgressIndicator` |
   | Editar | `IconButton` (lápis) com rótulo de acessibilidade |

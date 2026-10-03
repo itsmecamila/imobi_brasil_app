@@ -15,7 +15,8 @@ Todo elemento que depende de algo assíncrono (dados, imagens, ações externas)
 | Elemento | Carregando | Sucesso | Vazio | Erro |
 |---|---|---|---|---|
 | Dados do imóvel (ex.: aberto direto pela URL na Web) | Indicador circular | Detalhe completo | — | **Não encontrado:** "Este imóvel não está mais disponível." + botão **Voltar para a lista** |
-| Foto | Área cinza com ícone de imagem | Foto | — | Área cinza com ícone de casa + "Foto indisponível" |
+| Foto | Área cinza com ícone de imagem | Foto | — | Área cinza com ícone de casa + "Foto indisponível" (o conteúdo encolhe para caber em espaços pequenos) |
+| Foto em tela cheia (`/property/:id/photo`) | Área cinza com ícone de imagem (por link direto: "Carregando foto…") | Foto com zoom de 1× a 4× sobre fundo escuro | — | Área cinza com "Foto indisponível"; imóvel inexistente: "Este imóvel não está mais disponível." + Voltar para a lista |
 | Contato (WhatsApp, Ligar, E-mail) | — | Abre o app externo | — | "Não foi possível abrir o WhatsApp. Tente ligar ou enviar um e-mail." (mensagem adaptada ao canal) |
 
 ## Tela 3 — Edição

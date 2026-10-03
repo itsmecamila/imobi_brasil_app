@@ -27,6 +27,7 @@ description: Regras de uso da identidade visual da ImobiBrasil no app — qual t
 | `OutlinedButton` / `TextButton` | texto e contorno `brand-600` |
 | AppBar | fundo `brand-600`, texto e ícones brancos, em todas as telas; na Lista, ícone da marca num quadro `surface` |
 | Splash screen | fundo `surface`, logo completo centralizado |
+| Foto em tela cheia | fundo `text` (o token mais escuro; preto puro não existe na paleta), ícone ✕ branco sobre branco translúcido |
 | Status bar (Android) | `brand-800` |
 | Ícones de ação, indicador de progresso, foco | `brand-500` |
 | Links em verde | `brand-600` |

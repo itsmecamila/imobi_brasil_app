@@ -122,7 +122,22 @@ class _DetailViewState extends State<_DetailView> {
               background: Stack(
                 fit: StackFit.expand,
                 children: [
-                  PropertyPhoto(url: property.photoUrl, title: property.title),
+                  // Only tappable while expanded: once it is the green bar,
+                  // tapping the title area must not open the photo.
+                  Semantics(
+                    button: !_collapsed,
+                    hint: 'Toque para ampliar',
+                    child: GestureDetector(
+                      onTap: _collapsed
+                          ? null
+                          : () => context.go(Routes.propertyPhoto(property.id)),
+                      child: PropertyPhoto(
+                        url: property.photoUrl,
+                        title: property.title,
+                        heroTag: propertyPhotoHeroTag(property.id),
+                      ),
+                    ),
+                  ),
                   Positioned(
                     right: 16,
                     bottom: 16,

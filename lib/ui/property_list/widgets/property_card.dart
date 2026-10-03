@@ -26,7 +26,11 @@ class PropertyCard extends StatelessWidget {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  PropertyPhoto(url: property.photoUrl, title: property.title),
+                  PropertyPhoto(
+                    url: property.photoUrl,
+                    title: property.title,
+                    heroTag: propertyPhotoHeroTag(property.id),
+                  ),
                   Positioned(
                     top: 10,
                     right: 10,

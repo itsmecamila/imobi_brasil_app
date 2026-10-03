@@ -9,7 +9,9 @@ flowchart TD
     L -->|"botão voltar nativo do Android (sem seta na tela)"| F((sai do app))
     D -->|"← ou voltar do Android"| L
     D -->|"imóvel não encontrado: Voltar para a lista"| L
-    D -->|toque no ✏️| E[Edição]
+    D -->|"toque em Editar"| E[Edição]
+    D -->|"toque na foto (expandida)"| P[Foto em tela cheia]
+    P -->|"✕ ou voltar"| D
     E -->|"Cancelar (descarta)"| D
     E -->|"← ou voltar, sem mudanças"| D
     E -->|"← ou voltar, com mudanças"| Q{{"Descartar alterações?"}}
@@ -33,7 +35,9 @@ flowchart TD
 | Lista → sai do app | Botão voltar nativo do Android. A Lista é a tela inicial: não tem seta de voltar |
 | Detalhe → Lista | Seta ← ou botão voltar do Android |
 | Detalhe (imóvel não encontrado) → Lista | Botão "Voltar para a lista" |
-| Detalhe → Edição | Toque no lápis ✏️ ("Editar imóvel") |
+| Detalhe → Edição | Toque em "Editar" (botão com ícone de lápis e texto) |
+| Detalhe → Foto em tela cheia | Toque na foto, **só com ela expandida** (com a barra verde recolhida, não faz nada). A foto "voa" do card ao detalhe e ao visualizador (animação Hero) |
+| Foto em tela cheia → Detalhe | ✕ (tooltip "Fechar") ou botão voltar do Android. Zoom por pinça de 1× a 4× |
 | Edição → Detalhe | Cancelar: descarta as alterações direto |
 | Edição → Detalhe | Seta ← ou voltar do Android **sem** mudanças: volta direto |
 | Edição → confirmação | Seta ← ou voltar do Android **com** mudanças não salvas: "Descartar alterações?" → Descartar (volta ao detalhe) ou Editar |
