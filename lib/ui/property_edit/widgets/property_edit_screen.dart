@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:imobi_app/routing/router.dart';
-import 'package:imobi_app/ui/core/themes/app_colors.dart';
 import 'package:imobi_app/ui/core/ui/state_message.dart';
+import 'package:imobi_app/ui/core/ui/success_snack_bar.dart';
 import 'package:imobi_app/ui/property_edit/view_models/property_edit_view_model.dart';
 import 'package:imobi_app/ui/property_form/view_models/property_form.dart';
 import 'package:imobi_app/ui/property_form/widgets/property_form_view.dart';
@@ -47,17 +47,7 @@ class PropertyEditScreen extends StatelessWidget {
       if (!saved || !context.mounted) return saved;
 
       backToDetail();
-      messenger.showSnackBar(
-        const SnackBar(
-          content: Row(
-            children: [
-              Icon(Icons.check_circle_outline, color: AppColors.brand50),
-              SizedBox(width: 8),
-              Text('Imóvel atualizado'),
-            ],
-          ),
-        ),
-      );
+      messenger.showSnackBar(successSnackBar('Imóvel atualizado'));
       return true;
     }
 

@@ -6,6 +6,14 @@ Fluxo entre as telas do app. O diagrama está em [Mermaid](https://mermaid.js.or
 flowchart TD
     S([Splash]) -->|automático, ~2 s| L[Lista]
     L -->|toque no card| D[Detalhe]
+    L -->|"＋ Adicionar imóvel"| N[Cadastro]
+    N -->|"Cancelar (descarta)"| L
+    N -->|"← ou voltar, em branco"| L
+    N -->|"← ou voltar, preenchido"| QN{{"Descartar alterações?"}}
+    QN -->|Descartar| L
+    QN -->|Editar| N
+    N -->|"Cadastrar ✓ (novo no topo + SnackBar)"| L
+    N -->|Cadastrar com erro| N
     L -->|"botão voltar nativo do Android (sem seta na tela)"| F((sai do app))
     D -->|"← ou voltar do Android"| L
     D -->|"imóvel não encontrado: Voltar para a lista"| L
@@ -32,6 +40,11 @@ flowchart TD
 |---|---|
 | Splash → Lista | Automático, depois de ~2 s. A splash sai do histórico: voltar nunca retorna a ela |
 | Lista → Detalhe | Toque no card |
+| Lista → Cadastro | Botão flutuante "＋ Adicionar imóvel" (só com a lista carregada) |
+| Cadastro → Lista | Cancelar: descarta direto. Seta ← ou voltar do Android com o formulário **em branco**: volta direto |
+| Cadastro → confirmação | Seta ← ou voltar do Android com algo preenchido: "Descartar alterações?" → Descartar (volta à Lista) ou Editar |
+| Cadastro → Lista | Cadastrar com sucesso: o novo aparece no **topo**, a Lista rola até ele e mostra "Imóvel cadastrado". Busca e filtro são mantidos se o novo aparece com eles; senão, são limpos e o aviso diz "Imóvel cadastrado. Busca e filtro limpos para mostrá-lo." |
+| Cadastro → Cadastro | Cadastrar com erro: permanece na tela, mantendo o que foi digitado |
 | Lista → sai do app | Botão voltar nativo do Android. A Lista é a tela inicial: não tem seta de voltar |
 | Detalhe → Lista | Seta ← ou botão voltar do Android |
 | Detalhe (imóvel não encontrado) → Lista | Botão "Voltar para a lista" |

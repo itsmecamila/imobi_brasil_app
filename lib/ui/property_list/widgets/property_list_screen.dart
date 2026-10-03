@@ -1,22 +1,65 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:imobi_app/domain/models/property.dart';
 import 'package:imobi_app/routing/router.dart';
 import 'package:imobi_app/ui/core/themes/app_colors.dart';
 import 'package:imobi_app/ui/core/ui/state_message.dart';
+import 'package:imobi_app/ui/core/ui/success_snack_bar.dart';
 import 'package:imobi_app/ui/property_list/view_models/property_list_view_model.dart';
 import 'package:imobi_app/ui/property_list/widgets/property_card.dart';
 import 'package:provider/provider.dart';
 
-class PropertyListScreen extends StatelessWidget {
+class PropertyListScreen extends StatefulWidget {
   const PropertyListScreen({super.key});
+
+  @override
+  State<PropertyListScreen> createState() => _PropertyListScreenState();
+}
+
+class _PropertyListScreenState extends State<PropertyListScreen> {
+  final _scrollController = ScrollController();
+  late final _searchController = TextEditingController(
+    text: context.read<PropertyListViewModel>().query,
+  );
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  /// After a listing is created here: make sure it is visible (search and
+  /// filter are cleared only if they hide it) and scroll to the top, where new
+  /// listings go. The create screen already confirmed the save; the message
+  /// is replaced only to explain a cleared search or filter.
+  Future<void> _openCreate() async {
+    final created = await context.push<Property>(Routes.newProperty);
+    if (created == null || !mounted) return;
+
+    final cleared = context.read<PropertyListViewModel>().reveal(created);
+    if (_scrollController.hasClients) _scrollController.jumpTo(0);
+    if (!cleared) return;
+
+    _searchController.clear();
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        successSnackBar(
+          'Imóvel cadastrado. Busca e filtro limpos para mostrá-lo.',
+        ),
+      );
+  }
 
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<PropertyListViewModel>();
+    final isLoaded = !viewModel.isLoading && !viewModel.hasError;
 
     return Scaffold(
       body: CustomScrollView(
+        controller: _scrollController,
         slivers: [
           SliverAppBar(
             // Quick return: hides on scroll down, comes back whole on scroll up.
@@ -27,11 +70,22 @@ class PropertyListScreen extends StatelessWidget {
             toolbarHeight: 68,
             titleSpacing: 16,
             title: const _BrandTitle(),
-            bottom: _SearchAndFilter(viewModel: viewModel),
+            bottom: _SearchAndFilter(
+              viewModel: viewModel,
+              searchController: _searchController,
+            ),
           ),
           ..._content(context, viewModel),
         ],
       ),
+      // Only once listings are loaded: a new id depends on them.
+      floatingActionButton: isLoaded
+          ? FloatingActionButton.extended(
+              onPressed: _openCreate,
+              icon: const Icon(Icons.add),
+              label: const Text('Adicionar imóvel'),
+            )
+          : null,
     );
   }
 
@@ -93,7 +147,8 @@ class PropertyListScreen extends StatelessWidget {
 
     return [
       SliverPadding(
-        padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
+        // Bottom room for the floating button over the last card.
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 96),
         sliver: SliverList.separated(
           itemCount: properties.length,
           separatorBuilder: (context, index) => const SizedBox(height: 16),
@@ -139,9 +194,13 @@ class _BrandTitle extends StatelessWidget {
 }
 
 class _SearchAndFilter extends StatelessWidget implements PreferredSizeWidget {
-  const _SearchAndFilter({required this.viewModel});
+  const _SearchAndFilter({
+    required this.viewModel,
+    required this.searchController,
+  });
 
   final PropertyListViewModel viewModel;
+  final TextEditingController searchController;
 
   @override
   Size get preferredSize => const Size.fromHeight(116);
@@ -154,7 +213,7 @@ class _SearchAndFilter extends StatelessWidget implements PreferredSizeWidget {
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
         child: Column(
           children: [
-            _SearchField(viewModel: viewModel),
+            _SearchField(viewModel: viewModel, controller: searchController),
             const SizedBox(height: 10),
             SizedBox(
               width: double.infinity,
@@ -196,40 +255,28 @@ class _FilterLabel extends StatelessWidget {
       Text(text, maxLines: 1, softWrap: false);
 }
 
-class _SearchField extends StatefulWidget {
-  const _SearchField({required this.viewModel});
+class _SearchField extends StatelessWidget {
+  const _SearchField({required this.viewModel, required this.controller});
 
   final PropertyListViewModel viewModel;
-
-  @override
-  State<_SearchField> createState() => _SearchFieldState();
-}
-
-class _SearchFieldState extends State<_SearchField> {
-  late final _controller = TextEditingController(text: widget.viewModel.query);
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+  final TextEditingController controller;
 
   void _clear() {
-    _controller.clear();
-    widget.viewModel.clearSearch();
+    controller.clear();
+    viewModel.clearSearch();
   }
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-      controller: _controller,
-      onChanged: widget.viewModel.search,
+      controller: controller,
+      onChanged: viewModel.search,
       textInputAction: TextInputAction.search,
       decoration: InputDecoration(
         hintText: 'Buscar por título ou cidade',
         prefixIcon: const Icon(Icons.search),
         isDense: true,
-        suffixIcon: widget.viewModel.query.isEmpty
+        suffixIcon: viewModel.query.isEmpty
             ? null
             : IconButton(
                 icon: const Icon(Icons.close),

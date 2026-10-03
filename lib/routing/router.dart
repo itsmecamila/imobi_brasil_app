@@ -1,5 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:imobi_app/data/repositories/property_repository.dart';
+import 'package:imobi_app/ui/property_create/view_models/property_create_view_model.dart';
+import 'package:imobi_app/ui/property_create/widgets/property_create_screen.dart';
 import 'package:imobi_app/ui/property_detail/view_models/property_detail_view_model.dart';
 import 'package:imobi_app/ui/property_detail/widgets/property_detail_screen.dart';
 import 'package:imobi_app/ui/property_edit/view_models/property_edit_view_model.dart';
@@ -10,6 +12,7 @@ import 'package:provider/provider.dart';
 
 abstract final class Routes {
   static const home = '/';
+  static const newProperty = '/property/new';
   static String property(int id) => '/property/$id';
   static String editProperty(int id) => '/property/$id/edit';
   static String propertyPhoto(int id) => '/property/$id/photo';
@@ -24,6 +27,15 @@ GoRouter createRouter() => GoRouter(
       // Child route: the list stays underneath, so going back keeps
       // its search, filter and scroll position.
       routes: [
+        // Before 'property/:id', which would otherwise read "new" as an id.
+        GoRoute(
+          path: 'property/new',
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (context) =>
+                PropertyCreateViewModel(context.read<PropertyRepository>()),
+            child: const PropertyCreateScreen(),
+          ),
+        ),
         GoRoute(
           path: 'property/:id',
           builder: (context, state) => ChangeNotifierProvider(

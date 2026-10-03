@@ -68,4 +68,38 @@ void main() {
       });
     }
   });
+
+  group('botão "Adicionar imóvel"', () {
+    testWidgets('aparece com os imóveis carregados', (tester) async {
+      await _pumpList(tester, width: 360);
+
+      expect(find.text('Adicionar imóvel'), findsOneWidget);
+    });
+
+    testWidgets('não aparece quando o carregamento falha', (tester) async {
+      final viewModel = PropertyListViewModel(
+        PropertyRepository(
+          PropertyService(
+            loadDelay: Duration.zero,
+            saveDelay: Duration.zero,
+            simulateError: true,
+          ),
+        ),
+      );
+      await tester.runAsync(viewModel.load);
+
+      await tester.pumpWidget(
+        ChangeNotifierProvider.value(
+          value: viewModel,
+          child: MaterialApp(
+            theme: AppTheme.light,
+            home: const PropertyListScreen(),
+          ),
+        ),
+      );
+
+      expect(find.text('Atualizar'), findsOneWidget);
+      expect(find.text('Adicionar imóvel'), findsNothing);
+    });
+  });
 }
