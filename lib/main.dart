@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:imobi_app/data/repositories/auth_repository.dart';
 import 'package:imobi_app/data/repositories/property_repository.dart';
+import 'package:imobi_app/data/services/auth_service.dart';
 import 'package:imobi_app/data/services/property_service.dart';
 import 'package:imobi_app/routing/router.dart';
 import 'package:imobi_app/ui/core/themes/app_theme.dart';
@@ -12,9 +14,12 @@ import 'package:provider/provider.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await precacheSplashLogo();
+  // Created here because the router (outside the widget tree) listens to it.
+  final auth = AuthRepository(AuthService());
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider.value(value: auth),
         ChangeNotifierProvider(
           create: (_) => PropertyRepository(PropertyService()),
         ),
@@ -27,7 +32,7 @@ Future<void> main() async {
               PropertyListViewModel(context.read<PropertyRepository>())..load(),
         ),
       ],
-      child: ImobiApp(router: createRouter()),
+      child: ImobiApp(router: createRouter(auth)),
     ),
   );
 }

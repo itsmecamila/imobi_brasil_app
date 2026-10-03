@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:imobi_app/data/repositories/auth_repository.dart';
 import 'package:imobi_app/domain/models/property.dart';
 import 'package:imobi_app/routing/router.dart';
 import 'package:imobi_app/ui/core/themes/app_colors.dart';
@@ -70,6 +71,16 @@ class _PropertyListScreenState extends State<PropertyListScreen> {
             toolbarHeight: 68,
             titleSpacing: 16,
             title: const _BrandTitle(),
+            actions: [
+              IconButton(
+                tooltip: 'Sair',
+                icon: const Icon(Icons.logout),
+                // No navigation here: the router sends a signed-out user to
+                // the login screen.
+                onPressed: context.read<AuthRepository>().signOut,
+              ),
+              const SizedBox(width: 8),
+            ],
             bottom: _SearchAndFilter(
               viewModel: viewModel,
               searchController: _searchController,
@@ -170,6 +181,7 @@ class _BrandTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userName = context.watch<AuthRepository>().user?.name;
     return Row(
       children: [
         // Original brand icon on a white tile: green on green would vanish.
@@ -187,7 +199,26 @@ class _BrandTitle extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 14),
-        const Text('Imóveis'),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('Imóveis'),
+              if (userName != null)
+                Text(
+                  userName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+            ],
+          ),
+        ),
       ],
     );
   }

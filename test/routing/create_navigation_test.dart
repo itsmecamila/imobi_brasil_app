@@ -9,6 +9,8 @@ import 'package:imobi_app/ui/property_list/view_models/property_list_view_model.
 import 'package:imobi_app/ui/property_list/widgets/property_card.dart';
 import 'package:provider/provider.dart';
 
+import '../helpers/auth.dart';
+
 Future<(PropertyRepository, GoRouter)> _pumpApp(WidgetTester tester) async {
   // Tall enough for the whole form to be built at once.
   tester.view.physicalSize = const Size(800, 2000);
@@ -23,10 +25,12 @@ Future<(PropertyRepository, GoRouter)> _pumpApp(WidgetTester tester) async {
     ),
   );
   await tester.runAsync(repository.load);
-  final router = createRouter();
+  final auth = await signedInAuth(tester);
+  final router = createRouter(auth);
   await tester.pumpWidget(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider.value(value: auth),
         ChangeNotifierProvider.value(value: repository),
         ChangeNotifierProvider(
           create: (_) => PropertyListViewModel(repository),

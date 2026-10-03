@@ -10,6 +10,8 @@ import 'package:imobi_app/ui/property_list/view_models/property_list_view_model.
 import 'package:imobi_app/ui/property_list/widgets/property_card.dart';
 import 'package:provider/provider.dart';
 
+import '../helpers/auth.dart';
+
 Finder _heroWithTag(int id) => find.byWidgetPredicate(
   (widget) => widget is Hero && widget.tag == propertyPhotoHeroTag(id),
 );
@@ -23,10 +25,12 @@ Future<void> _pumpApp(WidgetTester tester) async {
     ),
   );
   await tester.runAsync(repository.load);
+  final auth = await signedInAuth(tester);
 
   await tester.pumpWidget(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider.value(value: auth),
         ChangeNotifierProvider.value(value: repository),
         ChangeNotifierProvider(
           create: (_) => PropertyListViewModel(repository),
@@ -34,7 +38,7 @@ Future<void> _pumpApp(WidgetTester tester) async {
       ],
       child: MaterialApp.router(
         theme: AppTheme.light,
-        routerConfig: createRouter(),
+        routerConfig: createRouter(auth),
       ),
     ),
   );

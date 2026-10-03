@@ -7,6 +7,8 @@ import 'package:imobi_app/ui/property_list/view_models/property_list_view_model.
 import 'package:imobi_app/ui/property_list/widgets/property_list_screen.dart';
 import 'package:provider/provider.dart';
 
+import '../../../helpers/auth.dart';
+
 Future<void> _pumpList(
   WidgetTester tester, {
   required double width,
@@ -26,10 +28,12 @@ Future<void> _pumpList(
     ),
   );
   await tester.runAsync(repository.load);
+  final auth = await signedInAuth(tester);
 
   await tester.pumpWidget(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider.value(value: auth),
         ChangeNotifierProvider.value(value: repository),
         ChangeNotifierProvider(
           create: (_) => PropertyListViewModel(repository),
@@ -87,10 +91,14 @@ void main() {
         ),
       );
       await tester.runAsync(viewModel.load);
+      final auth = await signedInAuth(tester);
 
       await tester.pumpWidget(
-        ChangeNotifierProvider.value(
-          value: viewModel,
+        MultiProvider(
+          providers: [
+            ChangeNotifierProvider.value(value: auth),
+            ChangeNotifierProvider.value(value: viewModel),
+          ],
           child: MaterialApp(
             theme: AppTheme.light,
             home: const PropertyListScreen(),

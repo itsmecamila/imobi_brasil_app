@@ -1,5 +1,8 @@
 import 'package:go_router/go_router.dart';
+import 'package:imobi_app/data/repositories/auth_repository.dart';
 import 'package:imobi_app/data/repositories/property_repository.dart';
+import 'package:imobi_app/ui/login/view_models/login_view_model.dart';
+import 'package:imobi_app/ui/login/widgets/login_screen.dart';
 import 'package:imobi_app/ui/property_create/view_models/property_create_view_model.dart';
 import 'package:imobi_app/ui/property_create/widgets/property_create_screen.dart';
 import 'package:imobi_app/ui/property_detail/view_models/property_detail_view_model.dart';
@@ -12,15 +15,32 @@ import 'package:provider/provider.dart';
 
 abstract final class Routes {
   static const home = '/';
+  static const login = '/login';
   static const newProperty = '/property/new';
   static String property(int id) => '/property/$id';
   static String editProperty(int id) => '/property/$id/edit';
   static String propertyPhoto(int id) => '/property/$id/photo';
 }
 
-GoRouter createRouter() => GoRouter(
+/// Every route but the login needs a session. The router listens to [auth],
+/// so signing in or out moves the user on its own, from any screen.
+GoRouter createRouter(AuthRepository auth) => GoRouter(
   initialLocation: Routes.home,
+  refreshListenable: auth,
+  redirect: (context, state) {
+    final atLogin = state.matchedLocation == Routes.login;
+    if (!auth.isSignedIn) return atLogin ? null : Routes.login;
+    // After signing in, the list (as the brief asks), never the login again.
+    return atLogin ? Routes.home : null;
+  },
   routes: [
+    GoRoute(
+      path: Routes.login,
+      builder: (context, state) => ChangeNotifierProvider(
+        create: (context) => LoginViewModel(context.read<AuthRepository>()),
+        child: const LoginScreen(),
+      ),
+    ),
     GoRoute(
       path: Routes.home,
       builder: (context, state) => const PropertyListScreen(),
