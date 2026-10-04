@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:imobi_app/domain/models/property.dart';
+import 'package:imobi_app/ui/core/themes/app_theme.dart';
 import 'package:imobi_app/ui/property_form/view_models/property_form.dart';
 import 'package:imobi_app/ui/property_form/widgets/property_form_view.dart';
 import 'package:imobi_app/utils/currency_input.dart';
+
+import '../../../helpers/fonts.dart';
 
 const _labels = PropertyFormLabels(
   save: 'Cadastrar',
@@ -102,5 +105,49 @@ void main() {
     expect(sent?.type, PropertyType.rent);
     expect(find.text('Não foi possível cadastrar agora.'), findsOneWidget);
     expect(find.text('Atualizar'), findsOneWidget);
+  });
+
+  group('barra de botões', () {
+    for (final (:saving, :textScale) in [
+      (saving: false, textScale: 1.0),
+      (saving: true, textScale: 1.0),
+      (saving: false, textScale: 1.3),
+      (saving: true, textScale: 1.3),
+      (saving: true, textScale: 1.5),
+    ]) {
+      testWidgets('cabe em 360 de largura '
+          '(${saving ? 'salvando' : 'parada'}, fonte x$textScale)', (
+        tester,
+      ) async {
+        await loadAppFonts(tester);
+        tester.view.physicalSize = const Size(360, 800);
+        tester.view.devicePixelRatio = 1;
+        tester.platformDispatcher.textScaleFactorTestValue = textScale;
+        addTearDown(tester.view.reset);
+        addTearDown(tester.platformDispatcher.clearAllTestValues);
+
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: AppTheme.light,
+            home: PropertyFormView(
+              screenTitle: 'Cadastrar imóvel',
+              initial: const PropertyForm.blank(),
+              isSaving: saving,
+              labels: _labels,
+              hasChanges: (_) => false,
+              onSave: (_) async => true,
+              onLeave: () {},
+            ),
+          ),
+        );
+
+        expect(tester.takeException(), isNull);
+        expect(find.text('Cancelar'), findsOneWidget);
+        expect(
+          find.text(saving ? 'Cadastrando…' : 'Cadastrar'),
+          findsOneWidget,
+        );
+      });
+    }
   });
 }

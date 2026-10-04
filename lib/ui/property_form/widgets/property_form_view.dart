@@ -452,32 +452,40 @@ class _ActionsBar extends StatelessWidget {
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+          // Each button may shrink (its label scales down only when needed),
+          // so large system fonts on narrow phones never overflow the bar.
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              TextButton(
-                onPressed: isSaving ? null : onCancel,
-                child: const Text('Cancelar'),
+              Flexible(
+                child: TextButton(
+                  onPressed: isSaving ? null : onCancel,
+                  child: const _FitLabel(child: Text('Cancelar')),
+                ),
               ),
               const SizedBox(width: 8),
-              FilledButton(
-                onPressed: isSaving ? null : onSave,
-                child: isSaving
-                    ? Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const SizedBox.square(
-                            dimension: 16,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Text(savingLabel),
-                        ],
-                      )
-                    : Text(saveLabel),
+              Flexible(
+                child: FilledButton(
+                  onPressed: isSaving ? null : onSave,
+                  child: _FitLabel(
+                    child: isSaving
+                        ? Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const SizedBox.square(
+                                dimension: 16,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Text(savingLabel),
+                            ],
+                          )
+                        : Text(saveLabel),
+                  ),
+                ),
               ),
             ],
           ),
@@ -485,4 +493,14 @@ class _ActionsBar extends StatelessWidget {
       ),
     );
   }
+}
+
+class _FitLabel extends StatelessWidget {
+  const _FitLabel({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) =>
+      FittedBox(fit: BoxFit.scaleDown, child: child);
 }
