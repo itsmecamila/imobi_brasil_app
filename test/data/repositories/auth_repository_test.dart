@@ -102,6 +102,18 @@ void main() {
       expect(reopened.isSignedIn, isFalse);
     });
 
+    test('sessão guardada ilegível: pede o login e é apagada', () async {
+      for (final damaged in ['não é JSON', '{"outro": 1}', '[1, 2]']) {
+        await SharedPreferencesAsync().setString('sessao', damaged);
+
+        final reopened = withStorage();
+        await reopened.restoreSession();
+
+        expect(reopened.isSignedIn, isFalse, reason: damaged);
+        expect(await SharedPreferencesAsync().getString('sessao'), isNull);
+      }
+    });
+
     test('credencial errada não guarda sessão', () async {
       await withStorage().signIn('corretor@imobibrasil.com.br', 'errada');
 

@@ -39,10 +39,24 @@ class AuthService {
     return user;
   }
 
-  /// The user of the last session still open on this device, if any.
+  /// The user of the last session still open on this device, if any. A
+  /// value that cannot be read (damaged, or from an older version) is erased:
+  /// asking for the login again beats an app stuck on the splash.
   Future<Map<String, dynamic>?> savedSession() async {
     final saved = await storage?.getString(_sessionKey);
-    return saved == null ? null : jsonDecode(saved) as Map<String, dynamic>;
+    if (saved == null) return null;
+    try {
+      final user = jsonDecode(saved);
+      if (user is Map<String, dynamic> &&
+          user['nome'] is String &&
+          user['email'] is String) {
+        return user;
+      }
+    } on FormatException {
+      // Not JSON: erased below, like any other unreadable value.
+    }
+    await storage?.remove(_sessionKey);
+    return null;
   }
 
   /// Same latency as signing in. It never fails: the session is local, so
