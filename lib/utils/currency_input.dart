@@ -1,7 +1,6 @@
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
+import 'package:imobi_app/utils/formatters.dart';
 
-final _currency = NumberFormat.currency(locale: 'pt_BR', symbol: r'R$');
 final _nonDigits = RegExp(r'\D');
 final _leadingZeros = RegExp(r'^0+');
 
@@ -32,7 +31,7 @@ class CurrencyInputFormatter extends TextInputFormatter {
   }
 }
 
-String formatCents(int cents) => _currency.format(cents / 100);
+String formatCents(int cents) => formatCurrency(cents / 100);
 
 /// Reads the cents back from a masked text; empty or invalid text is 0.
 int parseCents(String text) =>

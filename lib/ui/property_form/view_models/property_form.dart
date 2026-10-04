@@ -41,7 +41,7 @@ class PropertyForm {
     bedrooms: '${property.bedrooms}',
     bathrooms: '${property.bathrooms}',
     parkingSpaces: '${property.parkingSpaces}',
-    area: formatDecimal(property.area),
+    area: formatDecimalInput(property.area),
   );
 
   final String title;

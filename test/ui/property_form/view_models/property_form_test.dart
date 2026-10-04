@@ -51,6 +51,31 @@ void main() {
       );
     });
 
+    test('ida e volta não muda a área, mesmo com milhar (2000 m²)', () {
+      for (final area in [2000.0, 65.5, 1234.5, 28.0]) {
+        final property = Property(
+          id: 5,
+          title: 'Chácara',
+          description: '',
+          type: PropertyType.sale,
+          price: 680000,
+          city: 'Presidente Prudente',
+          neighborhood: 'Zona Rural',
+          bedrooms: 3,
+          bathrooms: 2,
+          parkingSpaces: 4,
+          area: area,
+          photoUrl: '',
+        );
+
+        final form = PropertyForm.fromProperty(property);
+        final back = form.toProperty(id: 5, photoUrl: '');
+
+        expect(back.area, area, reason: 'campo mostrou "${form.area}"');
+        expect(PropertyFormRules.validateArea(form.area), isNull);
+      }
+    });
+
     test('não vira imóvel sem o tipo escolhido', () {
       expect(
         () => const PropertyForm.blank().toProperty(id: 7, photoUrl: ''),

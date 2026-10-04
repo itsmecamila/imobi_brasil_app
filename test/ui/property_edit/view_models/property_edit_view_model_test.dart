@@ -54,6 +54,21 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('rascunho', () {
+    test('abrir e voltar sem mexer não conta como mudança, '
+        'nem com 2000 m² (Chácara)', () async {
+      final repository = PropertyRepository(_FakeService());
+      await repository.load();
+
+      for (final listing in repository.properties) {
+        final viewModel = PropertyEditViewModel(repository, listing.id);
+        expect(
+          viewModel.hasChanges(PropertyForm.fromProperty(listing)),
+          isFalse,
+          reason: listing.title,
+        );
+      }
+    });
+
     test('converte os textos do formulário num imóvel', () async {
       final viewModel = await _viewModel();
 
