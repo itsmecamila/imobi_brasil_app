@@ -114,4 +114,64 @@ void main() {
       expect(repository.properties.length, 6);
     });
   });
+
+  group('PropertyRepository: estado do carregamento', () {
+    test('falhou: loadFailed; tentar de novo com sucesso limpa', () async {
+      final service = _FlakyService(failures: 1);
+      final repository = PropertyRepository(service);
+
+      await expectLater(repository.load(), throwsException);
+      expect(repository.loadFailed, isTrue);
+      expect(repository.isLoading, isFalse);
+
+      await repository.load();
+
+      expect(repository.loadFailed, isFalse);
+      expect(repository.hasLoaded, isTrue);
+    });
+
+    test('duas cargas ao mesmo tempo viram uma só requisição', () async {
+      final service = _FlakyService(failures: 0);
+      final repository = PropertyRepository(service);
+
+      await Future.wait([repository.load(), repository.load()]);
+
+      expect(service.fetches, 1);
+    });
+
+    test('restaurar depois de uma carga que falhou mostra os dados', () async {
+      final repository = PropertyRepository(_FlakyService(failures: 99));
+      await expectLater(repository.load(), throwsException);
+
+      await repository.resetToSample();
+
+      expect(repository.loadFailed, isFalse);
+      expect(repository.hasLoaded, isTrue);
+      expect(repository.properties.length, 6);
+    });
+  });
+}
+
+/// Fails the first [failures] fetches, then works; counts the fetches.
+class _FlakyService extends PropertyService {
+  _FlakyService({required int failures})
+    : _failuresLeft = failures,
+      super(
+        loadDelay: Duration.zero,
+        saveDelay: Duration.zero,
+        simulateError: false,
+      );
+
+  int _failuresLeft;
+  int fetches = 0;
+
+  @override
+  Future<List<Map<String, dynamic>>> fetchProperties() async {
+    fetches++;
+    if (_failuresLeft > 0) {
+      _failuresLeft--;
+      throw Exception('Load failed');
+    }
+    return super.fetchProperties();
+  }
 }

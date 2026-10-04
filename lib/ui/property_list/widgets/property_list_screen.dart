@@ -118,7 +118,10 @@ class _PropertyListScreenState extends State<PropertyListScreen> {
           SliverFloatingHeader(
             child: Column(
               children: [
-                _BrandBar(onRestore: _restoreSample),
+                _BrandBar(
+                  onRestore: _restoreSample,
+                  canRestore: !viewModel.isLoading,
+                ),
                 _SearchAndFilter(
                   viewModel: viewModel,
                   searchController: _searchController,
@@ -214,9 +217,10 @@ class _PropertyListScreenState extends State<PropertyListScreen> {
 /// The green bar: brand, title, user and "Sair". Built by hand instead of an
 /// AppBar because an AppBar has a fixed height.
 class _BrandBar extends StatelessWidget {
-  const _BrandBar({required this.onRestore});
+  const _BrandBar({required this.onRestore, required this.canRestore});
 
   final VoidCallback onRestore;
+  final bool canRestore;
 
   @override
   Widget build(BuildContext context) {
@@ -279,7 +283,7 @@ class _BrandBar extends StatelessWidget {
                   ],
                 ),
               ),
-              _MoreMenu(onRestore: onRestore),
+              _MoreMenu(onRestore: onRestore, canRestore: canRestore),
             ],
           ),
         ),
@@ -294,9 +298,12 @@ enum _MenuAction { restore, signOut }
 /// Signing out asks first (a stray tap in the corner should not end the
 /// session), then shows "Saindo…" while the session closes.
 class _MoreMenu extends StatefulWidget {
-  const _MoreMenu({required this.onRestore});
+  const _MoreMenu({required this.onRestore, required this.canRestore});
 
   final VoidCallback onRestore;
+
+  /// Off while listings load, so a restore never races the first load.
+  final bool canRestore;
 
   @override
   State<_MoreMenu> createState() => _MoreMenuState();
@@ -360,15 +367,16 @@ class _MoreMenuState extends State<_MoreMenu> {
         _MenuAction.restore => widget.onRestore(),
         _MenuAction.signOut => _signOut(),
       },
-      itemBuilder: (context) => const [
+      itemBuilder: (context) => [
         PopupMenuItem(
           value: _MenuAction.restore,
-          child: _MenuItem(
+          enabled: widget.canRestore,
+          child: const _MenuItem(
             icon: Icons.restore,
             label: 'Restaurar dados de exemplo',
           ),
         ),
-        PopupMenuItem(
+        const PopupMenuItem(
           value: _MenuAction.signOut,
           child: _MenuItem(icon: Icons.logout, label: 'Sair'),
         ),

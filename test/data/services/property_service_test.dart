@@ -76,6 +76,20 @@ void main() {
       expect((await service().fetchProperties()).length, 6);
     });
 
+    test('restaurar com erro não apaga o que estava guardado', () async {
+      final first = (await service().fetchProperties()).first;
+      await service().saveProperty({...first, 'preco': 2000.0});
+      final failing = PropertyService(
+        storage: SharedPreferencesAsync(),
+        saveDelay: Duration.zero,
+        simulateError: true,
+      );
+
+      await expectLater(failing.resetToSample(), throwsException);
+
+      expect((await service().fetchProperties()).first['preco'], 2000.0);
+    });
+
     test('com erro ao salvar, nada é guardado', () async {
       final first = (await service().fetchProperties()).first;
       final failing = PropertyService(

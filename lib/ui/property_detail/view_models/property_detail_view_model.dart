@@ -23,15 +23,25 @@ class PropertyDetailViewModel extends ChangeNotifier {
   final LinkLauncher _launcher;
   final int propertyId;
 
-  bool get isLoading => !_repository.hasLoaded;
+  bool get isLoading => !_repository.hasLoaded && !_repository.loadFailed;
+
+  /// Loading failed (e.g. opened straight from a link while offline).
+  bool get hasLoadError => _repository.loadFailed;
+
+  /// "Atualizar": loads again; the repository tells every screen the result.
+  Future<void> retry() async {
+    try {
+      await _repository.load();
+    } catch (_) {
+      // Shown through [hasLoadError].
+    }
+  }
 
   Property? get property => _repository.findById(propertyId);
 
-  bool get isNotFound => _repository.hasLoaded && property == null;
-
   Future<bool> openWhatsApp() async {
     final title = property?.title ?? '';
-    return _launcher(
+    return _open(
       Uri.https('wa.me', '/${BrokerContact.phoneDigits}', {
         'text': 'Olá! Tenho interesse no imóvel "$title".',
       }),
@@ -39,17 +49,27 @@ class PropertyDetailViewModel extends ChangeNotifier {
   }
 
   Future<bool> call() =>
-      _launcher(Uri(scheme: 'tel', path: '+${BrokerContact.phoneDigits}'));
+      _open(Uri(scheme: 'tel', path: '+${BrokerContact.phoneDigits}'));
 
   Future<bool> sendEmail() {
     final title = property?.title ?? '';
-    return _launcher(
+    return _open(
       Uri(
         scheme: 'mailto',
         path: BrokerContact.email,
         query: 'subject=${Uri.encodeComponent('Interesse: $title')}',
       ),
     );
+  }
+
+  /// Some devices throw instead of returning false (no app for the link, or
+  /// a platform error); both mean "could not open", which the screen reports.
+  Future<bool> _open(Uri uri) async {
+    try {
+      return await _launcher(uri);
+    } catch (_) {
+      return false;
+    }
   }
 
   @override

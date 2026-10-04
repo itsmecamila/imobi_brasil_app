@@ -11,13 +11,19 @@ class PropertyListViewModel extends ChangeNotifier {
 
   final PropertyRepository _repository;
 
-  bool _isLoading = false;
-  bool _hasError = false;
+  bool _isRestoring = false;
   String _query = '';
   PropertyFilter _filter = PropertyFilter.all;
 
-  bool get isLoading => _isLoading;
-  bool get hasError => _hasError;
+  /// Loading state lives in the repository, shared with the other screens;
+  /// "not loaded yet and not failed" counts as loading too.
+  bool get isLoading =>
+      _isRestoring ||
+      _repository.isLoading ||
+      (!_repository.hasLoaded && !_repository.loadFailed);
+
+  /// Any failure gets the same friendly message; details are not shown.
+  bool get hasError => _repository.loadFailed;
   String get query => _query;
   PropertyFilter get filter => _filter;
 
@@ -40,24 +46,17 @@ class PropertyListViewModel extends ChangeNotifier {
   }
 
   Future<void> load() async {
-    _isLoading = true;
-    _hasError = false;
-    notifyListeners();
     try {
       await _repository.load();
     } catch (_) {
-      // Any failure gets the same friendly message; details are not shown.
-      _hasError = true;
-    } finally {
-      _isLoading = false;
-      notifyListeners();
+      // Shown through [hasError], which reads the repository.
     }
   }
 
   /// Back to the sample data, showing all of it (search and filter cleared).
   /// Returns whether it worked; on failure the current listings stay.
   Future<bool> restoreSample() async {
-    _isLoading = true;
+    _isRestoring = true;
     notifyListeners();
     try {
       await _repository.resetToSample();
@@ -67,7 +66,7 @@ class PropertyListViewModel extends ChangeNotifier {
     } catch (_) {
       return false;
     } finally {
-      _isLoading = false;
+      _isRestoring = false;
       notifyListeners();
     }
   }

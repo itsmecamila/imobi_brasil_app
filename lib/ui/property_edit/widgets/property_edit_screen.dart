@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:imobi_app/domain/models/property.dart';
 import 'package:imobi_app/routing/router.dart';
-import 'package:imobi_app/ui/core/ui/state_message.dart';
+import 'package:imobi_app/ui/core/ui/load_states.dart';
 import 'package:imobi_app/ui/core/ui/success_snack_bar.dart';
 import 'package:imobi_app/ui/property_edit/view_models/property_edit_view_model.dart';
 import 'package:imobi_app/ui/property_form/view_models/property_form.dart';
@@ -18,27 +19,27 @@ class PropertyEditScreen extends StatelessWidget {
     final viewModel = context.watch<PropertyEditViewModel>();
     final original = viewModel.original;
 
-    if (viewModel.isLoading) {
-      return Scaffold(
-        appBar: AppBar(title: const Text(_screenTitle)),
-        body: const StateMessage.loading(message: 'Carregando imóvel…'),
-      );
-    }
-    if (original == null) {
-      return Scaffold(
-        appBar: AppBar(title: const Text(_screenTitle)),
-        body: StateMessage(
-          icon: Icons.home_work_outlined,
-          message: 'Este imóvel não está mais disponível.',
-          hint: 'Ele pode ter sido removido ou o link está desatualizado.',
-          action: FilledButton(
-            onPressed: () => context.go(Routes.home),
-            child: const Text('Voltar para a lista'),
-          ),
-        ),
-      );
-    }
+    return LoadStates(
+      title: _screenTitle,
+      loadingMessage: 'Carregando imóvel…',
+      isLoading: viewModel.isLoading,
+      hasError: viewModel.hasLoadError,
+      onRetry: viewModel.retry,
+      builder: (context) => original == null
+          ? const ListingNotFound(title: _screenTitle)
+          : _EditForm(viewModel: viewModel, original: original),
+    );
+  }
+}
 
+class _EditForm extends StatelessWidget {
+  const _EditForm({required this.viewModel, required this.original});
+
+  final PropertyEditViewModel viewModel;
+  final Property original;
+
+  @override
+  Widget build(BuildContext context) {
     void backToDetail() => context.go(Routes.property(original.id));
 
     Future<bool> save(PropertyForm form) async {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:imobi_app/routing/router.dart';
-import 'package:imobi_app/ui/core/ui/state_message.dart';
+import 'package:imobi_app/ui/core/ui/load_states.dart';
 import 'package:imobi_app/ui/core/ui/success_snack_bar.dart';
 import 'package:imobi_app/ui/property_create/view_models/property_create_view_model.dart';
 import 'package:imobi_app/ui/property_form/view_models/property_form.dart';
@@ -17,13 +17,24 @@ class PropertyCreateScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final viewModel = context.watch<PropertyCreateViewModel>();
 
-    if (viewModel.isLoading) {
-      return Scaffold(
-        appBar: AppBar(title: const Text(_screenTitle)),
-        body: const StateMessage.loading(message: 'Carregando…'),
-      );
-    }
+    return LoadStates(
+      title: _screenTitle,
+      loadingMessage: 'Carregando…',
+      isLoading: viewModel.isLoading,
+      hasError: viewModel.hasLoadError,
+      onRetry: viewModel.retry,
+      builder: (context) => _CreateForm(viewModel: viewModel),
+    );
+  }
+}
 
+class _CreateForm extends StatelessWidget {
+  const _CreateForm({required this.viewModel});
+
+  final PropertyCreateViewModel viewModel;
+
+  @override
+  Widget build(BuildContext context) {
     void backToList() => context.go(Routes.home);
 
     // Feedback is given here because the list only awaits the result when

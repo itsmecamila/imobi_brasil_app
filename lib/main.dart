@@ -20,24 +20,29 @@ Future<void> main() async {
   // Created here because the router (outside the widget tree) listens to it.
   final auth = AuthRepository(AuthService(storage: storage));
   await auth.restoreSession();
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider.value(value: auth),
-        ChangeNotifierProvider(
-          create: (_) => PropertyRepository(PropertyService(storage: storage)),
-        ),
-        // Lives above the screens so search, filter and list survive
-        // navigation. Not lazy: loading starts as soon as the app opens,
-        // even when it opens straight on a detail link (web).
-        ChangeNotifierProvider(
-          lazy: false,
-          create: (context) =>
-              PropertyListViewModel(context.read<PropertyRepository>())..load(),
-        ),
-      ],
-      child: ImobiApp(router: createRouter(auth)),
-    ),
+  final properties = PropertyRepository(PropertyService(storage: storage));
+  // Started before the first frame: a load that begins during a build would
+  // notify listeners in the middle of it, which Flutter forbids. Failures
+  // are not lost: the repository keeps them in [PropertyRepository.loadFailed].
+  properties.load().ignore();
+  runApp(appWithProviders(auth: auth, properties: properties));
+}
+
+/// The app with its shared state above the screens. Separate from [main] so
+/// tests start the app exactly the same way.
+Widget appWithProviders({
+  required AuthRepository auth,
+  required PropertyRepository properties,
+}) {
+  return MultiProvider(
+    providers: [
+      ChangeNotifierProvider.value(value: auth),
+      ChangeNotifierProvider.value(value: properties),
+      // Lives above the screens so search, filter and list survive
+      // navigation.
+      ChangeNotifierProvider(create: (_) => PropertyListViewModel(properties)),
+    ],
+    child: ImobiApp(router: createRouter(auth)),
   );
 }
 

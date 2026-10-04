@@ -13,9 +13,20 @@ class PropertyEditViewModel extends ChangeNotifier {
   bool _isSaving = false;
 
   bool get isSaving => _isSaving;
-  bool get isLoading => !_repository.hasLoaded;
+  bool get isLoading => !_repository.hasLoaded && !_repository.loadFailed;
   Property? get original => _repository.findById(propertyId);
-  bool get isNotFound => _repository.hasLoaded && original == null;
+
+  /// Loading failed (e.g. opened straight from a link while offline).
+  bool get hasLoadError => _repository.loadFailed;
+
+  /// "Atualizar": loads again; the repository tells every screen the result.
+  Future<void> retry() async {
+    try {
+      await _repository.load();
+    } catch (_) {
+      // Shown through [hasLoadError].
+    }
+  }
 
   /// The draft as a listing, keeping the original id and photo.
   Property toProperty(PropertyForm form) {

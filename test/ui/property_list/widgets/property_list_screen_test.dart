@@ -288,6 +288,24 @@ void main() {
       semantics.dispose();
     });
 
+    testWidgets('"Restaurar" fica desativado enquanto carrega', (tester) async {
+      await pumpLoading(tester);
+
+      await tester.tap(find.byTooltip('Mais opções'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      final restore = tester.widget<PopupMenuItem<Object?>>(
+        find.ancestor(
+          of: find.text('Restaurar dados de exemplo'),
+          matching: find.byWidgetPredicate((w) => w is PopupMenuItem),
+        ),
+      );
+      expect(restore.enabled, isFalse);
+
+      await tester.pump(const Duration(seconds: 2));
+    });
+
     testWidgets('com "remover animações" do sistema, os blocos ficam parados', (
       tester,
     ) async {

@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/foundation.dart';
 import 'package:imobi_app/data/services/property_service.dart';
 import 'package:imobi_app/domain/models/property.dart';
@@ -10,11 +12,21 @@ class PropertyRepository extends ChangeNotifier {
   final PropertyService _service;
   List<Property> _properties = [];
   bool _hasLoaded = false;
+  bool _isLoading = false;
+  bool _loadFailed = false;
+  Future<void>? _ongoingLoad;
 
-  List<Property> get properties => List.unmodifiable(_properties);
+  /// A read-only view of the list, without copying it on every read.
+  List<Property> get properties => UnmodifiableListView(_properties);
 
   /// Distinguishes "still loading" from "loaded, but the listing is missing".
   bool get hasLoaded => _hasLoaded;
+  bool get isLoading => _isLoading;
+
+  /// Loading failed and there is nothing to show. Kept here, in the source of
+  /// truth, so every screen (list, detail, edit, create, photo) shows the
+  /// same error, and a retry from any of them fixes all.
+  bool get loadFailed => _loadFailed;
 
   Property? findById(int id) {
     for (final property in _properties) {
@@ -23,11 +35,26 @@ class PropertyRepository extends ChangeNotifier {
     return null;
   }
 
-  Future<void> load() async {
-    final raw = await _service.fetchProperties();
-    _properties = raw.map(Property.fromJson).toList();
-    _hasLoaded = true;
+  /// Calls made while a load is running share it, so two screens (or
+  /// "Restaurar" during the first load) never race each other.
+  Future<void> load() =>
+      _ongoingLoad ??= _load().whenComplete(() => _ongoingLoad = null);
+
+  Future<void> _load() async {
+    _isLoading = true;
+    _loadFailed = false;
     notifyListeners();
+    try {
+      final raw = await _service.fetchProperties();
+      _properties = raw.map(Property.fromJson).toList();
+      _hasLoaded = true;
+    } catch (_) {
+      _loadFailed = !_hasLoaded;
+      rethrow;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   /// Saves first and only then changes the list (pessimistic update):
@@ -40,10 +67,14 @@ class PropertyRepository extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Throws away every edit and new listing and loads the sample data again.
+  /// Throws away every edit and new listing and shows the sample data.
+  /// On failure nothing changes, here or on the device.
   Future<void> resetToSample() async {
-    await _service.resetToSample();
-    await load();
+    final raw = await _service.resetToSample();
+    _properties = raw.map(Property.fromJson).toList();
+    _hasLoaded = true;
+    _loadFailed = false;
+    notifyListeners();
   }
 
   /// Incremental id for a new listing: the highest id plus one.

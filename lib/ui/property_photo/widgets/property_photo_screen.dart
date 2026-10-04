@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:imobi_app/domain/models/property.dart';
 import 'package:imobi_app/routing/router.dart';
 import 'package:imobi_app/ui/core/themes/app_colors.dart';
+import 'package:imobi_app/ui/core/ui/load_states.dart';
 import 'package:imobi_app/ui/core/ui/property_photo.dart';
-import 'package:imobi_app/ui/core/ui/state_message.dart';
 import 'package:imobi_app/ui/property_detail/view_models/property_detail_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -18,27 +19,27 @@ class PropertyPhotoScreen extends StatelessWidget {
     final viewModel = context.watch<PropertyDetailViewModel>();
     final property = viewModel.property;
 
-    // Opened straight from a link: show the usual states on the light theme.
-    if (viewModel.isLoading) {
-      return Scaffold(
-        appBar: AppBar(title: const Text('Foto')),
-        body: const StateMessage.loading(message: 'Carregando foto…'),
-      );
-    }
-    if (property == null) {
-      return Scaffold(
-        appBar: AppBar(title: const Text('Foto')),
-        body: StateMessage(
-          icon: Icons.home_work_outlined,
-          message: 'Este imóvel não está mais disponível.',
-          action: FilledButton(
-            onPressed: () => context.go(Routes.home),
-            child: const Text('Voltar para a lista'),
-          ),
-        ),
-      );
-    }
+    // Opened straight from a link: the usual states, on the light theme.
+    return LoadStates(
+      title: 'Foto',
+      loadingMessage: 'Carregando foto…',
+      isLoading: viewModel.isLoading,
+      hasError: viewModel.hasLoadError,
+      onRetry: viewModel.retry,
+      builder: (context) => property == null
+          ? const ListingNotFound(title: 'Foto')
+          : _FullScreenPhoto(property: property),
+    );
+  }
+}
 
+class _FullScreenPhoto extends StatelessWidget {
+  const _FullScreenPhoto({required this.property});
+
+  final Property property;
+
+  @override
+  Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: Scaffold(

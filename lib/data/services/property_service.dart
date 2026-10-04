@@ -49,10 +49,14 @@ class PropertyService {
     await _write((all) => [json, ...all]);
   }
 
-  /// Forgets every change: the next fetch returns the sample data again.
-  Future<void> resetToSample() async {
+  /// Forgets every change and returns the sample data. One operation: the
+  /// sample is read before the saved data is erased, so a failure leaves
+  /// everything as it was.
+  Future<List<Map<String, dynamic>>> resetToSample() async {
     await _simulateRequest();
+    final sample = await _sample();
     await storage?.remove(_storageKey);
+    return sample;
   }
 
   Future<void> _simulateRequest() async {
@@ -64,7 +68,10 @@ class PropertyService {
   Future<List<Map<String, dynamic>>> _current() async {
     final saved = await storage?.getString(_storageKey);
     if (saved != null) return _decodeList(saved);
+    return _sample();
+  }
 
+  Future<List<Map<String, dynamic>>> _sample() async {
     final raw = await rootBundle.loadString('assets/properties.json');
     final body = jsonDecode(raw) as Map<String, dynamic>;
     return (body['imoveis'] as List).cast<Map<String, dynamic>>();

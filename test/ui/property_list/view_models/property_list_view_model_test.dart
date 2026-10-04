@@ -164,6 +164,21 @@ void main() {
       expect(viewModel.isLoading, isFalse);
     });
 
+    test('restaurar a partir da tela de erro tira o erro', () async {
+      final viewModel = PropertyListViewModel(
+        PropertyRepository(_OfflineService()),
+      );
+      await viewModel.load();
+      expect(viewModel.hasError, isTrue);
+
+      final restored = await viewModel.restoreSample();
+
+      expect(restored, isTrue);
+      expect(viewModel.hasError, isFalse);
+      expect(viewModel.isLoading, isFalse);
+      expect(viewModel.visibleProperties.length, 6);
+    });
+
     test('com erro, os imóveis atuais continuam', () async {
       final repository = PropertyRepository(_FailingResetService());
       final viewModel = PropertyListViewModel(repository);
@@ -190,5 +205,20 @@ class _FailingResetService extends PropertyService {
       );
 
   @override
-  Future<void> resetToSample() async => throw Exception('Reset failed');
+  Future<List<Map<String, dynamic>>> resetToSample() async =>
+      throw Exception('Reset failed');
+}
+
+/// Never loads, but the sample data can still be restored.
+class _OfflineService extends PropertyService {
+  _OfflineService()
+    : super(
+        loadDelay: Duration.zero,
+        saveDelay: Duration.zero,
+        simulateError: false,
+      );
+
+  @override
+  Future<List<Map<String, dynamic>>> fetchProperties() async =>
+      throw Exception('Offline');
 }

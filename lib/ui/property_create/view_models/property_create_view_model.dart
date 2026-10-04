@@ -19,7 +19,19 @@ class PropertyCreateViewModel extends ChangeNotifier {
   bool get isSaving => _isSaving;
 
   /// The next id depends on the loaded listings, so creating waits for them.
-  bool get isLoading => !_repository.hasLoaded;
+  bool get isLoading => !_repository.hasLoaded && !_repository.loadFailed;
+
+  /// Loading failed (e.g. opened straight from a link while offline).
+  bool get hasLoadError => _repository.loadFailed;
+
+  /// "Atualizar": loads again; the repository tells every screen the result.
+  Future<void> retry() async {
+    try {
+      await _repository.load();
+    } catch (_) {
+      // Shown through [hasLoadError].
+    }
+  }
 
   /// Decides whether leaving needs the "Descartar alterações?" confirmation.
   bool hasChanges(PropertyForm form) => !form.isBlank;

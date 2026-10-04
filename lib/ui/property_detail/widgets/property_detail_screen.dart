@@ -3,9 +3,9 @@ import 'package:go_router/go_router.dart';
 import 'package:imobi_app/domain/models/property.dart';
 import 'package:imobi_app/routing/router.dart';
 import 'package:imobi_app/ui/core/themes/app_colors.dart';
+import 'package:imobi_app/ui/core/ui/load_states.dart';
 import 'package:imobi_app/ui/core/ui/property_photo.dart';
 import 'package:imobi_app/ui/core/ui/property_type_badge.dart';
-import 'package:imobi_app/ui/core/ui/state_message.dart';
 import 'package:imobi_app/ui/property_detail/view_models/property_detail_view_model.dart';
 import 'package:imobi_app/ui/property_detail/widgets/contact_options.dart';
 import 'package:imobi_app/utils/formatters.dart';
@@ -19,29 +19,18 @@ class PropertyDetailScreen extends StatelessWidget {
     final viewModel = context.watch<PropertyDetailViewModel>();
     final property = viewModel.property;
 
-    if (viewModel.isLoading) {
-      return Scaffold(
-        appBar: AppBar(title: const Text('Imóvel')),
-        body: const StateMessage.loading(message: 'Carregando imóvel…'),
-      );
-    }
-    if (property == null) {
-      return Scaffold(
-        appBar: AppBar(title: const Text('Imóvel')),
-        body: StateMessage(
-          icon: Icons.home_work_outlined,
-          message: 'Este imóvel não está mais disponível.',
-          hint: 'Ele pode ter sido removido ou o link está desatualizado.',
-          action: FilledButton(
-            onPressed: () => context.go(Routes.home),
-            child: const Text('Voltar para a lista'),
-          ),
-        ),
-      );
-    }
-    return _DetailView(
-      property: property,
-      onContact: () => showContactOptions(context, viewModel),
+    return LoadStates(
+      title: 'Imóvel',
+      loadingMessage: 'Carregando imóvel…',
+      isLoading: viewModel.isLoading,
+      hasError: viewModel.hasLoadError,
+      onRetry: viewModel.retry,
+      builder: (context) => property == null
+          ? const ListingNotFound(title: 'Imóvel')
+          : _DetailView(
+              property: property,
+              onContact: () => showContactOptions(context, viewModel),
+            ),
     );
   }
 }
