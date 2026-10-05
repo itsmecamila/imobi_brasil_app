@@ -66,6 +66,11 @@ void main() {
 
     expect(find.byType(InteractiveViewer), findsOneWidget);
     expect(_heroWithTag(1), findsOneWidget);
+    // Full screen means the whole screen, not the photo's own (small) size.
+    final screen = tester.view.physicalSize / tester.view.devicePixelRatio;
+    expect(tester.getSize(find.byType(PropertyPhoto)), screen);
+    // …while the ✕ keeps its normal size.
+    expect(tester.getSize(find.byTooltip('Fechar')).width, lessThan(64));
 
     await tester.tap(find.byTooltip('Fechar'));
     await tester.pumpAndSettle();

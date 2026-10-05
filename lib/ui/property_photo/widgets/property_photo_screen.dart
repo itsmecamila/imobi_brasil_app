@@ -45,39 +45,46 @@ class _FullScreenPhoto extends StatelessWidget {
       child: Scaffold(
         // The darkest brand token: pure black is not in the palette.
         backgroundColor: AppColors.text,
-        body: Stack(
-          children: [
-            Positioned.fill(
-              child: InteractiveViewer(
-                minScale: 1,
-                maxScale: 4,
-                child: Center(
-                  child: PropertyPhoto(
-                    url: property.photoUrl,
-                    title: property.title,
-                    heroTag: propertyPhotoHeroTag(property.id),
-                    fit: BoxFit.contain,
+        // A Stack takes the size of its non-positioned layers (here only the
+        // ✕ button), so it is stretched to the screen: otherwise the photo,
+        // which fills the Stack, would be stuck in the button's corner.
+        body: SizedBox.expand(
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: InteractiveViewer(
+                  minScale: 1,
+                  maxScale: 4,
+                  // The whole screen, so `contain` can make the photo as large
+                  // as it fits; a Center would leave it at its own small size.
+                  child: SizedBox.expand(
+                    child: PropertyPhoto(
+                      url: property.photoUrl,
+                      title: property.title,
+                      heroTag: propertyPhotoHeroTag(property.id),
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ),
               ),
-            ),
-            SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: IconButton(
-                  tooltip: 'Fechar',
-                  icon: const Icon(Icons.close),
-                  style: IconButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.white.withValues(alpha: 0.16),
+              SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: IconButton(
+                    tooltip: 'Fechar',
+                    icon: const Icon(Icons.close),
+                    style: IconButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.white.withValues(alpha: 0.16),
+                    ),
+                    onPressed: () => context.canPop()
+                        ? context.pop()
+                        : context.go(Routes.property(property.id)),
                   ),
-                  onPressed: () => context.canPop()
-                      ? context.pop()
-                      : context.go(Routes.property(property.id)),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
