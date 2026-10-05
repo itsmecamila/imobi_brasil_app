@@ -57,7 +57,11 @@ class _CreateForm extends StatelessWidget {
         save: 'Cadastrar',
         saving: 'Cadastrando…',
         saveError: 'Não foi possível cadastrar agora.',
-        discardMessage: 'Os dados preenchidos ainda não foram salvos.',
+        discardTitle: 'Descartar cadastro?',
+        discardMessage:
+            'O imóvel não será cadastrado e os dados preenchidos serão '
+            'perdidos.',
+        keepGoing: 'Continuar cadastrando',
       ),
       hasChanges: viewModel.hasChanges,
       onSave: save,

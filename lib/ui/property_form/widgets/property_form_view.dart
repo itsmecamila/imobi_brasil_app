@@ -48,13 +48,20 @@ class PropertyFormLabels {
     required this.save,
     required this.saving,
     required this.saveError,
+    required this.discardTitle,
     required this.discardMessage,
+    required this.keepGoing,
   });
 
   final String save;
   final String saving;
   final String saveError;
+
+  /// The confirmation before throwing away what was typed: it says what
+  /// leaving means for this form, and how to stay ([keepGoing]).
+  final String discardTitle;
   final String discardMessage;
+  final String keepGoing;
 }
 
 class _PropertyFormViewState extends State<PropertyFormView> {
@@ -178,17 +185,28 @@ class _PropertyFormViewState extends State<PropertyFormView> {
   }
 
   /// Back arrow and system back: leave directly when nothing changed,
-  /// otherwise ask. "Cancelar" never reaches this.
+  /// otherwise ask.
   Future<void> _onBack(bool didPop, Object? result) async {
     if (didPop || widget.isSaving) return;
     if (!widget.hasChanges(_currentForm())) {
       context.pop();
       return;
     }
-    final discard = await _confirmDiscard(
-      context,
-      widget.labels.discardMessage,
-    );
+    await _confirmThenLeave();
+  }
+
+  /// "Cancelar" asks too when something would be lost: a stray tap must not
+  /// throw away what was typed.
+  Future<void> _onCancel() async {
+    if (!widget.hasChanges(_currentForm())) {
+      widget.onLeave();
+      return;
+    }
+    await _confirmThenLeave();
+  }
+
+  Future<void> _confirmThenLeave() async {
+    final discard = await _confirmDiscard(context, widget.labels);
     if (discard && mounted) widget.onLeave();
   }
 
@@ -315,7 +333,7 @@ class _PropertyFormViewState extends State<PropertyFormView> {
           isSaving: isSaving,
           saveLabel: widget.labels.save,
           savingLabel: widget.labels.saving,
-          onCancel: widget.onLeave,
+          onCancel: _onCancel,
           onSave: _save,
         ),
       ),
@@ -323,16 +341,19 @@ class _PropertyFormViewState extends State<PropertyFormView> {
   }
 }
 
-Future<bool> _confirmDiscard(BuildContext context, String message) async {
+Future<bool> _confirmDiscard(
+  BuildContext context,
+  PropertyFormLabels labels,
+) async {
   final discard = await showDialog<bool>(
     context: context,
     builder: (context) => AlertDialog(
-      title: const Text('Descartar alterações?'),
-      content: Text(message),
+      title: Text(labels.discardTitle),
+      content: Text(labels.discardMessage),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(false),
-          child: const Text('Editar'),
+          child: Text(labels.keepGoing),
         ),
         DestructiveButton(
           label: 'Descartar',

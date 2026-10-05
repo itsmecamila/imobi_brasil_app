@@ -12,7 +12,10 @@ const _labels = PropertyFormLabels(
   save: 'Cadastrar',
   saving: 'Cadastrando…',
   saveError: 'Não foi possível cadastrar agora.',
-  discardMessage: 'Os dados preenchidos ainda não foram salvos.',
+  discardTitle: 'Descartar cadastro?',
+  discardMessage:
+      'O imóvel não será cadastrado e os dados preenchidos serão perdidos.',
+  keepGoing: 'Continuar cadastrando',
 );
 
 Widget _app({
@@ -149,5 +152,63 @@ void main() {
         );
       });
     }
+  });
+
+  group('Cancelar', () {
+    Future<List<String>> pumpForm(WidgetTester tester) async {
+      final left = <String>[];
+      await tester.pumpWidget(
+        MaterialApp(
+          home: PropertyFormView(
+            screenTitle: 'Cadastrar imóvel',
+            initial: const PropertyForm.blank(),
+            isSaving: false,
+            labels: _labels,
+            hasChanges: (form) => !form.isBlank,
+            onSave: (_) async => true,
+            onLeave: () => left.add('saiu'),
+          ),
+        ),
+      );
+      return left;
+    }
+
+    testWidgets('sem nada preenchido, sai direto', (tester) async {
+      final left = await pumpForm(tester);
+
+      await tester.tap(find.text('Cancelar'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Descartar cadastro?'), findsNothing);
+      expect(left, ['saiu']);
+    });
+
+    testWidgets('com algo preenchido, pergunta; continuar mantém o texto', (
+      tester,
+    ) async {
+      final left = await pumpForm(tester);
+      await tester.enterText(find.byType(TextField).first, 'Casa Nova');
+
+      await tester.tap(find.text('Cancelar'));
+      await tester.pumpAndSettle();
+      expect(find.text('Descartar cadastro?'), findsOneWidget);
+      expect(
+        find.text(
+          'O imóvel não será cadastrado e os dados preenchidos serão perdidos.',
+        ),
+        findsOneWidget,
+      );
+
+      await tester.tap(find.text('Continuar cadastrando'));
+      await tester.pumpAndSettle();
+      expect(left, isEmpty);
+      expect(find.text('Casa Nova'), findsOneWidget);
+
+      await tester.tap(find.text('Cancelar'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Descartar'));
+      await tester.pumpAndSettle();
+      expect(left, ['saiu']);
+    });
   });
 }

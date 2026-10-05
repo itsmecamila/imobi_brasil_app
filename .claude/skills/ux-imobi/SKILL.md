@@ -46,7 +46,7 @@ _Heurísticas de Nielsen: 3 (controle e liberdade do usuário) e 6 (reconhecer e
 
 **Regras:**
 1. Sempre há um caminho de volta visível (seta na barra do detalhe e da edição); o botão voltar do Android se comporta igual. _(H3)_
-2. Cancelar na edição descarta tudo e volta ao detalhe, sem etapas extras (intenção explícita). Já a seta ← ou o voltar do Android **com mudanças não salvas** pedem confirmação: "Descartar alterações?" · Editar · Descartar (toque acidental; H5). Sem mudanças, voltam direto. _(H3 + H5)_
+2. Sair de um formulário (Cancelar, seta ← ou voltar do Android) **sem mudanças** volta direto. **Com algo modificado ou preenchido**, os três pedem confirmação, dizendo a consequência: "Descartar alterações?" / "Descartar cadastro?" · **Continuar editando / Continuar cadastrando** · Descartar (toque acidental; H5). _Revisto em 05/10: antes o Cancelar descartava direto; a Camila decidiu que um toque por engano não pode apagar o que foi digitado._ _(H3 + H5)_
 3. Busca e filtro ativos ficam visíveis ou reaparecem com um leve gesto para cima (quick return): segmento selecionado destacado, texto no campo, botão ✕ para limpar a busca. _(H6)_
 4. Ao voltar do detalhe para a lista, busca, filtro e posição da rolagem continuam como estavam. _(H6)_
 5. A edição abre preenchida com os valores atuais. _(H6)_

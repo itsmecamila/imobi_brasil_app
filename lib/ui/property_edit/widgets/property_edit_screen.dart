@@ -60,8 +60,10 @@ class _EditForm extends StatelessWidget {
         save: 'Salvar',
         saving: 'Salvando…',
         saveError: 'Não foi possível salvar agora.',
+        discardTitle: 'Descartar alterações?',
         discardMessage:
-            'As mudanças feitas neste imóvel ainda não foram salvas.',
+            'As mudanças não serão salvas e o imóvel continua como estava.',
+        keepGoing: 'Continuar editando',
       ),
       hasChanges: viewModel.hasChanges,
       onSave: save,
