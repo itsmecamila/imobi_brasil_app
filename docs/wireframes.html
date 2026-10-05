@@ -1,0 +1,604 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Telas do Imobi App</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..24,400,0..1,0&display=block">
+<style>
+/* Layout: prancheta de especificação — celulares lado a lado, anotações como "redlines" abaixo de cada tela */
+:root {
+  /* Prancheta (página) */
+  --board: #EEF3EF; --ink: #0F1A14; --ink-2: #41504A; --line: #D3DED7; --note: #00622B; --device: #1B2420;
+  /* Tokens da ImobiBrasil (fixos: o app é claro em qualquer tema da página) */
+  --b50: #E6F7ED; --b500: #00923F; --b600: #007A35; --b700: #00622B; --b800: #004A21;
+  --blue: #3B82C4; --yellow: #F4C332; --danger: #DC4545;
+  --bg: #F7FAF8; --surface: #FFFFFF; --border: #E3EEE7;
+  --text: #0F172A; --text2: #334155; --muted: #64748B;
+  --scrim: rgba(15, 23, 42, .5); --chip-dark: rgba(15, 23, 42, .58);
+  /* Tipografia */
+  --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --app: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --board: #0F1613; --ink: #E7EFEA; --ink-2: #A9B8B0; --line: #26332D; --note: #7FD3A2; --device: #2B3833; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --board: #0F1613; --ink: #E7EFEA; --ink-2: #A9B8B0; --line: #26332D; --note: #7FD3A2; --device: #2B3833; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { background: var(--board); color: var(--ink); font-family: var(--app); line-height: 1.5; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-inline: 20px; padding-block: 40px 64px; display: flex; flex-direction: column; gap: 56px; }
+
+header.intro { display: flex; flex-direction: column; gap: 14px; max-width: 70ch; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--note); }
+h1 { font-family: var(--display); font-weight: 800; font-size: clamp(30px, 5vw, 46px); line-height: 1.05; margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+h2 { font-family: var(--display); font-weight: 800; font-size: 24px; margin: 0; text-wrap: balance; }
+.intro p, .sec-head p { margin: 0; color: var(--ink-2); font-size: 15px; }
+nav.toc { display: flex; flex-wrap: wrap; gap: 8px; }
+nav.toc a { font-family: var(--mono); font-size: 12.5px; color: var(--ink); text-decoration: none; border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; }
+nav.toc a:hover, nav.toc a:focus-visible { border-color: var(--note); color: var(--note); outline: none; }
+
+section { display: flex; flex-direction: column; gap: 22px; scroll-margin-top: 16px; }
+.sec-head { display: flex; flex-direction: column; gap: 6px; max-width: 75ch; border-top: 1px solid var(--line); padding-top: 18px; }
+.screens { display: flex; flex-wrap: wrap; gap: 32px 28px; align-items: flex-start; }
+figure { margin: 0; display: flex; flex-direction: column; gap: 12px; width: 280px; max-width: 100%; }
+figcaption { display: flex; flex-direction: column; gap: 6px; font-family: var(--mono); font-size: 12px; color: var(--ink-2); }
+figcaption b { font-family: var(--app); font-size: 14px; color: var(--ink); font-weight: 600; }
+figcaption ul { margin: 0; padding-left: 16px; display: flex; flex-direction: column; gap: 2px; }
+
+/* ---------- Celular ---------- */
+.phone { width: 280px; max-width: 100%; height: 590px; border: 9px solid var(--device); border-radius: 34px; background: var(--bg); overflow: hidden; position: relative; display: flex; flex-direction: column; font-family: var(--app); color: var(--text); font-size: 13px; line-height: 1.4; }
+.sb { flex: none; height: 22px; background: var(--b800); color: #fff; font-size: 10.5px; font-weight: 600; display: flex; align-items: center; justify-content: space-between; padding: 0 14px; font-variant-numeric: tabular-nums; }
+.sb.light { background: var(--surface); color: var(--text); }
+.ms { font-family: "Material Symbols Outlined"; font-weight: normal; font-style: normal; font-size: 20px; line-height: 1; display: inline-block; white-space: nowrap; direction: ltr; font-feature-settings: "liga"; -webkit-font-smoothing: antialiased; flex: none; }
+.ms.fill { font-variation-settings: "FILL" 1; }
+.appbar { flex: none; height: 52px; background: var(--b600); color: #fff; display: flex; align-items: center; gap: 6px; padding: 0 6px 0 8px; }
+.appbar .t { font-size: 17px; font-weight: 600; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left: 6px; }
+.iconbtn { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; color: inherit; }
+.content { flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: 12px; padding: 12px; }
+.pinned { display: flex; flex-direction: column; gap: 10px; }
+
+.search { height: 40px; background: var(--surface); border: 1px solid var(--muted); border-radius: 8px; display: flex; align-items: center; gap: 8px; padding: 0 8px 0 10px; color: var(--muted); }
+.search span.v { flex: 1; color: var(--text); }
+.search span.ph { flex: 1; }
+.seg { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--muted); border-radius: 999px; overflow: hidden; height: 36px; }
+.seg span { display: flex; align-items: center; justify-content: center; gap: 4px; font-size: 12.5px; font-weight: 600; color: var(--text2); border-left: 1px solid var(--muted); }
+.seg span:first-child { border-left: 0; }
+.seg span.on { background: var(--b50); color: var(--b700); }
+.seg span.on .ms { font-size: 16px; }
+
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; flex: none; }
+.photo { position: relative; aspect-ratio: 16 / 10; display: grid; place-items: center; color: rgba(255,255,255,.55); }
+.photo .ms { font-size: 44px; }
+.p1 { background: linear-gradient(160deg, #A9C3D3, #5F7F92 70%, #4B6676); }
+.p2 { background: linear-gradient(160deg, #C9D9B4, #7F9A63 65%, #5D7448); }
+.p3 { background: linear-gradient(160deg, #E3CDB4, #B08A68 70%, #8C6A4E); }
+.p4 { background: linear-gradient(160deg, #CBC3DA, #8C80A6 70%, #6E6388); }
+.badge { position: absolute; top: 10px; right: 10px; background: var(--yellow); color: var(--text); font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 3px 8px; border-radius: 6px; }
+.card .body { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 2px; }
+.card .tt { font-size: 15px; font-weight: 600; }
+.card .loc { display: flex; align-items: center; gap: 3px; color: var(--text2); font-size: 12.5px; }
+.card .loc .ms { font-size: 16px; color: var(--muted); }
+.card .pr { font-size: 16px; font-weight: 700; margin-top: 4px; font-variant-numeric: tabular-nums; }
+.card .pr small { font-weight: 500; font-size: 12px; color: var(--text2); }
+
+.state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center; padding: 0 12px; color: var(--text2); }
+.state .ms { font-size: 44px; color: var(--muted); }
+.state .ms.err { color: var(--danger); }
+.state p { margin: 0; font-size: 14px; color: var(--text); }
+.state small { font-size: 12.5px; color: var(--text2); }
+.spinner { width: 36px; height: 36px; border-radius: 50%; border: 4px solid var(--b50); border-top-color: var(--b500); animation: spin .9s linear infinite; }
+.spinner.sm { width: 16px; height: 16px; border-width: 2.5px; border-color: rgba(255,255,255,.35); border-top-color: #fff; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
+
+.filled { height: 44px; border-radius: 8px; background: var(--b600); color: #fff; font-weight: 600; font-size: 14.5px; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 0 20px; }
+.filled.busy { background: var(--b700); }
+.textbtn { height: 44px; border-radius: 8px; color: var(--b600); font-weight: 600; font-size: 14.5px; display: flex; align-items: center; justify-content: center; padding: 0 14px; }
+.bottombar { flex: none; background: var(--surface); border-top: 1px solid var(--border); padding: 10px 12px; display: flex; gap: 8px; }
+.bottombar .filled { flex: 1; }
+.bottombar.split { justify-content: flex-end; }
+.bottombar.split .filled { flex: 0 0 auto; min-width: 128px; }
+
+/* Detalhe */
+.hero { position: relative; flex: none; height: 210px; }
+.hero .photo { height: 100%; aspect-ratio: auto; }
+.hero .over { position: absolute; top: 8px; left: 8px; right: 8px; display: flex; justify-content: space-between; }
+.hero .over .iconbtn { background: var(--chip-dark); color: #fff; }
+.hero .badge { top: auto; bottom: 12px; right: 12px; }
+.dtitle { font-size: 19px; font-weight: 700; line-height: 1.25; }
+.dprice { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.dprice small { font-size: 13px; font-weight: 500; color: var(--text2); }
+.dloc { display: flex; gap: 4px; color: var(--text2); font-size: 13px; }
+.dloc .ms { font-size: 18px; color: var(--muted); }
+.feats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.feat { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 500; }
+.feat .ms { color: var(--b500); }
+.desc h4 { margin: 0 0 2px; font-size: 13px; font-weight: 600; }
+.desc p { margin: 0; color: var(--text2); font-size: 12.5px; }
+
+.scrim { position: absolute; inset: 0; background: var(--scrim); }
+.sheet { position: absolute; left: 0; right: 0; bottom: 0; background: var(--surface); border-radius: 16px 16px 0 0; padding: 8px 16px 14px; display: flex; flex-direction: column; gap: 6px; }
+.handle { width: 32px; height: 4px; border-radius: 2px; background: var(--muted); align-self: center; opacity: .5; margin-bottom: 6px; }
+.sheet h4 { margin: 0; font-size: 16px; font-weight: 600; }
+.broker { display: flex; align-items: center; gap: 10px; padding: 6px 0 4px; }
+.avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--b50); color: var(--b700); display: grid; place-items: center; font-weight: 700; font-size: 13px; }
+.broker small { display: block; color: var(--muted); font-size: 11.5px; }
+.row { display: flex; align-items: center; gap: 12px; min-height: 48px; border-top: 1px solid var(--border); }
+.row .ms { color: var(--b600); }
+.row div { display: flex; flex-direction: column; }
+.row b { font-weight: 600; font-size: 13.5px; }
+.row small { color: var(--text2); font-size: 12px; font-variant-numeric: tabular-nums; }
+
+/* Formulário */
+.form { flex: 1; min-height: 0; overflow: hidden; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+.field { display: flex; flex-direction: column; gap: 4px; }
+.field label { font-size: 12px; font-weight: 600; color: var(--text2); }
+.field label i { color: var(--danger); font-style: normal; }
+.input { height: 38px; background: var(--surface); border: 1px solid var(--muted); border-radius: 8px; display: flex; align-items: center; gap: 6px; padding: 0 10px; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+.input.focus { border: 2px solid var(--b500); padding: 0 9px; }
+.input.err { border: 2px solid var(--danger); padding: 0 9px; }
+.input .v { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.input .ms { font-size: 18px; color: var(--text2); }
+.input.err .ms { color: var(--danger); }
+.input .suffix { color: var(--text2); }
+.help { display: flex; align-items: flex-start; gap: 4px; font-size: 11.5px; color: var(--text2); }
+.help .ms { font-size: 15px; color: var(--danger); margin-top: 1px; }
+.cols3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.cols2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+.snack { position: absolute; left: 10px; right: 10px; bottom: 74px; background: var(--text); color: #fff; border-radius: 8px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; font-size: 13px; box-shadow: 0 6px 18px rgba(15,23,42,.25); }
+.snack .ms { color: var(--b50); font-size: 18px; }
+.snack .act { margin-left: auto; color: var(--b50); font-weight: 600; white-space: nowrap; }
+
+.splash { flex: 1; background: var(--surface); display: grid; place-items: center; padding: 0 28px; }
+.splash svg { width: 100%; height: auto; }
+
+.gesture { position: absolute; left: 50%; top: 40%; transform: translateX(-50%); background: var(--chip-dark); color: #fff; border-radius: 999px; padding: 6px 12px; font-size: 11.5px; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+
+/* Peças avulsas */
+.parts { display: flex; flex-wrap: wrap; gap: 28px; }
+.part { width: 280px; max-width: 100%; display: flex; flex-direction: column; gap: 10px; }
+.part .board { background: var(--bg); border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 10px; color: var(--text); font-size: 13px; }
+
+.decide { display: flex; flex-direction: column; gap: 10px; max-width: 75ch; }
+.decide ol { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; color: var(--ink-2); }
+.decide ol b { color: var(--ink); }
+
+.compare { display: flex; flex-wrap: wrap; gap: 20px 28px; }
+.opt { width: 280px; max-width: 100%; display: flex; flex-direction: column; gap: 10px; }
+.opt .appbar { border-radius: 12px; }
+.ico { width: 26px; height: 26px; flex: none; display: grid; place-items: center; }
+.ico svg { width: 100%; height: auto; }
+.ico.tile { width: 34px; height: 34px; background: var(--surface); border-radius: 8px; padding: 4px; }
+.dialog { position: absolute; left: 18px; right: 18px; top: 50%; transform: translateY(-50%); background: var(--surface); border-radius: 16px; padding: 20px 16px 10px 20px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 12px 32px rgba(15,23,42,.3); }
+.dialog h4 { margin: 0; font-size: 17px; font-weight: 600; }
+.dialog p { margin: 0; font-size: 13px; color: var(--text2); }
+.dact { display: flex; justify-content: flex-end; gap: 2px; margin-top: 6px; }
+.dact .textbtn { padding: 0 10px; font-size: 13.5px; }
+.outdanger { height: 40px; border: 1.5px solid var(--danger); border-radius: 8px; color: var(--text); font-weight: 600; font-size: 13.5px; display: flex; align-items: center; gap: 6px; padding: 0 12px; }
+.outdanger .ms { color: var(--danger); font-size: 18px; }
+.snapshot { border: 1px solid var(--note); border-radius: 8px; padding: 12px 16px; color: var(--ink); font-size: 14px; max-width: 75ch; }
+footer { font-family: var(--mono); font-size: 12px; color: var(--ink-2); border-top: 1px solid var(--line); padding-top: 16px; }
+</style>
+
+<div class="wrap">
+  <aside class="snapshot" role="note"><b>Versão aprovada em 01/10/2026, antes do código.</b> Mostra o MVP (Splash, Lista, Detalhe e Edição) como foi desenhado e aprovado. O app evoluiu depois: extras desenhados em wireframes de texto (login, cadastro, esqueleto de carregamento, foto em tela cheia) e ajustes do teste no celular. A seção "Design" do README resume o que mudou e por quê.</aside>
+  <header class="intro">
+    <span class="eyebrow">Teste técnico ImobiBrasil · alta fidelidade</span>
+    <h1>Telas do Imobi App</h1>
+    <p>As três telas com as cores, a fonte Inter e os raios do design system da ImobiBrasil, para aprovação antes do código. Fotos e dados do corretor são ilustrativos. Abaixo de cada tela estão as regras e decisões que ela aplica.</p>
+    <nav class="toc" aria-label="Seções">
+      <a href="#splash">Splash</a><a href="#lista">Tela 1 · Lista</a><a href="#detalhe">Tela 2 · Detalhe</a><a href="#edicao">Tela 3 · Edição</a><a href="#pecas">Peças</a><a href="#decidir">Decidido</a>
+    </nav>
+  </header>
+
+  <!-- SPLASH -->
+  <section id="splash">
+    <div class="sec-head"><h2>Splash</h2><p>Primeira coisa que o usuário vê, com o logo completo. Na barra da Lista aparece só o ícone, num quadro branco.</p></div>
+    <div class="screens">
+      <figure>
+        <div class="phone">
+          <div class="sb light"><span>9:41</span><span>▮▮ ◔</span></div>
+          <div class="splash" role="img" aria-label="Logo ImobiBrasil"><svg aria-hidden="true" focusable="false" id="Camada_2" data-name="Camada 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1867.43 439.47">
+  <g id="Horizontal">
+    <g id="_Ícone" data-name="Ícone">
+      <g>
+        <path fill="#009035" d="M402.15,76.23l-25.69-7.54c34.32,63.42,17.83,161.92-45.26,239.84-45.03,55.61-103.55,88.06-156.9,92.69l122.57,35.98c29.77,8.74,61.26-8.46,70-38.23l73.96-251.91c8.84-30.11-8.57-61.99-38.68-70.83Z"/>
+        <path fill="#009035" d="M100.96,100.77c31.57-38.99,69.79-66.57,108.2-81.19L150.24,2.28c-29.76-8.75-61.26,8.46-70,38.23L6.29,292.4c-8.85,30.11,8.56,62,38.68,70.84l38,11.16c-.86-.73-1.75-1.42-2.6-2.18-63.56-57.36-54.35-178.92,20.59-271.45Z"/>
+        <path fill="#ffcb00" d="M331.2,308.53c63.1-77.92,79.59-176.42,45.26-239.84-6.44-11.89-14.65-22.56-24.69-31.62C314.99,3.88,261.9-.5,209.16,19.58c-38.41,14.62-76.62,42.2-108.2,81.19-74.94,92.53-84.15,214.09-20.59,271.45.85.76,1.73,1.45,2.6,2.18,25.02,21.25,57.09,29.78,91.33,26.81,53.34-4.63,111.87-37.08,156.9-92.69Z"/>
+      </g>
+      <polygon id="Telhado" fill="#fff" fill-rule="evenodd" points="0 275.68 97.78 126.2 276.48 135.19 379.87 285.79 196.68 284.68 110.15 147.56 30.35 275.68 0 275.68"/>
+    </g>
+    <g id="ImobiBrasil">
+      <path id="Imobi" fill="#009035" d="M1124.24,168l-11.48,158.87h20.17l11.5-158.87h-20.19ZM1125.68,112.58l-1.45,20.19h25.3l1.45-20.19h-25.3ZM967.84,112.58l-15.49,214.29h20.18l2.01-27.86c5.09,9.39,12.99,16.87,23.69,22.41,10.7,5.56,22.35,8.34,34.95,8.34,19.23,0,36.17-6.94,50.84-20.82,14.67-13.89,23.02-34.81,25.04-62.79,2.16-29.9-3.94-51.14-18.29-63.74-14.36-12.6-32.86-18.9-55.5-18.9-9.39,0-18.69.91-27.9,2.72-9.2,1.81-17.11,4.11-23.72,6.89l4.38-60.55h-20.19ZM982.74,185.62c17.46-5.12,33.01-7.68,46.69-7.68,20.07,0,35.45,5.18,46.12,15.53,10.67,10.36,15.3,25.36,13.88,45-2.08,28.83-8.59,48.69-19.52,59.58-10.93,10.9-24.61,16.34-41.05,16.34-17.3,0-30.46-5.55-39.48-16.66-9.02-11.11-12.87-25.73-11.56-43.89l4.93-68.23ZM867.88,180.5c19,0,33.68,7.36,44.04,22.1,10.36,14.74,14.85,31.61,13.48,50.62-1.3,17.94-7.51,33.05-18.65,45.32-11.14,12.28-26.53,18.41-46.17,18.41-18.58,0-32.85-7.15-42.82-21.45-9.96-14.31-14.27-30.86-12.91-49.66,1.3-17.94,7.44-33.31,18.39-46.12,10.97-12.81,25.84-19.22,44.64-19.22ZM868.97,165.44c-24.13,0-43.82,8.54-59.03,25.63-15.23,17.08-23.65,36.94-25.29,59.58-1.61,22.42,3.94,41.59,16.67,57.5,12.72,15.91,32.12,23.86,58.17,23.86,24.34,0,43.83-8.06,58.45-24.19,14.61-16.12,22.73-35.28,24.33-57.5,1.65-22.85-3.85-42.71-16.51-59.58-12.66-16.87-31.59-25.3-56.78-25.3ZM572.25,168h-20.18l-11.49,158.87h20.19l7.12-98.54c1.03-14.15,6.9-25.25,17.63-33.37,10.73-8.17,22.61-12.23,35.64-12.23,9.39,0,17.07,2.41,23.02,7.21,5.96,4.81,8.6,11.75,7.96,20.72l-8.41,116.21h20.18l7.3-100.9c.99-13.66,6.67-24.28,17.04-31.87,10.37-7.58,21.97-11.37,34.78-11.37,9.61,0,17.61,2.25,24.02,6.73,6.4,4.49,9.32,10.78,8.72,18.9l-8.56,118.51h20.18l8.76-121.08c.92-12.81-3.12-22.69-12.12-29.63-9-6.94-20.44-10.41-34.32-10.41-11.74,0-23.04,2.56-33.87,7.69-10.83,5.13-19.17,12.6-25.01,22.42-3.54-10.14-9.55-17.73-18.06-22.69-8.51-4.97-18.41-7.42-29.73-7.42s-22.23,2.51-32.09,7.47c-9.86,4.97-16.7,11.64-20.51,20.08l1.83-25.31ZM506.5,112.58l-15.49,214.29h22.74l15.49-214.29h-22.74Z"/>
+      <path id="Brasil" fill="#009035" fill-rule="evenodd" d="M1867.43,110.02h-45.48l-15.68,216.86h45.49l15.67-216.86ZM1749.3,168l-11.48,158.87h45.48l11.49-158.87h-45.49ZM1753.68,107.47l-2.36,32.67h45.48l2.36-32.67h-45.49ZM1728.89,168c-13.83-3.63-28.32-5.44-43.49-5.44-18.36,0-33.09,2.77-44.16,8.33-13.52,6.83-20.78,17.2-21.79,31.08-.85,11.74,3.86,23.38,14.14,34.91,2.18,2.36,12.01,11.11,29.49,26.27,10.85,9.39,16.08,16.87,15.67,22.42-.32,4.49-2.91,7.84-7.77,10.09-4.86,2.24-11.34,3.37-19.46,3.37s-15.88-1.13-23.94-3.37c-8.07-2.25-14.95-5.29-20.64-9.13l2.57,35.23c16.7,5.34,34.02,8.01,51.95,8.01,21.56,0,38-3.68,49.32-11.06,11.33-7.36,17.45-17.56,18.39-30.59.78-10.89-4.16-22.31-14.82-34.27-2.37-2.56-12.39-11.74-30.03-27.54-10.84-9.61-16.06-17.2-15.66-22.75.57-7.68,7.99-11.52,22.29-11.52,12.18,0,25.74,2.88,40.7,8.64l-2.76-32.67ZM1471.2,175.69l-4.41,30.11c10.75-4.06,21.94-7.42,33.56-10.09,11.61-2.67,21.8-4.01,30.56-4.01s15.24,1.71,20.13,5.13c4.88,3.42,7.13,7.68,6.76,12.81-.58,7.9-10.54,14.42-29.92,19.54-30.69,7.9-48.79,13.13-54.31,15.69-19.87,8.97-30.43,22.11-31.68,39.4-.92,12.81,2.78,23.6,11.12,32.35,9.72,10.25,24.09,15.37,43.09,15.37,10.25,0,21.9-1.7,34.96-5.13l7.15-27.86c-2.02,1.28-5.85,2.61-11.51,4-5.65,1.39-11.04,2.08-16.16,2.08-7.05,0-13.02-1.59-17.91-4.8-4.89-3.21-7.13-7.79-6.69-13.77.86-11.96,13.28-21.35,37.27-28.19,16.78-4.69,28.08-8.75,33.87-12.17l-5.83,80.71h42.6l8.76-121.08c1.03-14.3-5.04-24.88-18.22-31.71-11.11-5.77-26.27-8.65-45.5-8.65-12.17,0-23.93.91-35.27,2.72-11.34,1.81-22.15,4.33-32.41,7.52ZM1353.33,168l-11.48,158.87h45.49l6.73-93.21c.9-12.39,6.16-21.68,15.79-27.87,7.83-4.91,17.09-7.36,27.76-7.36,2.78,0,5.64.21,8.6.63,2.96.44,5.7.96,8.22,1.6l-2.59-35.23c-6.1-1.28-11.6-1.92-16.51-1.92-16.66,0-30.12,7.36-40.36,22.1l1.28-17.61h-42.93ZM1205.42,296.77l4.55-63.1h45.17c11.52,0,20.48,3.2,26.85,9.61,6.37,6.4,9.26,13.77,8.65,22.09-.59,8.12-4.63,15.38-12.15,21.78-7.5,6.4-16.82,9.61-27.92,9.61h-45.16ZM1212.35,200.67l4.2-57.97h40.36c10.46,0,18.8,2.83,25.01,8.49,6.22,5.66,9.06,12.02,8.55,19.06-.59,8.12-4.36,15.22-11.31,21.3-6.96,6.09-15.77,9.13-26.45,9.13h-40.36ZM1173.24,112.58l-15.49,214.29h105.71c23.28,0,41.51-5.65,54.72-16.97,11.6-9.83,17.97-22.53,19.1-38.12.98-13.66-2.31-25.73-9.88-36.2-8.15-11.31-19.31-17.83-33.5-19.54,12.41-3.2,22.35-9.29,29.83-18.25,7.48-8.97,11.62-19.01,12.42-30.11,1.08-14.95-3.55-27.55-13.92-37.81-11.77-11.52-28.65-17.29-50.65-17.29h-98.33Z"/>
+    </g>
+  </g>
+</svg></div>
+        </div>
+        <figcaption><b>Abertura</b><ul><li>~2 s, depois vai para a Lista</li><li>sai do histórico: voltar nunca retorna aqui</li></ul></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- LISTA -->
+  <section id="lista">
+    <div class="sec-head"><h2>Tela 1 · Lista</h2><p>Busca por título ou cidade, filtro por tipo e cards com foto em cima, como no site da ImobiBrasil.</p></div>
+
+    <div class="screens">
+      <figure>
+        <div class="phone">
+          <div class="sb"><span>9:41</span><span>▮▮ ◔</span></div>
+          <div class="appbar"><span class="ico tile" role="img" aria-label="ImobiBrasil"><svg aria-hidden="true" focusable="false" id="Camada_2" data-name="Camada 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 443.13 439.47">
+  <g id="Horizontal">
+    <g id="_Ícone" data-name="Ícone">
+      <g>
+        <path fill="#009035" d="M402.15,76.23l-25.69-7.54c34.32,63.42,17.83,161.92-45.26,239.84-45.03,55.61-103.55,88.06-156.9,92.69l122.57,35.98c29.77,8.74,61.26-8.46,70-38.23l73.96-251.91c8.84-30.11-8.57-61.99-38.68-70.83Z"/>
+        <path fill="#009035" d="M100.96,100.77c31.57-38.99,69.79-66.57,108.2-81.19L150.24,2.28c-29.76-8.75-61.26,8.46-70,38.23L6.29,292.4c-8.85,30.11,8.56,62,38.68,70.84l38,11.16c-.86-.73-1.75-1.42-2.6-2.18-63.56-57.36-54.35-178.92,20.59-271.45Z"/>
+        <path fill="#ffcb00" d="M331.2,308.53c63.1-77.92,79.59-176.42,45.26-239.84-6.44-11.89-14.65-22.56-24.69-31.62C314.99,3.88,261.9-.5,209.16,19.58c-38.41,14.62-76.62,42.2-108.2,81.19-74.94,92.53-84.15,214.09-20.59,271.45.85.76,1.73,1.45,2.6,2.18,25.02,21.25,57.09,29.78,91.33,26.81,53.34-4.63,111.87-37.08,156.9-92.69Z"/>
+      </g>
+      <polygon id="Telhado" fill="#fff" fill-rule="evenodd" points="0 275.68 97.78 126.2 276.48 135.19 379.87 285.79 196.68 284.68 110.15 147.56 30.35 275.68 0 275.68"/>
+    </g>
+  </g>
+</svg></span><span class="t" style="padding-left:4px">Imóveis</span></div>
+          <div class="content">
+            <div class="pinned">
+              <div class="search"><span class="ms">search</span><span class="ph">Buscar por título ou cidade</span></div>
+              <div class="seg"><span class="on"><span class="ms">check</span>Todos</span><span>Venda</span><span>Aluguel</span></div>
+            </div>
+            <div class="card">
+              <div class="photo p1"><span class="ms">apartment</span><span class="badge">Aluguel</span></div>
+              <div class="body"><span class="tt">Apartamento Centro</span><span class="loc"><span class="ms">location_on</span>Presidente Prudente</span><span class="pr">R$ 1.800,00 <small>/mês</small></span></div>
+            </div>
+            <div class="card">
+              <div class="photo p2"><span class="ms">home</span><span class="badge">Venda</span></div>
+              <div class="body"><span class="tt">Casa Jardim Bongiovani</span><span class="loc"><span class="ms">location_on</span>Presidente Prudente</span><span class="pr">R$ 420.000,00</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><b>Sucesso</b><ul><li>ícone da marca num quadro branco</li><li>segmento ativo: fundo brand-50 + ✓</li><li>badge amarelo com texto escuro</li><li>preço em R$, "/mês" no aluguel</li></ul></figcaption>
+      </figure>
+
+      <figure>
+        <div class="phone">
+          <div class="sb"><span>9:41</span><span>▮▮ ◔</span></div>
+          <div class="content">
+            <div class="card">
+              <div class="photo p3"><span class="ms">bed</span><span class="badge">Aluguel</span></div>
+              <div class="body"><span class="tt">Kitnet Universitária</span><span class="loc"><span class="ms">location_on</span>Presidente Prudente</span><span class="pr">R$ 850,00 <small>/mês</small></span></div>
+            </div>
+            <div class="card">
+              <div class="photo p4"><span class="ms">holiday_village</span><span class="badge">Venda</span></div>
+              <div class="body"><span class="tt">Sobrado Vila Marcondes</span><span class="loc"><span class="ms">location_on</span>Presidente Prudente</span><span class="pr">R$ 580.000,00</span></div>
+            </div>
+          </div>
+          <span class="gesture"><span class="ms">swipe_up</span>leve gesto para cima: a barra volta</span>
+        </div>
+        <figcaption><b>Rolando para baixo (quick return)</b><ul><li>barra, busca e filtro saem de cena</li><li>reaparecem ao subir um pouco</li><li>regra 3 de "controle"</li></ul></figcaption>
+      </figure>
+
+      <figure>
+        <div class="phone">
+          <div class="sb"><span>9:41</span><span>▮▮ ◔</span></div>
+          <div class="appbar"><span class="ico tile" role="img" aria-label="ImobiBrasil"><svg aria-hidden="true" focusable="false" id="Camada_2" data-name="Camada 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 443.13 439.47">
+  <g id="Horizontal">
+    <g id="_Ícone" data-name="Ícone">
+      <g>
+        <path fill="#009035" d="M402.15,76.23l-25.69-7.54c34.32,63.42,17.83,161.92-45.26,239.84-45.03,55.61-103.55,88.06-156.9,92.69l122.57,35.98c29.77,8.74,61.26-8.46,70-38.23l73.96-251.91c8.84-30.11-8.57-61.99-38.68-70.83Z"/>
+        <path fill="#009035" d="M100.96,100.77c31.57-38.99,69.79-66.57,108.2-81.19L150.24,2.28c-29.76-8.75-61.26,8.46-70,38.23L6.29,292.4c-8.85,30.11,8.56,62,38.68,70.84l38,11.16c-.86-.73-1.75-1.42-2.6-2.18-63.56-57.36-54.35-178.92,20.59-271.45Z"/>
+        <path fill="#ffcb00" d="M331.2,308.53c63.1-77.92,79.59-176.42,45.26-239.84-6.44-11.89-14.65-22.56-24.69-31.62C314.99,3.88,261.9-.5,209.16,19.58c-38.41,14.62-76.62,42.2-108.2,81.19-74.94,92.53-84.15,214.09-20.59,271.45.85.76,1.73,1.45,2.6,2.18,25.02,21.25,57.09,29.78,91.33,26.81,53.34-4.63,111.87-37.08,156.9-92.69Z"/>
+      </g>
+      <polygon id="Telhado" fill="#fff" fill-rule="evenodd" points="0 275.68 97.78 126.2 276.48 135.19 379.87 285.79 196.68 284.68 110.15 147.56 30.35 275.68 0 275.68"/>
+    </g>
+  </g>
+</svg></span><span class="t" style="padding-left:4px">Imóveis</span></div>
+          <div class="content">
+            <div class="pinned">
+              <div class="search"><span class="ms">search</span><span class="ph">Buscar por título ou cidade</span></div>
+              <div class="seg"><span class="on"><span class="ms">check</span>Todos</span><span>Venda</span><span>Aluguel</span></div>
+            </div>
+            <div class="state" role="status"><div class="spinner" aria-hidden="true"></div><p>Carregando imóveis…</p></div>
+          </div>
+        </div>
+        <figcaption><b>Carregando</b><ul><li>1–2 s simulados no Service</li><li>H1: status visível</li></ul></figcaption>
+      </figure>
+
+      <figure>
+        <div class="phone">
+          <div class="sb"><span>9:41</span><span>▮▮ ◔</span></div>
+          <div class="appbar"><span class="ico tile" role="img" aria-label="ImobiBrasil"><svg aria-hidden="true" focusable="false" id="Camada_2" data-name="Camada 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 443.13 439.47">
+  <g id="Horizontal">
+    <g id="_Ícone" data-name="Ícone">
+      <g>
+        <path fill="#009035" d="M402.15,76.23l-25.69-7.54c34.32,63.42,17.83,161.92-45.26,239.84-45.03,55.61-103.55,88.06-156.9,92.69l122.57,35.98c29.77,8.74,61.26-8.46,70-38.23l73.96-251.91c8.84-30.11-8.57-61.99-38.68-70.83Z"/>
+        <path fill="#009035" d="M100.96,100.77c31.57-38.99,69.79-66.57,108.2-81.19L150.24,2.28c-29.76-8.75-61.26,8.46-70,38.23L6.29,292.4c-8.85,30.11,8.56,62,38.68,70.84l38,11.16c-.86-.73-1.75-1.42-2.6-2.18-63.56-57.36-54.35-178.92,20.59-271.45Z"/>
+        <path fill="#ffcb00" d="M331.2,308.53c63.1-77.92,79.59-176.42,45.26-239.84-6.44-11.89-14.65-22.56-24.69-31.62C314.99,3.88,261.9-.5,209.16,19.58c-38.41,14.62-76.62,42.2-108.2,81.19-74.94,92.53-84.15,214.09-20.59,271.45.85.76,1.73,1.45,2.6,2.18,25.02,21.25,57.09,29.78,91.33,26.81,53.34-4.63,111.87-37.08,156.9-92.69Z"/>
+      </g>
+      <polygon id="Telhado" fill="#fff" fill-rule="evenodd" points="0 275.68 97.78 126.2 276.48 135.19 379.87 285.79 196.68 284.68 110.15 147.56 30.35 275.68 0 275.68"/>
+    </g>
+  </g>
+</svg></span><span class="t" style="padding-left:4px">Imóveis</span></div>
+          <div class="content">
+            <div class="pinned">
+              <div class="search"><span class="ms">search</span><span class="v">chácara zona norte</span><span class="ms" aria-label="Limpar busca">close</span></div>
+              <div class="seg"><span>Todos</span><span>Venda</span><span class="on"><span class="ms">check</span>Aluguel</span></div>
+            </div>
+            <div class="state"><span class="ms">search_off</span><p>Nenhum imóvel encontrado para "chácara zona norte".</p><small>Tente outro termo ou mude o filtro.</small></div>
+          </div>
+        </div>
+        <figcaption><b>Vazio (busca sem resultado)</b><ul><li>H10: diz o motivo e o que fazer</li><li>✕ limpa a busca</li></ul></figcaption>
+      </figure>
+
+      <figure>
+        <div class="phone">
+          <div class="sb"><span>9:41</span><span>▮▮ ◔</span></div>
+          <div class="appbar"><span class="ico tile" role="img" aria-label="ImobiBrasil"><svg aria-hidden="true" focusable="false" id="Camada_2" data-name="Camada 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 443.13 439.47">
+  <g id="Horizontal">
+    <g id="_Ícone" data-name="Ícone">
+      <g>
+        <path fill="#009035" d="M402.15,76.23l-25.69-7.54c34.32,63.42,17.83,161.92-45.26,239.84-45.03,55.61-103.55,88.06-156.9,92.69l122.57,35.98c29.77,8.74,61.26-8.46,70-38.23l73.96-251.91c8.84-30.11-8.57-61.99-38.68-70.83Z"/>
+        <path fill="#009035" d="M100.96,100.77c31.57-38.99,69.79-66.57,108.2-81.19L150.24,2.28c-29.76-8.75-61.26,8.46-70,38.23L6.29,292.4c-8.85,30.11,8.56,62,38.68,70.84l38,11.16c-.86-.73-1.75-1.42-2.6-2.18-63.56-57.36-54.35-178.92,20.59-271.45Z"/>
+        <path fill="#ffcb00" d="M331.2,308.53c63.1-77.92,79.59-176.42,45.26-239.84-6.44-11.89-14.65-22.56-24.69-31.62C314.99,3.88,261.9-.5,209.16,19.58c-38.41,14.62-76.62,42.2-108.2,81.19-74.94,92.53-84.15,214.09-20.59,271.45.85.76,1.73,1.45,2.6,2.18,25.02,21.25,57.09,29.78,91.33,26.81,53.34-4.63,111.87-37.08,156.9-92.69Z"/>
+      </g>
+      <polygon id="Telhado" fill="#fff" fill-rule="evenodd" points="0 275.68 97.78 126.2 276.48 135.19 379.87 285.79 196.68 284.68 110.15 147.56 30.35 275.68 0 275.68"/>
+    </g>
+  </g>
+</svg></span><span class="t" style="padding-left:4px">Imóveis</span></div>
+          <div class="content">
+            <div class="pinned">
+              <div class="search"><span class="ms">search</span><span class="ph">Buscar por título ou cidade</span></div>
+              <div class="seg"><span class="on"><span class="ms">check</span>Todos</span><span>Venda</span><span>Aluguel</span></div>
+            </div>
+            <div class="state"><span class="ms err">cloud_off</span><p>Não foi possível carregar os imóveis agora.</p><small>Verifique a conexão e tente de novo.</small><span class="filled"><span class="ms">refresh</span>Atualizar</span></div>
+          </div>
+        </div>
+        <figcaption><b>Erro</b><ul><li>--dart-define=SIMULATE_ERROR=true</li><li>H9: sem culpar o usuário + ação de recuperação</li></ul></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- DETALHE -->
+  <section id="detalhe">
+    <div class="sec-head"><h2>Tela 2 · Detalhe</h2><p>A foto ocupa o topo e, ao rolar, vira a barra verde com o título. O botão de contato fica fixo no rodapé.</p></div>
+    <div class="screens">
+      <figure>
+        <div class="phone">
+          <div class="sb"><span>9:41</span><span>▮▮ ◔</span></div>
+          <div class="hero">
+            <div class="photo p2"><span class="ms">home</span></div>
+            <div class="over"><span class="iconbtn" aria-label="Voltar"><span class="ms">arrow_back</span></span><span class="iconbtn" aria-label="Editar imóvel"><span class="ms">edit</span></span></div>
+            <span class="badge">Venda</span>
+          </div>
+          <div class="content">
+            <div class="dtitle">Casa Jardim Bongiovani</div>
+            <div class="dprice">R$ 420.000,00</div>
+            <div class="dloc"><span class="ms">location_on</span><span>Jardim Bongiovani, Presidente Prudente</span></div>
+            <div class="feats">
+              <span class="feat"><span class="ms">bed</span>3 quartos</span>
+              <span class="feat"><span class="ms">bathtub</span>2 banheiros</span>
+              <span class="feat"><span class="ms">directions_car</span>2 vagas</span>
+              <span class="feat"><span class="ms">square_foot</span>150 m²</span>
+            </div>
+          </div>
+          <div class="bottombar"><span class="filled">Entrar em Contato</span></div>
+        </div>
+        <figcaption><b>Abrindo (foto expandida)</b><ul><li>ícones sobre a foto com círculo escuro (contraste)</li><li>"Editar imóvel" como rótulo do lápis</li></ul></figcaption>
+      </figure>
+
+      <figure>
+        <div class="phone">
+          <div class="sb"><span>9:41</span><span>▮▮ ◔</span></div>
+          <div class="appbar"><span class="iconbtn" aria-label="Voltar"><span class="ms">arrow_back</span></span><span class="t">Sala Comercial Ed. Corporate</span><span class="iconbtn" aria-label="Editar imóvel"><span class="ms">edit</span></span></div>
+          <div class="content">
+            <div class="dprice">R$ 2.200,00 <small>/mês</small></div>
+            <div class="dloc"><span class="ms">location_on</span><span>Centro, Presidente Prudente</span></div>
+            <div class="feats">
+              <span class="feat"><span class="ms">bed</span>Sem quartos</span>
+              <span class="feat"><span class="ms">bathtub</span>1 banheiro</span>
+              <span class="feat"><span class="ms">directions_car</span>1 vaga</span>
+              <span class="feat"><span class="ms">square_foot</span>40 m²</span>
+            </div>
+            <div class="desc"><h4>Descrição</h4><p>Sala de 40m² no edifício Corporate, 8º andar. Ar-condicionado central, recepção e segurança 24h.</p></div>
+          </div>
+          <div class="bottombar"><span class="filled">Entrar em Contato</span></div>
+        </div>
+        <figcaption><b>Depois de rolar</b><ul><li>foto virou barra verde com o título, fixa</li><li>"Sem quartos", "1 banheiro", "1 vaga"</li></ul></figcaption>
+      </figure>
+
+      <figure>
+        <div class="phone">
+          <div class="sb"><span>9:41</span><span>▮▮ ◔</span></div>
+          <div class="appbar"><span class="iconbtn"><span class="ms">arrow_back</span></span><span class="t">Casa Jardim Bongiovani</span><span class="iconbtn"><span class="ms">edit</span></span></div>
+          <div class="content">
+            <div class="dprice">R$ 420.000,00</div>
+            <div class="dloc"><span class="ms">location_on</span><span>Jardim Bongiovani, Presidente Prudente</span></div>
+          </div>
+          <div class="bottombar"><span class="filled">Entrar em Contato</span></div>
+          <div class="scrim"></div>
+          <div class="sheet" role="dialog" aria-label="Fale com o corretor">
+            <span class="handle"></span>
+            <h4>Fale com o corretor</h4>
+            <div class="broker"><span class="avatar">CE</span><div><b>Corretora Exemplo</b><small>Dados fictícios</small></div></div>
+            <div class="row"><span class="ms">chat</span><div><b>WhatsApp</b><small>(18) 90000-0000</small></div></div>
+            <div class="row"><span class="ms">call</span><div><b>Ligar</b><small>(18) 90000-0000</small></div></div>
+            <div class="row"><span class="ms">mail</span><div><b>E-mail</b><small>corretor@exemplo.com.br</small></div></div>
+            <span class="textbtn" style="align-self:flex-end">Fechar</span>
+          </div>
+        </div>
+        <figcaption><b>Contato (celular)</b><ul><li>painel de baixo em tela &lt; 600</li><li>diálogo com o mesmo conteúdo em tela larga</li><li>se o app não abrir: sugere outro canal</li></ul></figcaption>
+      </figure>
+
+      <figure>
+        <div class="phone">
+          <div class="sb"><span>9:41</span><span>▮▮ ◔</span></div>
+          <div class="appbar"><span class="iconbtn"><span class="ms">arrow_back</span></span><span class="t">Imóvel</span></div>
+          <div class="content">
+            <div class="state"><span class="ms">home_work</span><p>Este imóvel não está mais disponível.</p><small>Ele pode ter sido removido ou o link está desatualizado.</small><span class="filled">Voltar para a lista</span></div>
+          </div>
+        </div>
+        <figcaption><b>Não encontrado</b><ul><li>ex.: link antigo aberto na Web</li><li>H9: diz o que houve + saída</li></ul></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- EDIÇÃO -->
+  <section id="edicao">
+    <div class="sec-head"><h2>Tela 3 · Edição</h2><p>Formulário preenchido com os valores atuais. Erros aparecem ao sair do campo e ao tocar em Salvar. Cancelar descarta direto; voltar com mudanças não salvas pede confirmação.</p></div>
+    <div class="screens">
+      <figure>
+        <div class="phone">
+          <div class="sb"><span>9:41</span><span>▮▮ ◔</span></div>
+          <div class="appbar"><span class="iconbtn"><span class="ms">arrow_back</span></span><span class="t">Editar imóvel</span></div>
+          <div class="form">
+            <div class="field"><label>Título <i>*</i></label><div class="input"><span class="v">Casa Jardim Bongiovani</span></div></div>
+            <div class="field"><label>Descrição</label><div class="input"><span class="v">Casa ampla com 3 quartos, quintal e churrasqueira.</span></div></div>
+            <div class="field"><label>Tipo <i>*</i></label><div class="input"><span class="v">Venda</span><span class="ms">expand_more</span></div></div>
+            <div class="field"><label>Preço <i>*</i></label><div class="input focus"><span class="v">R$ 420.000,00</span></div></div>
+            <div class="field"><label>Cidade <i>*</i></label><div class="input"><span class="v">Presidente Prudente</span></div></div>
+            <div class="field"><label>Bairro <i>*</i></label><div class="input"><span class="v">Jardim Bongiovani</span></div></div>
+            <div class="cols3">
+              <div class="field"><label>Quartos</label><div class="input"><span class="v">3</span></div></div>
+              <div class="field"><label>Banheiros</label><div class="input"><span class="v">2</span></div></div>
+              <div class="field"><label>Vagas</label><div class="input"><span class="v">2</span></div></div>
+            </div>
+            <div class="field"><label>Área <i>*</i></label><div class="input"><span class="v">150</span><span class="suffix">m²</span></div></div>
+          </div>
+          <div class="bottombar split"><span class="textbtn">Cancelar</span><span class="filled">Salvar</span></div>
+        </div>
+        <figcaption><b>Editando</b><ul><li>rótulos sempre visíveis, * = obrigatório</li><li>preço com máscara (foco = borda verde)</li><li>contagens só aceitam dígitos</li></ul></figcaption>
+      </figure>
+
+      <figure>
+        <div class="phone">
+          <div class="sb"><span>9:41</span><span>▮▮ ◔</span></div>
+          <div class="appbar"><span class="iconbtn"><span class="ms">arrow_back</span></span><span class="t">Editar imóvel</span></div>
+          <div class="form">
+            <div class="field"><label>Título <i>*</i></label><div class="input err"><span class="v"></span><span class="ms">error</span></div><span class="help"><span class="ms">error</span>Informe o título.</span></div>
+            <div class="field"><label>Descrição</label><div class="input"><span class="v">Casa ampla com 3 quartos, quintal e churrasqueira.</span></div></div>
+            <div class="field"><label>Tipo <i>*</i></label><div class="input"><span class="v">Venda</span><span class="ms">expand_more</span></div></div>
+            <div class="field"><label>Preço <i>*</i></label><div class="input err"><span class="v">R$ 0,00</span><span class="ms">error</span></div><span class="help"><span class="ms">error</span>Informe um preço maior que zero.</span></div>
+            <div class="field"><label>Cidade <i>*</i></label><div class="input"><span class="v">Presidente Prudente</span></div></div>
+            <div class="field"><label>Bairro <i>*</i></label><div class="input"><span class="v">Jardim Bongiovani</span></div></div>
+          </div>
+          <div class="bottombar split"><span class="textbtn">Cancelar</span><span class="filled">Salvar</span></div>
+        </div>
+        <figcaption><b>Com erro</b><ul><li>uma coluna: cada mensagem logo abaixo do seu campo</li><li>borda e ⚠ em vermelho; texto em text-2</li><li>diz como resolver (H9)</li><li>nada do que foi digitado se perde</li></ul></figcaption>
+      </figure>
+
+      <figure>
+        <div class="phone">
+          <div class="sb"><span>9:41</span><span>▮▮ ◔</span></div>
+          <div class="appbar"><span class="iconbtn"><span class="ms">arrow_back</span></span><span class="t">Editar imóvel</span></div>
+          <div class="form">
+            <div class="field"><label>Título <i>*</i></label><div class="input"><span class="v">Casa Jardim Bongiovani</span></div></div>
+            <div class="field"><label>Descrição</label><div class="input"><span class="v">Casa ampla com 3 quartos, quintal e churrasqueira.</span></div></div>
+            <div class="field"><label>Tipo <i>*</i></label><div class="input"><span class="v">Venda</span><span class="ms">expand_more</span></div></div>
+            <div class="field"><label>Preço <i>*</i></label><div class="input"><span class="v">R$ 435.000,00</span></div></div>
+            <div class="field"><label>Cidade <i>*</i></label><div class="input"><span class="v">Presidente Prudente</span></div></div>
+          </div>
+          <div class="bottombar split"><span class="textbtn" style="color:var(--muted)">Cancelar</span><span class="filled busy" aria-disabled="true"><span class="spinner sm" aria-hidden="true"></span>Salvando…</span></div>
+        </div>
+        <figcaption><b>Salvando</b><ul><li>~1 s simulado no Service</li><li>botões desabilitados: sem toque duplo</li></ul></figcaption>
+      </figure>
+
+      <figure>
+        <div class="phone">
+          <div class="sb"><span>9:41</span><span>▮▮ ◔</span></div>
+          <div class="appbar"><span class="iconbtn"><span class="ms">arrow_back</span></span><span class="t">Casa Jardim Bongiovani</span><span class="iconbtn"><span class="ms">edit</span></span></div>
+          <div class="content">
+            <div class="dprice">R$ 435.000,00</div>
+            <div class="dloc"><span class="ms">location_on</span><span>Jardim Bongiovani, Presidente Prudente</span></div>
+            <div class="feats">
+              <span class="feat"><span class="ms">bed</span>3 quartos</span>
+              <span class="feat"><span class="ms">bathtub</span>2 banheiros</span>
+            </div>
+          </div>
+          <div class="snack" role="status"><span class="ms">check_circle</span>Imóvel atualizado</div>
+          <div class="bottombar"><span class="filled">Entrar em Contato</span></div>
+        </div>
+        <figcaption><b>Salvou</b><ul><li>volta ao detalhe já com o preço novo</li><li>SnackBar acima do botão fixo</li></ul></figcaption>
+      </figure>
+
+      <figure>
+        <div class="phone">
+          <div class="sb"><span>9:41</span><span>▮▮ ◔</span></div>
+          <div class="appbar"><span class="iconbtn"><span class="ms">arrow_back</span></span><span class="t">Editar imóvel</span></div>
+          <div class="form">
+            <div class="field"><label>Título <i>*</i></label><div class="input"><span class="v">Casa Jardim Bongiovani</span></div></div>
+            <div class="field"><label>Tipo <i>*</i></label><div class="input"><span class="v">Venda</span><span class="ms">expand_more</span></div></div>
+            <div class="field"><label>Preço <i>*</i></label><div class="input"><span class="v">R$ 435.000,00</span></div></div>
+            <div class="field"><label>Cidade <i>*</i></label><div class="input"><span class="v">Presidente Prudente</span></div></div>
+          </div>
+          <div class="snack" role="status"><span class="ms">error</span>Não foi possível salvar agora.<span class="act">Atualizar</span></div>
+          <div class="bottombar split"><span class="textbtn">Cancelar</span><span class="filled">Salvar</span></div>
+        </div>
+        <figcaption><b>Erro ao salvar</b><ul><li>fica na edição com o que foi digitado</li><li>ação de recuperação na própria SnackBar</li></ul></figcaption>
+      </figure>
+      <figure>
+        <div class="phone">
+          <div class="sb"><span>9:41</span><span>▮▮ ◔</span></div>
+          <div class="appbar"><span class="iconbtn"><span class="ms">arrow_back</span></span><span class="t">Editar imóvel</span></div>
+          <div class="form">
+            <div class="field"><label>Título <i>*</i></label><div class="input"><span class="v">Casa Jardim Bongiovani com piscina</span></div></div>
+            <div class="field"><label>Tipo <i>*</i></label><div class="input"><span class="v">Venda</span><span class="ms">expand_more</span></div></div>
+            <div class="field"><label>Preço <i>*</i></label><div class="input"><span class="v">R$ 435.000,00</span></div></div>
+          </div>
+          <div class="bottombar split"><span class="textbtn">Cancelar</span><span class="filled">Salvar</span></div>
+          <div class="scrim"></div>
+          <div class="dialog" role="alertdialog" aria-label="Descartar alterações?">
+            <h4>Descartar alterações?</h4>
+            <p>As mudanças feitas neste imóvel ainda não foram salvas.</p>
+            <div class="dact" style="align-items:center;gap:8px"><span class="textbtn">Editar</span><span class="outdanger"><span class="ms">delete</span>Descartar</span></div>
+          </div>
+        </div>
+        <figcaption><b>Voltar com mudanças não salvas</b><ul><li>só na seta ← ou no voltar do Android</li><li>Descartar: contorno e ícone vermelhos, texto escuro</li><li>Cancelar continua descartando direto</li><li>PopScope no Flutter</li></ul></figcaption>
+      </figure>
+
+    </div>
+  </section>
+
+  <!-- PEÇAS -->
+  <section id="pecas">
+    <div class="sec-head"><h2>Peças</h2><p>Estados de componentes que se repetem nas telas.</p></div>
+    <div class="parts">
+      <div class="part">
+        <div class="board">
+          <div class="card"><div class="photo" style="background:var(--border);color:var(--muted)"><span class="ms">image</span></div><div class="body"><span class="tt">Chácara Montalvão</span><span class="loc"><span class="ms">location_on</span>Presidente Prudente</span></div></div>
+        </div>
+        <figcaption><b>Foto carregando</b><ul><li>área cinza com ícone de imagem</li></ul></figcaption>
+      </div>
+      <div class="part">
+        <div class="board">
+          <div class="card"><div class="photo" style="background:var(--border);color:var(--muted);gap:4px;align-content:center"><span class="ms">home</span><span style="font-size:12px;color:var(--text2)">Foto indisponível</span></div><div class="body"><span class="tt">Chácara Montalvão</span><span class="loc"><span class="ms">location_on</span>Presidente Prudente</span></div></div>
+        </div>
+        <figcaption><b>Foto indisponível</b><ul><li>quando a imagem da internet falha</li></ul></figcaption>
+      </div>
+      <div class="part">
+        <div class="board">
+          <div class="field"><label>Normal</label><div class="input"><span class="v">Jardim Bongiovani</span></div></div>
+          <div class="field"><label>Em foco</label><div class="input focus"><span class="v">Jardim Bongio</span></div></div>
+          <div class="field"><label>Com erro</label><div class="input err"><span class="v"></span><span class="ms">error</span></div><span class="help"><span class="ms">error</span>Informe o bairro.</span></div>
+        </div>
+        <figcaption><b>Campo de texto</b><ul><li>sem estado "verde de sucesso"</li></ul></figcaption>
+      </div>
+    </div>
+  </section>
+
+  <section id="decidir" class="decide">
+    <div class="sec-head"><h2>Decidido na revisão</h2><p>Detalhes que apareceram ao desenhar em alta fidelidade, já aprovados.</p></div>
+    <ol>
+      <li><b>Características em grade 2×2</b>: com texto ("3 quartos") e fonte ampliada, 4 colunas não cabem.</li>
+      <li><b>"/mês" depois do preço de aluguel</b>: diferencia valor mensal de valor de venda.</li>
+      <li><b>Rótulos acima dos campos</b>, sempre visíveis.</li>
+      <li><b>Ícone da marca na barra da Lista</b>, num quadro branco.</li>
+      <li><b>Formulário em uma coluna</b>; só quartos, banheiros e vagas lado a lado.</li>
+      <li><b>"Atualizar"</b> como ação de recuperação em todos os erros.</li>
+      <li><b>Confirmar ao voltar com mudanças não salvas</b> (Editar · Descartar); Cancelar descarta direto.</li>
+    </ol>
+  </section>
+
+  <footer>Tokens: brand-50/500/600/700/800 · accent-yellow · danger · bg · surface · border · text · text-2 · muted. Fonte Inter. Raios 8 (botões e campos) e 16 (cards).</footer>
+</div>
+
+</body></html>
