@@ -8,9 +8,30 @@ Aplicativo Flutter de **listagem, detalhe, edição e cadastro de imóveis, com 
 
 ## Como rodar
 
+**Só quer experimentar no celular?** Baixe o APK na [release v1.0.0](https://github.com/itsmecamila/imobi_brasil_app/releases/tag/v1.0.0) e instale no Android (7.0 ou superior), sem instalar nada no computador. Para rodar a partir do código, siga os passos abaixo.
+
 **Versões:** Flutter **3.47.5** (canal *stable*), com Dart **3.13.4** (`sdk: ^3.13.4` no `pubspec.yaml`).
 
-**Pré-requisitos:** para o Android, o *Android SDK* (kit de desenvolvimento) e um aparelho com **Android 7.0 ou superior** (ou um emulador); para o navegador, o Chrome. O comando `flutter doctor` confere se o ambiente está pronto.
+### Antes de começar: o que instalar
+
+Para rodar o projeto a partir do código, instale, nesta ordem:
+
+1. **Git**, para baixar o código: [git-scm.com/downloads](https://git-scm.com/downloads).
+2. **Flutter SDK 3.47.5** (canal *stable*), que já inclui o Dart: siga o [guia oficial de instalação](https://docs.flutter.dev/get-started/install). Para instalar exatamente esta versão, ela está no [arquivo de versões do Flutter](https://docs.flutter.dev/install/archive). Versões mais novas devem funcionar, mas esta é a testada.
+3. **Para rodar no Android** (plataforma alvo), siga o [guia oficial de configuração do Android](https://docs.flutter.dev/platform-integration/android/setup):
+   - instale o **Android Studio** e, pelo SDK Manager dele, os componentes do **Android SDK** que o guia lista;
+   - aceite as licenças com `flutter doctor --android-licenses`;
+   - use um **celular com Android 7.0 ou superior**, com as [opções do desenvolvedor e a depuração USB ligadas](https://developer.android.com/studio/debug/dev-options), conectado por cabo; ou crie um **emulador** no Device Manager do Android Studio.
+4. **Para rodar no navegador** (segunda plataforma): **Google Chrome** ou Microsoft Edge, conforme o [guia oficial da Web](https://docs.flutter.dev/platform-integration/web/setup).
+
+Para conferir se está tudo pronto:
+
+```bash
+flutter doctor    # não deve haver erro em "Flutter" nem na plataforma que você vai usar
+flutter devices   # deve listar o celular, o emulador ou o navegador
+```
+
+### Baixar e rodar
 
 ```bash
 git clone https://github.com/itsmecamila/imobi_brasil_app.git
