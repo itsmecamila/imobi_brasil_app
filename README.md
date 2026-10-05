@@ -181,9 +181,45 @@ lib/
 
 ## Testes
 
-**134 testes automatizados** (`flutter test`):
-- **Unitários:** modelo (ida e volta do JSON), Services, Repositories (incluindo "com erro ao salvar, a lista não muda" e credencial errada × falha de conexão no login), ViewModels (busca sem acento, filtro, validações, rascunho da edição, cadastro e o `reveal` que garante que o imóvel novo apareça), formatadores e máscara de preço;
-- **De widget:** card do imóvel, esqueleto do carregando (com e sem animação), splash, tela de login (incluindo o 👁 como botão separado para leitores de tela), o filtro da Lista em telas estreitas e com fonte ampliada, o botão de cadastro, o formulário compartilhado (obrigatórios, erro ao salvar, botões em tela estreita, Cancelar com confirmação), o app ligado exatamente como o `main` e, com o roteador real, as navegações Lista → Detalhe → foto em tela cheia, Lista → Cadastro → Lista (mantendo ou limpando busca e filtro), a proteção das rotas (sem login cai no Login; entrar → Lista; sair → Login) e o erro de carregamento com **Atualizar** ao abrir Detalhe, Edição, Cadastro ou foto por link direto.
+**134 testes automatizados**, em 24 arquivos, cobrindo as três camadas da arquitetura e os caminhos entre as telas. Todos rodam com `flutter test` e no CI a cada envio.
+
+| Tipo | Quantos | O que monta | Onde ficam |
+|---|---|---|---|
+| **Unidade** | **88** | Uma peça sozinha, sem tela: modelo, Services, Repositories, ViewModels, formatadores | `test/data/`, `test/domain/`, `test/utils/` e as pastas `view_models/` |
+| **Widget** | **32** | Uma tela ou um componente, numa tela virtual: o teste toca, digita e lê o que aparece | `test/ui/**/widgets/`, `test/ui/core/`, `test/ui/splash/` |
+| **Navegação** | **14** | O app com o roteador de verdade, passando por várias telas | `test/routing/` e `test/app_start_test.dart` |
+
+No Flutter, testes de widget e de navegação usam a mesma ferramenta (`testWidgets`); a diferença é o tamanho do que montam.
+
+### O que cada tipo garante
+
+**Unidade (88)**
+- **Dados:** o JSON vira imóvel e volta igual; com erro ao salvar ou cadastrar, **a lista não muda**; duas cargas ao mesmo tempo viram uma só requisição; edições, cadastros e sessão **sobrevivem a "reabrir o app"**; restaurar com erro não apaga o que estava guardado; sessão guardada ilegível pede o login de novo.
+- **Login:** credencial errada × falha de conexão dão mensagens diferentes; e-mail ignora maiúsculas e espaços, senha não.
+- **ViewModels:** busca sem acento e por cidade; filtro; o `reveal` limpa busca e filtro só quando escondem o imóvel novo; "tem mudanças?" de cada imóvel de exemplo; estados de carregando e erro.
+- **Regras e formatos:** validações de todos os campos; máscara de preço (incluindo apagar até o fim); área com milhar (2000 m²) ida e volta.
+
+**Widget (32)**
+- **Layout em condições difíceis:** filtro "Aluguel" inteiro em telas de 320 e 360 de largura e com a fonte do sistema ampliada até 1,5×; cabeçalho que cresce com a fonte sem invadir a lista; barra de botões do formulário cabendo com "Cadastrando…". Esses testes carregam a fonte **Inter real**, porque a fonte padrão dos testes mede diferente.
+- **Acessibilidade:** o 👁 da senha é anunciado como botão separado do campo; o esqueleto de carregamento fica parado com "remover animações" ligado e anuncia "Carregando imóveis…".
+- **Formulários:** em branco, aponta os 6 obrigatórios e conta quantos corrigir; erro ao salvar mostra "Atualizar"; Cancelar com algo preenchido pede confirmação e "Continuar" mantém o que foi digitado.
+- **Componentes:** card do imóvel, splash, menu ⋮ com Restaurar, botão de cadastro que só aparece com a lista carregada.
+
+**Navegação (14)**
+- Lista → Detalhe → foto em tela cheia **do tamanho da tela** → fechar.
+- Lista → Cadastro → Lista, mantendo ou limpando a busca e o filtro.
+- Sem login, o app e qualquer link direto caem no Login; entrar leva à Lista com o nome na barra; Sair pede confirmação e volta ao Login.
+- Link direto para Detalhe, Edição, Cadastro ou foto **sem conexão**: mostra o erro com **Atualizar**, que resolve.
+- O app ligado **exatamente como o `main`**, do login à lista.
+
+### Como os testes foram feitos
+
+- **Peças falsas no lugar das reais:** como cada peça recebe as dependências de fora, os testes usam Services que falham quando o teste quer, armazenamento em memória no lugar do celular e uma função falsa no lugar de abrir o WhatsApp.
+- **Todo teste novo foi provado:** a correção era desfeita de propósito para confirmar que o teste acusava o defeito. Num caso, o teste passava mesmo com o defeito e foi reescrito.
+- **Cada bug real virou teste:** a área de 2000 m², o "L" cortado, a foto em miniatura, a lista travada no carregamento e o sufixo que quebrava a acessibilidade têm, cada um, um teste que falhava antes da correção.
+- **O que os testes não cobrem:** não há testes de integração no aparelho (`integration_test`); o comportamento no celular real foi verificado à mão, com roteiros por etapa, em dois aparelhos Android.
+
+Para rodar só um grupo: `flutter test test/routing` (navegação), `flutter test test/data` (dados) ou `flutter test test/ui` (telas e ViewModels).
 
 ## Extras
 
@@ -205,9 +241,7 @@ O que eu faria a seguir. As duas primeiras são ideias que tive ao longo do proj
 - **CEP com API externa** (ex.: ViaCEP): ao digitar o CEP no cadastro ou na edição, preencher e validar cidade e bairro. Entraria como um Service novo, do mesmo jeito que o de imóveis, sem mudar as telas além do campo.
 - **Fotos escolhidas pelo usuário**: escolher da galeria no cadastro e na edição, **várias fotos por imóvel** (galeria no detalhe e na tela cheia), **trocar** e **excluir** fotos. Hoje o imóvel novo recebe uma foto provisória.
 - **Firebase** (Analytics e Crashlytics).
-- **Restauração de navegação** ao reabrir o app.
 - Com uma **API real**: rolagem infinita sobre a lista, que já usa construção sob demanda.
-- Splash nativa com o ícone, e conteúdo centralizado em telas largas na Web.
 
 ## Harness e estratégia
 
